@@ -730,3 +730,52 @@ input, textarea, select {
         --text: #f8fafc;
     }
 }
+
+/* =========================================================
+   UI DYNAMIC TEMPLATE PATCH (WAJIB DITAMBAHKAN)
+   ========================================================= */
+
+/* 1. Progress Bar & Layout Area */
+.progress-container { margin-bottom: var(--lg); padding: 0 var(--lg); }
+.progress-bar-bg { width: 100%; height: 8px; background: rgba(148, 163, 184, 0.1); border-radius: 9999px; overflow: hidden; }
+.progress-bar-fill { height: 100%; width: 0%; transition: width 0.3s ease; }
+.areas-grid { display: flex; flex-direction: column; gap: 12px; padding: 0 var(--lg) 100px var(--lg); }
+
+/* 2. Visual Progress Area (Lingkaran) */
+.area-progress-ring { margin-right: 16px; display: flex; align-items: center; justify-content: center; }
+.area-status { font-size: 18px; color: #64748b; font-weight: bold; }
+.area-item.completed .area-status { color: #10b981; }
+.area-item.completed { border-color: #10b981; background: rgba(16, 185, 129, 0.05); }
+.area-item.has-warning { border-color: #f59e0b; }
+
+/* 3. Parameter Card (Layar Input) */
+.param-card { padding: var(--xl); background: var(--surface); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: var(--radius-xl); margin: var(--lg); margin-bottom: 120px; }
+.last-value-badge { display: inline-block; background: rgba(59, 130, 246, 0.1); color: #60a5fa; padding: 6px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin-bottom: 16px; border: 1px solid rgba(59, 130, 246, 0.2); }
+
+/* 4. Input Wrapper Dinamis */
+.input-box-wrapper { position: relative; display: flex; align-items: center; margin-bottom: var(--lg); }
+.param-input { width: 100%; padding: 16px 20px; padding-right: 60px; background: rgba(15, 23, 42, 0.6); border: 2px solid var(--border); border-radius: var(--radius-md); color: var(--text); font-size: 1.25rem; font-weight: 600; outline: none; transition: all 0.2s ease; }
+.param-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); }
+.param-input:disabled { opacity: 0.5; background: rgba(0,0,0,0.2); }
+.input-unit { position: absolute; right: 20px; color: var(--text-muted); font-weight: 600; font-size: 0.875rem; }
+.param-select { width: 100%; padding: 16px 20px; background: rgba(15, 23, 42, 0.6); border: 2px solid var(--border); border-radius: var(--radius-md); color: var(--text); font-size: 1.1rem; font-weight: 600; outline: none; margin-bottom: var(--lg); appearance: none; }
+
+/* 5. Photo Section (Tombol Kamera Baru) */
+.photo-section { margin-top: var(--lg); }
+.photo-trigger-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px; background: rgba(59, 130, 246, 0.1); border: 1px dashed var(--primary-light); border-radius: var(--radius-md); color: var(--primary-light); font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.photo-trigger-btn:hover { background: rgba(59, 130, 246, 0.2); }
+.photo-preview-box { position: relative; margin-top: 12px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border); }
+.photo-preview-box img { width: 100%; height: auto; display: block; }
+.btn-remove-photo { position: absolute; top: 8px; right: 8px; background: rgba(239, 68, 68, 0.9); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+/* 6. Abnormal Status (Chip Pilihan Kondisi) */
+.abnormal-section { margin-top: var(--xl); padding-top: var(--lg); border-top: 1px dashed var(--border); }
+.status-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { padding: 10px 16px; border-radius: 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.8125rem; font-weight: 600; color: #cbd5e1; cursor: pointer; transition: all 0.2s; }
+.chip.active:nth-child(1) { background: #10b981; border-color: #10b981; color: white; } /* NORMAL */
+.chip.active:nth-child(2) { background: #ef4444; border-color: #ef4444; color: white; } /* ERROR */
+.chip.active:nth-child(3) { background: #f59e0b; border-color: #f59e0b; color: white; } /* MAINT. */
+.chip.active:nth-child(4) { background: #64748b; border-color: #64748b; color: white; } /* OFF */
+
+/* 7. Bottom Action Bar (Tombol Kembali & Lanjut) */
+.bottom-action-bar { position: fixed; bottom: 0; left: 0; right: 0; padding: var(--lg); display: flex; gap: var(--md); z-index: 100; border-top: 1px solid var(--border); }
