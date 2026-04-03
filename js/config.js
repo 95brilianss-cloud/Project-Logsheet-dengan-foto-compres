@@ -528,13 +528,13 @@ const LOGSHEET_CONFIG = {
 };
 const INPUT_TYPES = {
     PUMP_STATUS: {
-        patterns: ['(A/B)', '(ON/OFF)', '(On/Off)', '(Running/Stop)', '(Remote/Running/Stop)'],
+        patterns: ['(A/B)', '(ON/OFF)', '(On/Off)', '(Running/Stop)', '(Remote/Running/Stop)', '(A/M)', 'STATUS'],
         options: {
             '(A/B)': ['A', 'B'],
             '(ON/OFF)': ['ON', 'OFF'],
             '(On/Off)': ['On', 'Off'],
             '(Running/Stop)': ['Running', 'Stop'],
-            '(Remote/Running/Stop)': ['Remote', 'Running', 'Stop']
+            '(Remote/Running/Stop)': ['Remote', 'Running', 'Stop'], // Pastikan koma ini ada
             '(A/M)': ['Auto', 'Manual'],
             'STATUS': ['Running', 'Stop', 'Standby']
         }
