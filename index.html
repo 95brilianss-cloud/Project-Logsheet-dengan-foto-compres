@@ -18,10 +18,37 @@
 </head>
 <body>
     <div id="app">
-        <div id="loadingScreen" class="overlay" style="display: none;">
-            <div class="loader-container glass">
-                <div class="spinner"></div>
-                <p id="loadingText">Memuat...</p>
+        <div id="loadingScreen" class="loader-overlay" style="display: none;">
+            <div class="loader-content">
+                <div class="loader-logo">
+                    <div class="loader-pulse-ring"></div>
+                    <div class="loader-pulse-ring delay"></div>
+                    <div class="loader-logo-inner">
+                        <img src="logo.png" alt="Logo" class="loader-img" onerror="this.style.display='none'">
+                    </div>
+                </div>
+                
+                <div class="typewriter-container">
+                    <h2 class="typewriter-text">
+                        <span class="char highlight" style="--char-index: 1;">M</span>
+                        <span class="char highlight" style="--char-index: 2;">e</span>
+                        <span class="char highlight" style="--char-index: 3;">m</span>
+                        <span class="char highlight" style="--char-index: 4;">u</span>
+                        <span class="char highlight" style="--char-index: 5;">a</span>
+                        <span class="char highlight" style="--char-index: 6;">t</span>
+                        <span class="cursor"></span>
+                    </h2>
+                </div>
+                <p class="loader-subtitle" id="loadingText">Menyiapkan aplikasi...</p>
+                
+                <div class="premium-progress-container">
+                    <div class="premium-progress-track">
+                        <div class="premium-progress-fill" style="width: 100%;">
+                            <div class="progress-shimmer"></div>
+                            <div class="progress-glow"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -179,11 +206,10 @@
                 </div>
 
                 <div id="dynamicSelectWrapper" style="display:none;" class="select-wrapper">
-                    <select id="dynamicSelectInput" class="param-select">
-                        </select>
+                    <select id="dynamicSelectInput" class="param-select"></select>
                 </div>
 
-                <div class="divider"></div>
+                <div class="divider" style="height:1px; background:var(--border); margin:16px 0;"></div>
 
                 <div class="photo-section">
                     <label class="photo-trigger-btn">
@@ -210,8 +236,8 @@
             </div>
 
             <div class="bottom-action-bar glass-header">
-                <button class="btn btn-secondary" onclick="goBackDynamic()">Kembali</button>
-                <button class="btn btn-primary" onclick="saveDynamicStep()">Selanjutnya ➔</button>
+                <button class="btn btn-secondary flex-1" onclick="goBackDynamic()">Kembali</button>
+                <button class="btn btn-primary flex-1" onclick="saveDynamicStep()">Selanjutnya ➔</button>
             </div>
         </div>
 
@@ -227,11 +253,8 @@
             </div>
         </div>
 
-        <div id="tpmScanScreen" class="screen">
-            </div>
-
-        <div id="tpmFormScreen" class="screen">
-            </div>
+        <div id="tpmScanScreen" class="screen"></div>
+        <div id="tpmFormScreen" class="screen"></div>
 
         <div id="balancingScreen" class="screen">
              <div class="screen-header glass-header">
@@ -252,17 +275,26 @@
                 </button>
                 <h2>Profil Pengguna</h2>
             </div>
-            <div class="profile-card glass mt-4">
-                <div class="profile-avatar large" id="profileAvatarLarge">U</div>
+            <div class="profile-card glass mt-4" style="margin: 20px; padding: 20px; text-align: center; border-radius: 16px;">
+                <div class="profile-avatar large" id="profileAvatarLarge" style="margin: 0 auto 16px;">U</div>
                 <h3 id="profileName">Nama User</h3>
                 <p id="profileNip">NIP: 12345</p>
-                <div class="profile-details mt-4">
-                    <div class="detail-row"><span>Role:</span> <strong id="profileRole">Operator</strong></div>
+                <div class="profile-details mt-4" style="text-align: left; background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px;">
+                    <div class="detail-row" style="margin-bottom: 8px;"><span>Role:</span> <strong id="profileRole">Operator</strong></div>
                     <div class="detail-row"><span>Departemen:</span> <strong id="profileDept">Produksi 3B</strong></div>
                 </div>
                 <button class="btn btn-danger w-100 mt-4" onclick="handleLogout()">Keluar Aplikasi</button>
             </div>
         </div>
 
-    </div> <script src="js/config.js"></script>    <script src="js/state.js"></script>     <script src="js/utils.js"></script>     <script src="js/users.js"></script>     <script src="js/auth.js"></script>      <script src="js/logsheet.js"></script>  <script src="js/tpm.js"></script>       <script src="js/balancing.js"></script> <script src="js/main.js"></script>      </body>
+    </div> <script src="js/config.js"></script>    
+    <script src="js/state.js"></script>     
+    <script src="js/utils.js"></script>     
+    <script src="js/users.js"></script>     
+    <script src="js/auth.js"></script>      
+    <script src="js/logsheet.js"></script>  
+    <script src="js/tpm.js"></script>       
+    <script src="js/balancing.js"></script> 
+    <script src="js/main.js"></script>      
+</body>
 </html>
