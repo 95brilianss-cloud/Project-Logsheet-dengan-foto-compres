@@ -2723,26 +2723,30 @@ function openUniversalLogsheet(type) {
 function renderUniversalAreaList() {
     const config = LOGSHEET_CONFIG[activeLogsheetType];
     const listContainer = document.getElementById('univAreaList');
+    if (!listContainer) return;
+    
     let html = '';
-
     let totalParams = 0;
     let filledParams = 0;
 
     // Looping semua area yang ada di config logsheet aktif
-    Object.entries(config.areas).forEach(([areaName, params]) => {
+    Object.entries(config.areas).forEach(([areaName, paramsList]) => {
         let areaFilled = 0;
-        const areaTotal = params.length;
+        const areaTotal = paramsList.length;
         totalParams += areaTotal;
 
         // Cek berapa parameter yang sudah diisi di area ini
-        params.forEach(param => {
-            if (univCurrentInput[param.id] !== undefined && univCurrentInput[param.id] !== '') {
+        paramsList.forEach(fullLabel => {
+            // PERBAIKAN: Mengecek dari object areaName dan key fullLabel
+            if (univCurrentInput[areaName] && 
+                univCurrentInput[areaName][fullLabel] !== undefined && 
+                univCurrentInput[areaName][fullLabel] !== '') {
                 areaFilled++;
                 filledParams++;
             }
         });
 
-        const isComplete = areaFilled === areaTotal;
+        const isComplete = areaFilled === areaTotal && areaTotal > 0;
         const progressPercent = areaTotal === 0 ? 0 : Math.round((areaFilled / areaTotal) * 100);
         
         // Atur status visual (Ikon & Warna)
@@ -2756,21 +2760,29 @@ function renderUniversalAreaList() {
             statusClass = 'in-progress';
         }
 
+        // Cek apakah ada status abnormal (ERROR, NOT_INSTALLED, dsb)
+        const hasAbnormal = paramsList.some(fullLabel => {
+            const val = (univCurrentInput[areaName] && univCurrentInput[areaName][fullLabel]) || '';
+            const firstLine = val.split('\n')[0];
+            return ['ERROR', 'MAINTENANCE', 'NOT_INSTALLED', 'OFF'].includes(firstLine);
+        });
+
         // Buat HTML Kotak Area
         html += `
-            <div class="area-card glass ${statusClass}" onclick="openUnivAreaInput('${areaName}')" style="cursor: pointer;">
+            <div class="area-card glass ${statusClass} ${hasAbnormal ? 'has-warning' : ''}" onclick="openUnivAreaInput('${areaName}')" style="cursor: pointer; position:relative;">
+                ${hasAbnormal ? '<div style="position:absolute; top:-6px; right:-6px; background:#ef4444; width:16px; height:16px; border-radius:50%; border:2px solid #0a0f1c;"></div>' : ''}
                 <div class="area-card-header">
                     <div class="area-title-group">
                         <span class="area-icon">${statusIcon}</span>
                         <div class="area-info">
                             <h3 style="margin:0; font-size:1.1rem;">${areaName}</h3>
-                            <p style="margin:0; font-size:0.8rem; color:#64748b;">${areaFilled} / ${areaTotal} Parameter diisi</p>
+                            <p style="margin:0; font-size:0.8rem; color:#64748b;">${areaFilled} / ${areaTotal} Parameter</p>
                         </div>
                     </div>
                     <span class="progress-badge" style="background:${isComplete ? config.themeColor : '#e2e8f0'}; color:${isComplete ? 'white' : '#64748b'}; padding:4px 8px; border-radius:12px; font-size:0.8rem; font-weight:bold;">${progressPercent}%</span>
                 </div>
-                <div class="progress-bar-bg" style="width: 100%; height: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; margin-top: 12px; overflow: hidden;">
-                    <div class="progress-bar-fill" style="height: 100%; width: ${progressPercent}%; background: ${config.themeColor}; transition: 0.3s ease;"></div>
+                <div class="progress-bar-bg" style="width: 100%; height: 6px; background: rgba(0,0,0,0.2); border-radius: 4px; margin-top: 12px; overflow: hidden;">
+                    <div class="progress-bar-fill" style="height: 100%; width: ${progressPercent}%; background: ${hasAbnormal ? '#ef4444' : config.themeColor}; transition: 0.3s ease;"></div>
                 </div>
             </div>
         `;
@@ -2780,21 +2792,30 @@ function renderUniversalAreaList() {
 
     // Update Bar Progress Keseluruhan (Overall Progress) di Header
     const overallPercent = totalParams === 0 ? 0 : Math.round((filledParams / totalParams) * 100);
-    document.getElementById('univOverallPercent').textContent = `${overallPercent}%`;
-    document.getElementById('univOverallProgressBar').style.width = `${overallPercent}%`;
-    document.getElementById('univOverallProgressBar').style.backgroundColor = config.themeColor;
-    document.getElementById('univProgressText').textContent = `${overallPercent}% Selesai`;
+    const overallPercentEl = document.getElementById('univOverallPercent');
+    const overallProgressBarEl = document.getElementById('univOverallProgressBar');
+    const progressTextEl = document.getElementById('univProgressText');
+    
+    if (overallPercentEl) overallPercentEl.textContent = `${overallPercent}%`;
+    if (overallProgressBarEl) {
+        overallProgressBarEl.style.width = `${overallPercent}%`;
+        overallProgressBarEl.style.backgroundColor = config.themeColor;
+    }
+    if (progressTextEl) progressTextEl.textContent = `${overallPercent}% Selesai`;
 
-    // Munculkan Tombol Submit HANYA JIKA sudah 100%
+    // Munculkan Tombol Submit HANYA JIKA ada data yang diisi (overallPercent > 0)
+    // Atau jika Anda ingin mewajibkan 100%, ubah (overallPercent > 0) menjadi (overallPercent === 100)
     const submitBtn = document.getElementById('univSubmitBtn');
-    if (overallPercent === 100) {
-        submitBtn.style.display = 'block';
-        submitBtn.style.backgroundColor = config.themeColor;
-    } else {
-        submitBtn.style.display = 'none';
+    if (submitBtn) {
+        if (overallPercent > 0) {
+            submitBtn.style.display = 'block';
+            submitBtn.style.backgroundColor = config.themeColor;
+            submitBtn.style.boxShadow = `0 8px 24px ${config.themeColor}50`;
+        } else {
+            submitBtn.style.display = 'none';
+        }
     }
 }
-
 // ==========================================
 // 6. UNIVERSAL INPUT ENGINE (CORE LOGIC)
 // ==========================================
