@@ -5,7 +5,7 @@
 // ============================================
 // 1. APP CONFIGURATION
 // ============================================
-const APP_VERSION = '2.4.0';
+const APP_VERSION = '2.3.8';
 const APP_NAME = 'Turbine Logsheet Pro';
 
 const AUTH_CONFIG = {
@@ -480,6 +480,52 @@ const AREAS_1100 = {
     "BFW OUT 30-E-1203 TI-1115 (°C)",
     "BFW OUT 30-E-1204 TI-1117 (°C)"
   ]
+};
+
+// ============================================
+// MASTER CONFIGURATION UNTUK DYNAMIC TEMPLATE
+// ============================================
+const LOGSHEET_CONFIG = {
+    'TURBINE': {
+        title: 'Logsheet Turbin',
+        subtitle: 'Input data operasional turbine',
+        areas: AREAS, // Mengambil dari variabel AREAS yang sudah ada
+        draftKey: DRAFT_KEYS.LOGSHEET,
+        offlineKey: DRAFT_KEYS.LOGSHEET_OFFLINE,
+        photoKey: PHOTO_DRAFT_KEYS.TURBINE,
+        submitType: 'LOGSHEET',
+        themeColor: '#3b82f6' // Warna biru
+    },
+    'CT': {
+        title: 'Logsheet Cooling Tower',
+        subtitle: 'Input data operasional basin & pompa',
+        areas: AREAS_CT,
+        draftKey: DRAFT_KEYS_CT.LOGSHEET,
+        offlineKey: DRAFT_KEYS_CT.OFFLINE,
+        photoKey: PHOTO_DRAFT_KEYS.CT,
+        submitType: 'LOGSHEET_CT',
+        themeColor: '#06b6d4' // Warna cyan
+    },
+    '1300': {
+        title: 'Logsheet Area 1300',
+        subtitle: 'Drying Air, Absorber & Lube Oil',
+        areas: AREAS_1300,
+        draftKey: DRAFT_KEYS_1300.LOGSHEET,
+        offlineKey: DRAFT_KEYS_1300.OFFLINE,
+        photoKey: PHOTO_DRAFT_KEYS.AREA1300,
+        submitType: 'LOGSHEET_1300',
+        themeColor: '#8b5cf6' // Warna ungu
+    },
+    '1100': {
+        title: 'Logsheet Area 1100/1200',
+        subtitle: 'Sulphur, Furnace, WHB',
+        areas: AREAS_1100,
+        draftKey: DRAFT_KEYS_1100.LOGSHEET,
+        offlineKey: DRAFT_KEYS_1100.OFFLINE,
+        photoKey: PHOTO_DRAFT_KEYS.AREA1100,
+        submitType: 'LOGSHEET_1100',
+        themeColor: '#eab308' // Warna kuning
+    }
 };
 
 // ============================================
