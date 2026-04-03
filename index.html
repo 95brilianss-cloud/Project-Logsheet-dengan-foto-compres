@@ -802,7 +802,32 @@
         </div>
     </div>
 </div>
+<input type="file" id="univParamCamera" accept="image/*" capture="environment" style="display: none;" onchange="handleUnivParamPhoto(event)">
 
+<div class="photo-card glass param-photo-card" id="univPhotoSection" style="padding: 16px; border-radius: 16px; margin-bottom: 16px;">
+    <div class="photo-section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+            </svg>
+            <span style="font-size: 0.875rem; font-weight: 600;">Foto Validasi</span>
+        </div>
+        <span class="photo-badge" id="univPhotoBadge" style="padding: 4px 12px; background: rgba(148, 163, 184, 0.15); color: #94a3b8; border-radius: 9999px; font-size: 0.6875rem; font-weight: 700;">OPSIONAL</span>
+    </div>
+    <div class="photo-preview" id="univPhotoPreview" style="height: 160px; background: #1e293b; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px;">
+        <div class="photo-placeholder" style="text-align: center; color: #64748b;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 8px;">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+            </svg>
+            <div>Tiada foto</div>
+        </div>
+    </div>
+    <button class="btn btn-camera" id="univBtnCamera" onclick="document.getElementById('univParamCamera').click()" style="width: 100%; padding: 14px; color: white; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600;">
+        <span>📷 Ambil Foto</span>
+    </button>
+</div>
     <div id="ctAreaListScreen" class="screen">
         <div class="screen-header glass-header">
             <button class="btn-icon" onclick="navigateTo('logsheetSelectScreen')">
