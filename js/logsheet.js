@@ -14,10 +14,13 @@ function fetchUniversalLastData(type) {
     updateStatusIndicator(false);
     showCustomAlert('🔄 Menarik data shift sebelumnya...', 'info');
     
-    // Set batas waktu 8 detik. Jika koneksi lambat, langsung buka logsheet saja
+    // Set batas waktu 8 detik. Jika koneksi lambat, tutup alert dan buka logsheet
     const timeout = setTimeout(() => {
-        showCustomAlert('⚠️ Waktu habis. Membuka logsheet tanpa data riwayat.', 'warning');
-        openUniversalLogsheet(type);
+        showCustomAlert('⚠️ Waktu habis. Membuka logsheet tanpa riwayat.', 'warning');
+        setTimeout(() => {
+            if(typeof closeAlert === 'function') closeAlert(); // Tutup alert otomatis
+            openUniversalLogsheet(type);
+        }, 1500); // Jeda 1,5 detik agar pesan terbaca
     }, 8000);
     
     const callbackName = 'jsonp_univ_' + Date.now();
@@ -29,8 +32,14 @@ function fetchUniversalLastData(type) {
         updateStatusIndicator(true);
         cleanupJSONP(callbackName);
         
-        // Setelah data didapat, buka halaman logsheet
-        openUniversalLogsheet(type);
+        // Tampilkan pesan sukses
+        showCustomAlert('Data shift sebelumnya berhasil ditarik!', 'success');
+        
+        // Tutup alert otomatis setelah 1 detik, lalu pindah ke halaman logsheet
+        setTimeout(() => {
+            if(typeof closeAlert === 'function') closeAlert(); // Menutup popup
+            openUniversalLogsheet(type);
+        }, 1000); // 1000ms = 1 detik
     };
     
     // Tentukan Parameter 'action' ke Google Apps Script berdasarkan tipenya
@@ -38,11 +47,11 @@ function fetchUniversalLastData(type) {
     if (type === 'CT') {
         actionParam = '&action=getLastCT';
     } else if (type === '1300') {
-        actionParam = '&action=getLast1300'; // Pastikan Apps Script Anda punya action ini
+        actionParam = '&action=getLast1300';
     } else if (type === '1100') {
-        actionParam = '&action=getLast1100'; // Pastikan Apps Script Anda punya action ini
+        actionParam = '&action=getLast1100'; 
     } else if (type === 'TURBINE') {
-        actionParam = ''; // Default/Kosong untuk Turbin (sesuai versi lama Anda)
+        actionParam = ''; 
     }
     
     const script = document.createElement('script');
@@ -50,9 +59,13 @@ function fetchUniversalLastData(type) {
     script.onerror = () => {
         clearTimeout(timeout);
         cleanupJSONP(callbackName);
-        showCustomAlert('Gagal menarik data. Anda sedang offline.', 'error');
-        // Tetap izinkan operator mengisi logsheet meski offline
-        openUniversalLogsheet(type);
+        showCustomAlert('Gagal menarik data. Membuka mode offline.', 'error');
+        
+        // Tutup otomatis setelah 1.5 detik
+        setTimeout(() => {
+            if(typeof closeAlert === 'function') closeAlert();
+            openUniversalLogsheet(type);
+        }, 1500);
     };
     document.body.appendChild(script);
 }
