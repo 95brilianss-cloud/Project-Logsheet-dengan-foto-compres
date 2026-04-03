@@ -2846,6 +2846,90 @@ function showStepUniv() {
     setTimeout(() => inputField.focus(), 200);
 }
 
+function handleUnivStatusChange(checkbox) {
+    const chip = checkbox.closest('.status-chip');
+    const valInput = document.getElementById('univValInput');
+    
+    // Uncheck yang lain (Radio-like behavior)
+    document.querySelectorAll('input[name="univParamStatus"]').forEach(cb => {
+        if (cb !== checkbox) cb.checked = false;
+    });
+
+    if (checkbox.checked) {
+        if (checkbox.value === 'NOT_INSTALLED') {
+            valInput.value = '-';
+            valInput.disabled = true;
+        }
+    } else {
+        valInput.disabled = false;
+        valInput.value = '';
+    }
+}
+function handleUnivParamPhoto(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const originalDataUrl = e.target.result;
+        try {
+            // Gunakan fungsi compressImage yang sudah ada di utils.js
+            const result = await compressImage(originalDataUrl, {
+                maxWidth: 1200,
+                quality: 0.7
+            });
+            
+            const config = LOGSHEET_CONFIG[activeLogsheetType];
+            const fullLabel = config.areas[univActiveArea][univActiveIdx];
+            
+            // Simpan foto ke state universal
+            if (!univParamPhotos[activeLogsheetType]) univParamPhotos[activeLogsheetType] = {};
+            univParamPhotos[activeLogsheetType][fullLabel] = result.dataUrl;
+            
+            // Simpan ke LocalStorage agar tidak hilang saat refresh
+            localStorage.setItem(config.photoKey, JSON.stringify(univParamPhotos[activeLogsheetType]));
+            
+            showCustomAlert("Foto berhasil disimpan!", "success");
+        } catch (error) {
+            console.error("Gagal kompres foto", error);
+        }
+    };
+    reader.readAsDataURL(file);
+}
+async function submitUniversalLogsheet() {
+    if (!requireAuth()) return; //
+
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
+    const progress = showUploadProgress('Mengirim ' + config.title + '...'); //
+    
+    // Gabungkan data input dengan info operator
+    const finalData = {
+        type: config.submitType,
+        Operator: currentUser.name,
+        OperatorId: currentUser.username,
+        ...univCurrentInput
+    };
+
+    try {
+        await fetch(GAS_URL, { //
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify(finalData)
+        });
+
+        progress.complete();
+        showCustomAlert("Data Berhasil Terkirim!", "success");
+        
+        // Bersihkan draf setelah berhasil
+        localStorage.removeItem(config.draftKey);
+        univCurrentInput = {};
+        
+        setTimeout(() => navigateTo('homeScreen'), 1500);
+    } catch (error) {
+        progress.error();
+        showCustomAlert("Gagal terhubung, data disimpan di draf offline.", "error");
+    }
+}
 function renderUnivDots() {
     const params = LOGSHEET_CONFIG[activeLogsheetType].areas[univActiveArea];
     const container = document.getElementById('univProgressDots');
