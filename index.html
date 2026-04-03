@@ -396,7 +396,7 @@
         </div>
 
         <div class="logsheet-select-container">
-            <div class="logsheet-select-card" onclick="goToLogsheetTurbin()">
+            <div class="logsheet-select-card" onclick="openUniversalLogsheet('TURBINE')">
                 <div class="logsheet-icon-large turbin">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="stroke: white;">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
@@ -413,7 +413,7 @@
                 </div>
             </div>
 
-            <div class="logsheet-select-card ct-version" onclick="goToLogsheetCT()">
+            <div class="logsheet-select-card ct-version" onclick="openUniversalLogsheet('CT')">
                 <div class="logsheet-icon-large ct">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="stroke: white;">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
@@ -1552,6 +1552,59 @@
         <span>📤 Kirim Data Logsheet</span>
     </button>
 </div>
+<div id="univParamScreen" class="screen">
+        <div class="screen-header glass-header">
+            <button class="btn-icon" onclick="prevUnivStep(true)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <div class="step-badge" id="univStepBadge" style="padding: 4px 12px; border-radius: 9999px; border: 1px solid currentColor;">
+                <span id="univStepInfo" style="font-size: 0.875rem; font-weight: 700;">1/10</span>
+            </div>
+        </div>
+
+        <div class="param-container">
+            <div class="param-card glass">
+                <div class="param-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <span class="param-area" id="univCurrentAreaName" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Area</span>
+                    <span class="param-counter" id="univAreaProgress" style="padding: 4px 12px; background: rgba(30, 41, 59, 0.8); border-radius: 9999px; font-size: 0.875rem; font-weight: 700; color: #e2e8f0;">1/10</span>
+                </div>
+                
+                <h2 class="param-name" id="univLabelInput" style="font-size: 1.375rem; font-weight: 700; color: #f8fafc; margin-bottom: 24px; line-height: 1.4;">Parameter Name</h2>
+                
+                <div class="input-box" id="univMainInputWrapper" style="display: flex; align-items: center; background: rgba(15, 23, 42, 0.6); border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 16px; overflow: hidden; margin-bottom: 24px;">
+                    <div class="input-field" id="univInputFieldContainer" style="flex: 1; padding: 12px 16px;">
+                        </div>
+                    <div class="input-unit" id="univUnitDisplay" style="padding: 0 16px; background: rgba(255,255,255, 0.05); font-weight: 700; font-size: 0.9375rem; border-left: 2px solid rgba(148, 163, 184, 0.2); min-height: 64px; display: flex; align-items: center;">--</div>
+                </div>
+            </div>
+
+            <div class="status-abnormal-card" style="margin: 16px 0; padding: 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px;">
+                <div class="status-header" style="margin-bottom: 12px; font-weight: 700; color:#94a3b8; font-size: 0.875rem;">Kondisi Parameter</div>
+                <div class="status-options" id="univStatusOptions" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <label class="status-chip" data-status="ERROR" style="display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: rgba(30, 41, 59, 0.8); border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 24px; cursor: pointer; font-size: 0.8125rem; color: #94a3b8; font-weight: 500;">
+                        <input type="checkbox" name="univParamStatus" value="ERROR" onchange="handleUnivStatusChange(this)" style="display: none;">
+                        <span class="chip-text">⚠️ ALAT RUSAK</span>
+                    </label>
+                    <label class="status-chip" data-status="NOT_INSTALLED" style="display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: rgba(30, 41, 59, 0.8); border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 24px; cursor: pointer; font-size: 0.8125rem; color: #94a3b8; font-weight: 500;">
+                        <input type="checkbox" name="univParamStatus" value="NOT_INSTALLED" onchange="handleUnivStatusChange(this)" style="display: none;">
+                        <span class="chip-text">❌ BELUM ADA</span>
+                    </label>
+                </div>
+                <div class="status-note" id="univStatusNoteContainer" style="display: none; margin-top: 12px;">
+                    <input type="text" id="univStatusNote" placeholder="Keterangan masalah..." style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255, 0.2); border-radius: 8px; color: white;">
+                </div>
+            </div>
+
+            <div class="param-dots" id="univProgressDots" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;"></div>
+
+            <div class="action-bar" style="display: flex; gap: 12px; margin-top: auto;">
+                <button class="btn btn-secondary" onclick="prevUnivStep(false)" style="flex: 1; padding: 16px; background: rgba(30, 41, 59, 0.8); color: #e2e8f0; border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 12px; font-weight: 600;">Kembali</button>
+                <button class="btn" id="univBtnSubmitStep" onclick="nextUnivStep()" style="flex: 1; padding: 16px; color: white; border: none; border-radius: 12px; font-weight: 600;">Simpan & Lanjut</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="js/config.js"></script>
