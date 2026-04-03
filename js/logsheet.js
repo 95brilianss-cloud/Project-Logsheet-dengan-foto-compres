@@ -2795,8 +2795,108 @@ function renderUniversalAreaList() {
     }
 }
 
-// Fungsi dummy sementara untuk menangkap klik area (akan kita buat di Langkah 4)
+let univActiveArea = '';
+let univActiveIdx = 0;
+
 function openUnivAreaInput(areaName) {
-    console.log("Membuka input untuk area:", areaName);
-    alert("Tombol berfungsi! Nanti akan membuka parameter untuk area: " + areaName);
+    univActiveArea = areaName;
+    univActiveIdx = 0;
+    
+    // Set UI awal
+    document.getElementById('univCurrentAreaName').textContent = areaName;
+    document.getElementById('univParamUser').textContent = currentUser || 'Operator';
+    
+    showStepUniv();
+    navigateTo('univParamScreen');
+}
+
+function showStepUniv() {
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
+    const params = config.areas[univActiveArea];
+    const fullLabel = params[univActiveIdx];
+    const total = params.length;
+
+    // 1. Pecahkan Nama & Unit (Contoh: "Flow (T/h)" -> Nama: Flow, Unit: T/h)
+    const nameOnly = fullLabel.split(' (')[0];
+    const unitMatch = fullLabel.match(/\(([^)]+)\)/);
+    const unit = unitMatch ? unitMatch[1] : '--';
+
+    // 2. Update Label & Progress
+    document.getElementById('univLabelInput').textContent = nameOnly;
+    document.getElementById('univUnitDisplay').textContent = unit;
+    document.getElementById('univStepInfo').textContent = `${univActiveIdx + 1}/${total}`;
+    document.getElementById('univAreaProgress').textContent = `${univActiveIdx + 1}/${total}`;
+    
+    // 3. Ambil Nilai Terakhir (Jika ada di data global lastData)
+    // Nota: Pastikan lastData sudah diisi dari fetchLastData()
+    document.getElementById('univPrevVal').textContent = (typeof lastData !== 'undefined' ? lastData[fullLabel] : '--') || '--';
+    document.getElementById('univLastTime').textContent = (typeof lastData !== 'undefined' ? lastData._lastTime : '--:--') || '--:--';
+
+    // 4. Isi input dengan draf yang sudah disimpan (jika ada)
+    const inputField = document.getElementById('univValInput');
+    inputField.value = univCurrentInput[fullLabel] || '';
+    
+    // Warna tema
+    document.getElementById('univUnitDisplay').style.color = config.themeColor;
+    document.getElementById('univNextBtn').style.backgroundColor = config.themeColor;
+
+    renderUnivDots();
+    
+    // Auto focus ke input
+    setTimeout(() => inputField.focus(), 200);
+}
+
+function renderUnivDots() {
+    const params = LOGSHEET_CONFIG[activeLogsheetType].areas[univActiveArea];
+    const container = document.getElementById('univProgressDots');
+    let html = '';
+    
+    params.forEach((param, index) => {
+        const isFilled = univCurrentInput[param] !== undefined && univCurrentInput[param] !== '';
+        const isActive = index === univActiveIdx;
+        let color = isFilled ? LOGSHEET_CONFIG[activeLogsheetType].themeColor : 'rgba(148, 163, 184, 0.2)';
+        let border = isActive ? `2px solid white` : 'none';
+        
+        html += `<div onclick="jumpToStepUniv(${index})" style="width:12px; height:12px; border-radius:50%; background:${color}; border:${border}; cursor:pointer;"></div>`;
+    });
+    container.innerHTML = html;
+}
+
+function nextStepUniv() {
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
+    const params = config.areas[univActiveArea];
+    const fullLabel = params[univActiveIdx];
+    const val = document.getElementById('univValInput').value;
+
+    // Simpan ke memori & LocalStorage
+    if (val !== '') {
+        univCurrentInput[fullLabel] = val;
+    } else {
+        delete univCurrentInput[fullLabel];
+    }
+    localStorage.setItem(config.draftKey, JSON.stringify(univCurrentInput));
+
+    if (univActiveIdx < params.length - 1) {
+        univActiveIdx++;
+        showStepUniv();
+    } else {
+        showCustomAlert("Area selesai!", "success");
+        renderUniversalAreaList(); // Update checklist di menu utama
+        navigateTo('universalAreaListScreen');
+    }
+}
+
+function goBackUniv() {
+    if (univActiveIdx > 0) {
+        univActiveIdx--;
+        showStepUniv();
+    } else {
+        renderUniversalAreaList();
+        navigateTo('universalAreaListScreen');
+    }
+}
+
+function jumpToStepUniv(idx) {
+    univActiveIdx = idx;
+    showStepUniv();
 }
