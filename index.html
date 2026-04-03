@@ -1522,6 +1522,36 @@
             </button>
         </div>
     </div>
+    <div id="universalAreaListScreen" class="screen">
+    <div class="screen-header glass-header">
+        <button class="btn-icon" onclick="navigateTo('logsheetSelectScreen')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+        </button>
+        <div class="header-title-group">
+            <h2 id="univHeaderTitle">Memuat...</h2>
+            <span class="header-subtitle" id="univProgressText">0% Complete</span>
+        </div>
+        <div class="user-pill"><span id="univAreaListUser">-</span></div>
+    </div>
+
+    <div class="progress-card glass">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="font-size: 0.875rem; color: #94a3b8;">Overall Progress</span>
+            <span style="font-weight: 700;" id="univOverallPercent">0%</span>
+        </div>
+        <div class="progress-bar-bg" style="width: 100%; height: 8px; background: rgba(148, 163, 184, 0.1); border-radius: 9999px; overflow: hidden;">
+            <div class="progress-bar-fill" id="univOverallProgressBar" style="height: 100%; width: 0%; transition: width 0.3s ease;"></div>
+        </div>
+    </div>
+
+    <div class="areas-list" id="univAreaList"></div>
+
+    <button class="btn btn-floating" id="univSubmitBtn" onclick="submitUniversalLogsheet()" style="display:none; position: fixed; bottom: 32px; left: 24px; right: 24px; padding: 16px; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer;">
+        <span>📤 Kirim Data Logsheet</span>
+    </button>
+</div>
 </div>
 
 <script src="js/config.js"></script>
