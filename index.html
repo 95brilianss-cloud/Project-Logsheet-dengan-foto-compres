@@ -53,6 +53,21 @@
         #statusAbnormalCard1100 .status-chip[data-status="ERROR"].active { background: rgba(239, 68, 68, 0.1) !important; border-color: #ef4444 !important; color: #ef4444 !important; }
         #statusAbnormalCard1100 .status-chip[data-status="MAINTENANCE"].active { background: rgba(245, 158, 11, 0.1) !important; border-color: #f59e0b !important; color: #f59e0b !important; }
         #statusAbnormalCard1100 .status-chip[data-status="OFF"].active { background: rgba(248, 250, 252, 0.1) !important; border-color: #f8fafc !important; color: #f8fafc !important; }
+      
+        /* Tambahan Animasi Custom Alert Premium */
+        @keyframes spin-slow {
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes alert-popup {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .custom-alert {
+            transition: opacity 0.3s ease;
+        }
+        .custom-alert:not(.hidden) .alert-content {
+            animation: alert-popup 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }  
     </style>
 </head>
 <body>
@@ -112,17 +127,19 @@
     </div>
 </div>
 
-<div id="customAlert" class="custom-alert hidden">
-    <div class="alert-content" id="alertContent" style="max-width: 340px;">
-        <div class="alert-icon-wrapper" id="alertIconWrapper">
-            <svg viewBox="0 0 52 52" style="stroke: #10b981; stroke-width: 3; fill: none;">
-                <circle cx="26" cy="26" r="25"/>
-                <path d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-            </svg>
-        </div>
-        <h3 id="alertTitle" style="margin-bottom: 8px; font-size: 1.25rem; font-weight: 700;">Berhasil</h3>
-        <p id="alertMessage" style="color: #94a3b8; margin-bottom: 20px; font-size: 0.9375rem;">Data berhasil dikirim!</p>
-        <button class="alert-btn success" onclick="closeAlert()">Oke</button>
+<div id="customAlert" class="custom-alert hidden" style="z-index: 100000; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center;">
+    <div class="alert-content glass" id="alertContent" style="max-width: 320px; width: 90%; background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95)); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; padding: 32px 24px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);">
+        
+        <div class="alert-icon-wrapper" id="alertIconWrapper" style="width: 80px; height: 80px; margin: 0 auto 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; background: rgba(15, 23, 42, 0.5); border: 2px solid rgba(255, 255, 255, 0.05); box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);">
+            <div style="position: absolute; inset: -6px; border-radius: 50%; border: 2px dashed rgba(148, 163, 184, 0.2); animation: spin-slow 8s linear infinite;"></div>
+            
+            </div>
+        
+        <h3 id="alertTitle" style="color: #f8fafc; margin-bottom: 12px; font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em;">Berhasil</h3>
+        
+        <p id="alertMessage" style="color: #94a3b8; margin-bottom: 28px; font-size: 0.95rem; line-height: 1.5;">Data berhasil dikirim!</p>
+        
+        <button class="alert-btn" onclick="closeAlert()" style="width: 100%; padding: 16px; border: none; border-radius: 16px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(59, 130, 246, 0.1); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);">OKE</button>
     </div>
 </div>
 
