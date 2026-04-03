@@ -5,7 +5,7 @@
 // ============================================
 // 1. APP CONFIGURATION
 // ============================================
-const APP_VERSION = '2.4.1';
+const APP_VERSION = '2.5.0';
 const APP_NAME = 'Turbine Logsheet Pro';
 
 const AUTH_CONFIG = {
@@ -535,6 +535,8 @@ const INPUT_TYPES = {
             '(On/Off)': ['On', 'Off'],
             '(Running/Stop)': ['Running', 'Stop'],
             '(Remote/Running/Stop)': ['Remote', 'Running', 'Stop']
+            '(A/M)': ['Auto', 'Manual'],
+            'STATUS': ['Running', 'Stop', 'Standby']
         }
     }
 };
