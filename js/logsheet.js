@@ -2673,3 +2673,129 @@ async function send1300ToSheet() {
         }, 500);
     }
    }
+// ==========================================
+// DYNAMIC TEMPLATE ENGINE
+// ==========================================
+
+// Variabel State Universal
+let activeLogsheetType = null; // Akan berisi 'TURBINE', 'CT', '1300', atau '1100'
+let univCurrentInput = {};     // Draf input sementara
+let univParamPhotos = {};      // Foto sementara
+
+/**
+ * Fungsi untuk membuka Logsheet apa saja (Turbin, CT, 1300, 1100)
+ * @param {string} type - Sesuai dengan key di LOGSHEET_CONFIG (misal: '1300')
+ */
+function openUniversalLogsheet(type) {
+    const config = LOGSHEET_CONFIG[type];
+    
+    if (!config) {
+        console.error("Wah, tipe logsheet " + type + " tidak ditemukan di config!");
+        return;
+    }
+
+    // 1. Set tipe logsheet yang sedang aktif
+    activeLogsheetType = type;
+
+    // 2. Ubah Judul & Info User di Header
+    document.getElementById('univHeaderTitle').textContent = config.title;
+    document.getElementById('univAreaListUser').textContent = currentUser || 'Operator';
+
+    // 3. Ambil Draf dari LocalStorage (Agar aman saat offline/refresh)
+    const savedDraft = localStorage.getItem(config.draftKey);
+    if (savedDraft) {
+        univCurrentInput = JSON.parse(savedDraft);
+    } else {
+        univCurrentInput = {}; // Mulai kosong jika tidak ada draf
+    }
+
+    // 4. Render Daftar Area & Progress-nya
+    renderUniversalAreaList();
+
+    // 5. Tampilkan Layar
+    navigateTo('universalAreaListScreen');
+}
+
+/**
+ * Fungsi untuk merender daftar kotak Area (Drying, Absorber, dll) secara otomatis
+ */
+function renderUniversalAreaList() {
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
+    const listContainer = document.getElementById('univAreaList');
+    let html = '';
+
+    let totalParams = 0;
+    let filledParams = 0;
+
+    // Looping semua area yang ada di config logsheet aktif
+    Object.entries(config.areas).forEach(([areaName, params]) => {
+        let areaFilled = 0;
+        const areaTotal = params.length;
+        totalParams += areaTotal;
+
+        // Cek berapa parameter yang sudah diisi di area ini
+        params.forEach(param => {
+            if (univCurrentInput[param.id] !== undefined && univCurrentInput[param.id] !== '') {
+                areaFilled++;
+                filledParams++;
+            }
+        });
+
+        const isComplete = areaFilled === areaTotal;
+        const progressPercent = areaTotal === 0 ? 0 : Math.round((areaFilled / areaTotal) * 100);
+        
+        // Atur status visual (Ikon & Warna)
+        let statusIcon = '📝';
+        let statusClass = '';
+        if (isComplete) {
+            statusIcon = '✅';
+            statusClass = 'completed';
+        } else if (areaFilled > 0) {
+            statusIcon = '⏳';
+            statusClass = 'in-progress';
+        }
+
+        // Buat HTML Kotak Area
+        html += `
+            <div class="area-card glass ${statusClass}" onclick="openUnivAreaInput('${areaName}')" style="cursor: pointer;">
+                <div class="area-card-header">
+                    <div class="area-title-group">
+                        <span class="area-icon">${statusIcon}</span>
+                        <div class="area-info">
+                            <h3 style="margin:0; font-size:1.1rem;">${areaName}</h3>
+                            <p style="margin:0; font-size:0.8rem; color:#64748b;">${areaFilled} / ${areaTotal} Parameter diisi</p>
+                        </div>
+                    </div>
+                    <span class="progress-badge" style="background:${isComplete ? config.themeColor : '#e2e8f0'}; color:${isComplete ? 'white' : '#64748b'}; padding:4px 8px; border-radius:12px; font-size:0.8rem; font-weight:bold;">${progressPercent}%</span>
+                </div>
+                <div class="progress-bar-bg" style="width: 100%; height: 6px; background: rgba(0,0,0,0.05); border-radius: 4px; margin-top: 12px; overflow: hidden;">
+                    <div class="progress-bar-fill" style="height: 100%; width: ${progressPercent}%; background: ${config.themeColor}; transition: 0.3s ease;"></div>
+                </div>
+            </div>
+        `;
+    });
+
+    listContainer.innerHTML = html;
+
+    // Update Bar Progress Keseluruhan (Overall Progress) di Header
+    const overallPercent = totalParams === 0 ? 0 : Math.round((filledParams / totalParams) * 100);
+    document.getElementById('univOverallPercent').textContent = `${overallPercent}%`;
+    document.getElementById('univOverallProgressBar').style.width = `${overallPercent}%`;
+    document.getElementById('univOverallProgressBar').style.backgroundColor = config.themeColor;
+    document.getElementById('univProgressText').textContent = `${overallPercent}% Selesai`;
+
+    // Munculkan Tombol Submit HANYA JIKA sudah 100%
+    const submitBtn = document.getElementById('univSubmitBtn');
+    if (overallPercent === 100) {
+        submitBtn.style.display = 'block';
+        submitBtn.style.backgroundColor = config.themeColor;
+    } else {
+        submitBtn.style.display = 'none';
+    }
+}
+
+// Fungsi dummy sementara untuk menangkap klik area (akan kita buat di Langkah 4)
+function openUnivAreaInput(areaName) {
+    console.log("Membuka input untuk area:", areaName);
+    alert("Tombol berfungsi! Nanti akan membuka parameter untuk area: " + areaName);
+}
