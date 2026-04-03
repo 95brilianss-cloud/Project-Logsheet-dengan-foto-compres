@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Logsheet & TPM App</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e293b">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/screens.css">
+</head>
+<body>
+    <div id="app">
+        <div id="loadingScreen" class="overlay" style="display: none;">
+            <div class="loader-container glass">
+                <div class="spinner"></div>
+                <p id="loadingText">Memuat...</p>
+            </div>
+        </div>
+
+        <div id="customAlert" class="custom-alert hidden">
+            <span class="alert-icon">ℹ️</span>
+            <span id="customAlertMessage">Pesan</span>
+        </div>
+
+        <div id="imageModal" class="modal-overlay hidden">
+            <div class="modal-content glass">
+                <button class="btn-close-modal" onclick="closeImageModal()">×</button>
+                <img id="modalImage" src="" alt="Preview">
+            </div>
+        </div>
+
+        <div id="loginScreen" class="screen active">
+            <div class="login-container glass">
+                <img src="logo.png" alt="Logo" class="login-logo" onerror="this.style.display='none'">
+                <h2>Sistem Operasi</h2>
+                <p class="subtitle">Silakan login untuk melanjutkan</p>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label>Username (NIP/Nama)</label>
+                        <input type="text" id="username" required autocomplete="off" placeholder="Masukkan username">
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="password" required placeholder="Masukkan password">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </form>
+                <div class="version-text">v3.0.0 (Dynamic Edition)</div>
+            </div>
+        </div>
+
+        <div id="mainMenuScreen" class="screen">
+            <div class="screen-header glass-header">
+                <div class="header-user-info">
+                    <div class="avatar" id="userAvatar">U</div>
+                    <div>
+                        <h2 id="welcomeName">Halo, User</h2>
+                        <span class="role-badge" id="userRoleBadge">Operator</span>
+                    </div>
+                </div>
+                <button class="btn-icon" onclick="navigateTo('profileScreen')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5 9 6.343 9 8s1.343 3 3 3zm0 2c-2.67 0-8 1.337-8 4v2h16v-2c0-2.663-5.33-4-8-4z"/></svg>
+                </button>
+            </div>
+
+            <div class="menu-grid">
+                <div class="menu-card glass" onclick="navigateTo('logsheetSelectScreen')">
+                    <div class="menu-icon logsheet-icon">📝</div>
+                    <h3>Isi Logsheet</h3>
+                    <p>Catat parameter operasional plant</p>
+                </div>
+                <div class="menu-card glass" onclick="navigateTo('tpmMenuScreen')">
+                    <div class="menu-icon tpm-icon">🔧</div>
+                    <h3>TPM</h3>
+                    <p>Total Productive Maintenance</p>
+                </div>
+                <div class="menu-card glass" onclick="navigateTo('balancingScreen')">
+                    <div class="menu-icon balance-icon">⚖️</div>
+                    <h3>Balancing</h3>
+                    <p>Power & Steam Balance</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="logsheetSelectScreen" class="screen">
+            <div class="screen-header glass-header">
+                <button class="btn-icon" onclick="navigateTo('mainMenuScreen')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2>Pilih Logsheet</h2>
+            </div>
+            <div class="menu-list">
+                <div class="menu-list-item glass" onclick="openDynamicLogsheet('TURBIN')">
+                    <div class="item-icon" style="background:#3b82f6;">⚙️</div>
+                    <div class="item-text">
+                        <h3>Logsheet Turbin</h3>
+                        <p>17.5 MW STG</p>
+                    </div>
+                </div>
+                <div class="menu-list-item glass" onclick="openDynamicLogsheet('CT')">
+                    <div class="item-icon" style="background:#06b6d4;">❄️</div>
+                    <div class="item-text">
+                        <h3>Logsheet Cooling Tower</h3>
+                        <p>Sistem Pendingin</p>
+                    </div>
+                </div>
+                <div class="menu-list-item glass" onclick="openDynamicLogsheet('1300')">
+                    <div class="item-icon" style="background:#8b5cf6;">💧</div>
+                    <div class="item-text">
+                        <h3>Logsheet 1300</h3>
+                        <p>Water Treatment Plant</p>
+                    </div>
+                </div>
+                <div class="menu-list-item glass" onclick="openDynamicLogsheet('1100')">
+                    <div class="item-icon" style="background:#eab308;">🔥</div>
+                    <div class="item-text">
+                        <h3>Logsheet 1100/1200</h3>
+                        <p>Area Boiler & Utilitas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dynamicAreaListScreen" class="screen">
+            <div class="screen-header glass-header">
+                <button class="btn-icon" onclick="navigateTo('logsheetSelectScreen')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <div class="header-title-group">
+                    <h2 id="dynamicListTitle">Nama Logsheet</h2>
+                    <span class="header-subtitle" id="dynamicProgressText">0% Selesai</span>
+                </div>
+            </div>
+
+            <div class="progress-container glass-panel">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="dynamicOverallProgressBar"></div>
+                </div>
+            </div>
+
+            <div class="areas-grid" id="dynamicAreaList">
+                </div>
+
+            <button class="btn btn-floating shadow-lg" id="dynamicSubmitBtn" onclick="submitDynamicLogsheet()" style="display:none;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                Kirim Data
+            </button>
+        </div>
+
+        <div id="dynamicParamScreen" class="screen">
+            <div class="screen-header glass-header">
+                <button class="btn-icon" onclick="goBackDynamic()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <div class="header-title-group">
+                    <h2 id="dynamicAreaTitle">Nama Area</h2>
+                    <span class="header-subtitle" id="dynamicStepInfo">Param 1 dari 10</span>
+                </div>
+            </div>
+
+            <div class="param-card glass">
+                <div class="last-value-badge" id="dynamicLastValueBadge" style="display:none;">
+                    Terakhir: <span id="dynamicLastValueText">--</span>
+                </div>
+
+                <h3 class="param-name" id="dynamicLabelInput">Nama Parameter</h3>
+                
+                <div class="input-box-wrapper" id="dynamicInputWrapper">
+                    <input type="text" id="dynamicValInput" class="param-input" autocomplete="off" placeholder="Masukkan nilai...">
+                    <div class="input-unit" id="dynamicUnitDisplay">--</div>
+                </div>
+
+                <div id="dynamicSelectWrapper" style="display:none;" class="select-wrapper">
+                    <select id="dynamicSelectInput" class="param-select">
+                        </select>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="photo-section">
+                    <label class="photo-trigger-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                        <span>Lampirkan Foto Bukti</span>
+                        <input type="file" accept="image/*" capture="environment" id="dynamicPhotoInput" hidden onchange="handleDynamicPhoto(event)">
+                    </label>
+                    <div id="dynamicPhotoPreviewContainer" class="photo-preview-box hidden">
+                        <img id="dynamicPhotoPreview" src="" alt="Preview">
+                        <button class="btn-remove-photo" onclick="removeDynamicPhoto()">×</button>
+                    </div>
+                </div>
+
+                <div class="abnormal-section mt-4">
+                    <h4 class="section-title">Status Kondisi</h4>
+                    <div class="status-chips" id="dynamicStatusChips">
+                        <div class="chip" onclick="setDynamicStatus('NORMAL')">🟢 NORMAL</div>
+                        <div class="chip" onclick="setDynamicStatus('ERROR')">🔴 ERROR / RUSAK</div>
+                        <div class="chip" onclick="setDynamicStatus('MAINTENANCE')">🟠 MAINTENANCE</div>
+                        <div class="chip" onclick="setDynamicStatus('NOT_INSTALLED')">⚪ BELUM PASANG</div>
+                    </div>
+                    <textarea id="dynamicStatusNote" class="note-input" placeholder="Tuliskan keterangan detail di sini..." style="display:none;"></textarea>
+                </div>
+            </div>
+
+            <div class="bottom-action-bar glass-header">
+                <button class="btn btn-secondary" onclick="goBackDynamic()">Kembali</button>
+                <button class="btn btn-primary" onclick="saveDynamicStep()">Selanjutnya ➔</button>
+            </div>
+        </div>
+
+        <div id="tpmMenuScreen" class="screen">
+            <div class="screen-header glass-header">
+                <button class="btn-icon" onclick="navigateTo('mainMenuScreen')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2>Menu TPM</h2>
+            </div>
+            <div class="menu-list">
+                <button class="btn btn-primary w-100 mb-3" onclick="navigateTo('tpmScanScreen')">Scan QR / Pilih Area TPM</button>
+            </div>
+        </div>
+
+        <div id="tpmScanScreen" class="screen">
+            </div>
+
+        <div id="tpmFormScreen" class="screen">
+            </div>
+
+        <div id="balancingScreen" class="screen">
+             <div class="screen-header glass-header">
+                <button class="btn-icon" onclick="navigateTo('mainMenuScreen')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2>Balancing Steam & Power</h2>
+            </div>
+            <div class="p-4">
+                <p>Fitur balancing dalam pengembangan.</p>
+            </div>
+        </div>
+
+        <div id="profileScreen" class="screen">
+            <div class="screen-header glass-header">
+                <button class="btn-icon" onclick="navigateTo('mainMenuScreen')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2>Profil Pengguna</h2>
+            </div>
+            <div class="profile-card glass mt-4">
+                <div class="profile-avatar large" id="profileAvatarLarge">U</div>
+                <h3 id="profileName">Nama User</h3>
+                <p id="profileNip">NIP: 12345</p>
+                <div class="profile-details mt-4">
+                    <div class="detail-row"><span>Role:</span> <strong id="profileRole">Operator</strong></div>
+                    <div class="detail-row"><span>Departemen:</span> <strong id="profileDept">Produksi 3B</strong></div>
+                </div>
+                <button class="btn btn-danger w-100 mt-4" onclick="handleLogout()">Keluar Aplikasi</button>
+            </div>
+        </div>
+
+    </div> <script src="js/config.js"></script>    <script src="js/state.js"></script>     <script src="js/utils.js"></script>     <script src="js/users.js"></script>     <script src="js/auth.js"></script>      <script src="js/logsheet.js"></script>  <script src="js/tpm.js"></script>       <script src="js/balancing.js"></script> <script src="js/main.js"></script>      </body>
+</html>
