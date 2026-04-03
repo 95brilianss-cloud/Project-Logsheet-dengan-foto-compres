@@ -135,7 +135,7 @@ function openUniversalLogsheet(type) {
 }
 
 /**
- * Fungsi untuk merender daftar kotak Area (Drying, Absorber, dll) secara otomatis
+ * Fungsi untuk merender daftar kotak Area secara otomatis (PREMIUM UI)
  */
 function renderUniversalAreaList() {
     const config = LOGSHEET_CONFIG[activeLogsheetType];
@@ -146,15 +146,12 @@ function renderUniversalAreaList() {
     let totalParams = 0;
     let filledParams = 0;
 
-    // Looping semua area yang ada di config logsheet aktif
     Object.entries(config.areas).forEach(([areaName, paramsList]) => {
         let areaFilled = 0;
         const areaTotal = paramsList.length;
         totalParams += areaTotal;
 
-        // Cek berapa parameter yang sudah diisi di area ini
         paramsList.forEach(fullLabel => {
-            // PERBAIKAN: Mengecek dari object areaName dan key fullLabel
             if (univCurrentInput[areaName] && 
                 univCurrentInput[areaName][fullLabel] !== undefined && 
                 univCurrentInput[areaName][fullLabel] !== '') {
@@ -166,40 +163,62 @@ function renderUniversalAreaList() {
         const isComplete = areaFilled === areaTotal && areaTotal > 0;
         const progressPercent = areaTotal === 0 ? 0 : Math.round((areaFilled / areaTotal) * 100);
         
-        // Atur status visual (Ikon & Warna)
-        let statusIcon = '📝';
-        let statusClass = '';
-        if (isComplete) {
-            statusIcon = '✅';
-            statusClass = 'completed';
-        } else if (areaFilled > 0) {
-            statusIcon = '⏳';
-            statusClass = 'in-progress';
-        }
-
-        // Cek apakah ada status abnormal (ERROR, NOT_INSTALLED, dsb)
+        // Cek apakah ada status abnormal (Alat Rusak / Belum Ada)
         const hasAbnormal = paramsList.some(fullLabel => {
             const val = (univCurrentInput[areaName] && univCurrentInput[areaName][fullLabel]) || '';
             const firstLine = val.split('\n')[0];
             return ['ERROR', 'MAINTENANCE', 'NOT_INSTALLED', 'OFF'].includes(firstLine);
         });
 
-        // Buat HTML Kotak Area
+        // Atur status visual (Ikon & Warna Premium)
+        let statusIcon = '📝';
+        let iconBg = `${config.themeColor}25`; // Transparansi 25%
+        let iconColor = config.themeColor;
+        let ringColor = `${config.themeColor}40`;
+        let themeColor = config.themeColor;
+
+        if (isComplete) {
+            statusIcon = '✅';
+            iconBg = 'rgba(16, 185, 129, 0.15)'; // Hijau Emerald
+            iconColor = '#10b981';
+            ringColor = 'rgba(16, 185, 129, 0.3)';
+            themeColor = '#10b981';
+        } else if (areaFilled > 0) {
+            statusIcon = '⏳';
+        }
+
+        if (hasAbnormal) {
+            iconBg = 'rgba(239, 68, 68, 0.15)'; // Merah
+            iconColor = '#ef4444';
+            ringColor = 'rgba(239, 68, 68, 0.3)';
+            themeColor = '#ef4444';
+        }
+
+        // HTML KARTU PREMIUM
         html += `
-            <div class="area-card glass ${statusClass} ${hasAbnormal ? 'has-warning' : ''}" onclick="openUnivAreaInput('${areaName}')" style="cursor: pointer; position:relative;">
-                ${hasAbnormal ? '<div style="position:absolute; top:-6px; right:-6px; background:#ef4444; width:16px; height:16px; border-radius:50%; border:2px solid #0a0f1c;"></div>' : ''}
-                <div class="area-card-header">
-                    <div class="area-title-group">
-                        <span class="area-icon">${statusIcon}</span>
-                        <div class="area-info">
-                            <h3 style="margin:0; font-size:1.1rem;">${areaName}</h3>
-                            <p style="margin:0; font-size:0.8rem; color:#64748b;">${areaFilled} / ${areaTotal} Parameter</p>
+            <div class="premium-area-card" onclick="openUnivAreaInput('${areaName}')" style="--theme-color: ${themeColor};">
+                ${hasAbnormal ? '<div class="abnormal-pulse" style="position:absolute; top:16px; right:16px; width:12px; height:12px; background:#ef4444; border-radius:50%;"></div>' : ''}
+                
+                <div class="premium-area-header">
+                    <div style="display: flex; align-items: center; flex: 1;">
+                        <div class="premium-icon-box" style="background: ${iconBg}; color: ${iconColor}; border: 1px solid ${ringColor};">
+                            ${statusIcon}
+                        </div>
+                        <div class="premium-area-info">
+                            <h3 class="premium-area-title">${areaName}</h3>
+                            <p class="premium-area-subtitle">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                                ${areaFilled} / ${areaTotal} Diisi
+                            </p>
                         </div>
                     </div>
-                    <span class="progress-badge" style="background:${isComplete ? config.themeColor : '#e2e8f0'}; color:${isComplete ? 'white' : '#64748b'}; padding:4px 8px; border-radius:12px; font-size:0.8rem; font-weight:bold;">${progressPercent}%</span>
+                    <div style="padding: 4px 12px; background: ${isComplete ? iconColor : 'rgba(15, 23, 42, 0.6)'}; color: ${isComplete ? 'white' : '#e2e8f0'}; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; font-size: 0.8rem; font-weight: 800;">
+                        ${progressPercent}%
+                    </div>
                 </div>
-                <div class="progress-bar-bg" style="width: 100%; height: 6px; background: rgba(0,0,0,0.2); border-radius: 4px; margin-top: 12px; overflow: hidden;">
-                    <div class="progress-bar-fill" style="height: 100%; width: ${progressPercent}%; background: ${hasAbnormal ? '#ef4444' : config.themeColor}; transition: 0.3s ease;"></div>
+
+                <div class="premium-progress-bar-bg">
+                    <div class="premium-progress-fill" style="width: ${progressPercent}%; background: ${themeColor}; box-shadow: 0 0 10px ${themeColor}80;"></div>
                 </div>
             </div>
         `;
@@ -207,7 +226,7 @@ function renderUniversalAreaList() {
 
     listContainer.innerHTML = html;
 
-    // Update Bar Progress Keseluruhan (Overall Progress) di Header
+    // Update Bar Progress Keseluruhan
     const overallPercent = totalParams === 0 ? 0 : Math.round((filledParams / totalParams) * 100);
     const overallPercentEl = document.getElementById('univOverallPercent');
     const overallProgressBarEl = document.getElementById('univOverallProgressBar');
@@ -217,17 +236,17 @@ function renderUniversalAreaList() {
     if (overallProgressBarEl) {
         overallProgressBarEl.style.width = `${overallPercent}%`;
         overallProgressBarEl.style.backgroundColor = config.themeColor;
+        overallProgressBarEl.style.boxShadow = `0 0 12px ${config.themeColor}80`; // Tambahan glow pada bar utama
     }
     if (progressTextEl) progressTextEl.textContent = `${overallPercent}% Selesai`;
 
-    // Munculkan Tombol Submit HANYA JIKA ada data yang diisi (overallPercent > 0)
-    // Atau jika Anda ingin mewajibkan 100%, ubah (overallPercent > 0) menjadi (overallPercent === 100)
+    // Tombol Submit
     const submitBtn = document.getElementById('univSubmitBtn');
     if (submitBtn) {
         if (overallPercent > 0) {
             submitBtn.style.display = 'block';
-            submitBtn.style.backgroundColor = config.themeColor;
-            submitBtn.style.boxShadow = `0 8px 24px ${config.themeColor}50`;
+            submitBtn.style.background = `linear-gradient(135deg, ${config.themeColor}, color-mix(in srgb, ${config.themeColor} 70%, black))`;
+            submitBtn.style.boxShadow = `0 8px 24px ${config.themeColor}60`;
         } else {
             submitBtn.style.display = 'none';
         }
