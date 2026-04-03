@@ -2,52 +2,89 @@
    TURBINE LOGSHEET PRO - GLOBAL STATE
    ============================================ */
 
-/**
- * File ini menyimpan semua variabel global yang dibutuhkan oleh aplikasi.
- * Dengan arsitektur Dynamic Template, kita tidak perlu lagi membuat variabel
- * terpisah untuk setiap area (Turbin, CT, 1300, 1100).
- */
+// ============================================
+// 1. GENERAL LOGSHEET STATE (TURBINE)
+// ============================================
+let lastData = {};
+let currentInput = {};
+let activeArea = "";
+let activeIdx = 0;
+let totalParams = 0;
+let currentInputType = 'text';
 
 // ============================================
-// 1. SYSTEM & PWA STATE
+// 2. AUTHENTICATION & USER STATE
 // ============================================
-let deferredPrompt = null;              // Menyimpan event untuk instalasi PWA
-let currentUploadController = null;     // Untuk membatalkan proses upload (AbortController)
+let currentUser = null;
+let isAuthenticated = false;
+let usersCache = null;
 
 // ============================================
-// 2. AUTHENTICATION STATE
+// 3. UI, SYSTEM & NETWORK STATE
 // ============================================
-let currentUser = null;                 // Menyimpan data user yang sedang login { username, role, name, department }
-
-// ============================================
-// 3. DYNAMIC LOGSHEET STATE
-// ============================================
-// Variabel ini akan berubah-ubah nilainya tergantung logsheet apa yang sedang dibuka
-let activeLogsheetType = null;          // Tipe logsheet aktif: "TURBIN", "CT", "1300", atau "1100"
-let activeArea = null;                  // Area aktif yang sedang diisi: misal "BASIN SA", "DRYING AIR"
-let activeIdx = 0;                      // Index parameter yang sedang diisi di dalam area aktif
-
-let currentInputData = {};              // Menyimpan nilai parameter yang sedang diketik user (Draft)
-let currentPhotosData = {};             // Menyimpan foto base64 untuk parameter terkait
-let currentParamPhoto = null;           // Foto yang sedang aktif/diambil di layar parameter saat ini
-let currentInputType = 'text';          // Tipe input parameter saat ini (bisa 'text' atau 'select')
-
-let lastData = {};                      // Menyimpan data referensi terakhir yang ditarik dari server (GAS)
+let autoCloseTimer = null;
+let uploadProgressInterval = null;
+let currentUploadController = null;
 
 // ============================================
 // 4. TPM (TOTAL PRODUCTIVE MAINTENANCE) STATE
 // ============================================
-// (Dibiarkan tetap ada untuk mendukung fitur TPM)
-let activeTPMArea = null;               // Area TPM yang sedang dipilih
-let currentTPMPhoto = null;             // Foto TPM saat ini
+let activeTPMArea = '';
+let currentTPMPhoto = null;
+let currentTPMStatus = '';
 
 // ============================================
-// 5. BALANCING POWER & STEAM STATE
+// 5. BALANCING STATE
 // ============================================
-// (Dibiarkan tetap ada untuk mendukung fitur Balancing)
-let currentBalancingData = {};          // Menyimpan data draft balancing
+let currentShift = 3;
+let balancingAutoSaveInterval = null;
 
 // ============================================
-// 6. HELPER / METADATA
+// 6. PWA (PROGRESSIVE WEB APP) STATE
 // ============================================
-let totalParams = 0;                    // (Opsional) Total parameter untuk keperluan kalkulasi progress keseluruhan
+let deferredPrompt = null;
+let installBannerShown = false;
+
+// ============================================
+// 7. COOLING TOWER (CT) LOGSHEET STATE
+// ============================================
+let lastDataCT = {};
+let currentInputCT = {};
+let activeAreaCT = "";
+let activeIdxCT = 0;
+let totalParamsCT = 0;
+let currentInputTypeCT = 'text';
+
+// ============================================
+// 8. 1300 LOGSHEET STATE
+// ============================================
+let currentInput1300 = {};
+let activeArea1300 = null;
+let activeIdx1300 = 0;
+let currentInputType1300 = 'text';
+let lastData1300 = {};
+
+// ============================================
+// 9. 1100 LOGSHEET STATE
+// ============================================
+let activeArea1100 = null;
+let activeIdx1100 = 0;
+let currentInput1100 = {};
+let param1100Photos = {};
+let current1100ParamPhoto = null;
+let lastData1100 = {};
+
+// ============================================
+// 10. PHOTO VALIDATION STATE (TURBINE & CT)
+// ============================================
+// Foto untuk parameter Turbine
+let currentParamPhoto = null;  // Foto yang sedang aktif diambil
+let paramPhotos = {};          // Format: { areaName: { paramName: photoData } }
+
+// Foto untuk parameter CT
+let currentCTParamPhoto = null; // Foto CT yang sedang aktif diambil
+let ctParamPhotos = {};        // Format: { areaName: { paramName: photoData } }
+
+// Untuk foto
+let paramPhotos1300 = {};
+let currentParamPhoto1300 = null;
