@@ -3053,3 +3053,203 @@ function jumpToUnivStep(idx) {
     showUnivStep();
 }
 
+// ==========================================
+// 7. UNIVERSAL PHOTO & SUBMIT ENGINE
+// ==========================================
+
+let univCurrentPhoto = null; // Foto yang sedang aktif
+// Inisialisasi object untuk menyimpan foto berdasarkan area
+if (typeof univParamPhotos === 'undefined') {
+    window.univParamPhotos = {}; 
+}
+
+function handleUnivParamPhoto(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    if (file.size > 10 * 1024 * 1024) {
+        showCustomAlert('Ukuran file terlalu besar (>10MB).', 'error');
+        event.target.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const originalDataUrl = e.target.result;
+        showCustomAlert('🔄 Mengkompresi foto...', 'info');
+        
+        try {
+            const result = await compressImage(originalDataUrl, { maxWidth: 1600, maxHeight: 1600, quality: 0.75, type: 'image/jpeg' });
+            
+            univCurrentPhoto = result.dataUrl;
+            if (!univParamPhotos[activeUnivArea]) univParamPhotos[activeUnivArea] = {};
+            const config = LOGSHEET_CONFIG[activeLogsheetType];
+            const fullLabel = config.areas[activeUnivArea][activeUnivIdx];
+            
+            univParamPhotos[activeUnivArea][fullLabel] = univCurrentPhoto;
+            
+            // Simpan draft foto
+            localStorage.setItem(config.photoKey, JSON.stringify(univParamPhotos));
+            
+            // Render UI
+            const preview = document.getElementById('univParamPhotoPreview');
+            const badge = document.getElementById('univParamPhotoBadge');
+            if (preview) {
+                preview.innerHTML = `
+                    <div style="position: relative; width: 100%; height: 100%;">
+                        <img src="${result.dataUrl}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                        <div style="position: absolute; top: 8px; right: 8px; background: ${config.themeColor}; color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 600;">
+                            ${result.compressedSize}KB ↓${result.reduction}%
+                        </div>
+                    </div>`;
+            }
+            if (badge) {
+                badge.textContent = `✓ ${result.compressedSize}KB`;
+                badge.style.backgroundColor = config.themeColor;
+                badge.style.color = 'white';
+            }
+            showCustomAlert(`✓ Foto berhasil dikompresi: ${result.compressedSize}KB`, 'success');
+            
+        } catch (error) {
+            console.error('Kompresi gagal:', error);
+            showCustomAlert('Gagal memproses foto', 'error');
+        }
+    };
+    reader.readAsDataURL(file);
+    event.target.value = '';
+}
+
+// Menampilkan foto saat pindah parameter (ditambahkan ke dalam showUnivStep nanti)
+function loadUnivParamPhotoForCurrentStep() {
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
+    const fullLabel = config.areas[activeUnivArea][activeUnivIdx];
+    
+    // Coba load dari LocalStorage dulu jika univParamPhotos kosong
+    if (Object.keys(univParamPhotos).length === 0) {
+        const saved = localStorage.getItem(config.photoKey);
+        if (saved) univParamPhotos = JSON.parse(saved);
+    }
+
+    univCurrentPhoto = univParamPhotos[activeUnivArea]?.[fullLabel] || null;
+    
+    const preview = document.getElementById('univParamPhotoPreview');
+    const badge = document.getElementById('univParamPhotoBadge');
+    
+    if (univCurrentPhoto) {
+        if (preview) preview.innerHTML = `<img src="${univCurrentPhoto}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">`;
+        if (badge) {
+            badge.textContent = '✓ ADA';
+            badge.style.backgroundColor = config.themeColor;
+            badge.style.color = 'white';
+        }
+    } else {
+        if (preview) {
+            preview.innerHTML = `
+                <div class="photo-placeholder" style="text-align: center; color: #64748b;">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 8px;">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                    <div>Belum ada foto</div>
+                </div>`;
+        }
+        if (badge) {
+            badge.textContent = 'OPSIONAL';
+            badge.style.backgroundColor = 'rgba(148, 163, 184, 0.15)';
+            badge.style.color = '#94a3b8';
+        }
+    }
+}
+
+/**
+ * MENGIRIM DATA KE GOOGLE SHEET SECARA UNIVERSAL
+ */
+async function submitUniversalLogsheet() {
+    if (!requireAuth()) return;
+    
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
+    const progress = showUploadProgress(`Mengirim ${config.title} & Foto...`);
+    progress.updateText('Mengumpulkan data...');
+    currentUploadController = new AbortController();
+    
+    // Gabungkan parameter dari semua area
+    let allParameters = {};
+    Object.entries(univCurrentInput).forEach(([areaName, params]) => {
+        Object.entries(params).forEach(([paramName, value]) => {
+            allParameters[paramName] = value;
+        });
+    });
+    
+    // Kumpulkan foto dari semua area
+    let allPhotos = {};
+    Object.entries(univParamPhotos).forEach(([areaName, areaPhotos]) => {
+        Object.entries(areaPhotos).forEach(([paramName, photoData]) => {
+            if (photoData) {
+                allPhotos[`${areaName}__${paramName}`] = photoData;
+            }
+        });
+    });
+    
+    const finalData = {
+        type: config.submitType, // Dari Config (Misal: LOGSHEET_1300)
+        Operator: currentUser ? currentUser.name : 'Unknown',
+        OperatorId: currentUser ? currentUser.username : 'Unknown',
+        photoCount: Object.keys(allPhotos).length,
+        ...allParameters
+    };
+    
+    // 1. Upload Foto Secara Paralel Berurutan
+    if (Object.keys(allPhotos).length > 0) {
+        progress.updateText(`Mengirim ${Object.keys(allPhotos).length} foto...`);
+        for (const [key, photoData] of Object.entries(allPhotos)) {
+            try {
+                const photoPayload = {
+                    type: 'LOGSHEET_PHOTO',
+                    parentType: config.submitType,
+                    Operator: currentUser ? currentUser.name : 'Unknown',
+                    photoKey: key,
+                    photo: photoData,
+                    timestamp: new Date().toISOString()
+                };
+                await fetch(GAS_URL, {
+                    method: 'POST', mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(photoPayload),
+                    signal: currentUploadController.signal
+                });
+                await new Promise(resolve => setTimeout(resolve, 200)); // Delay agar Google Apps Script tidak error
+            } catch (error) { console.warn('Error upload foto:', error); }
+        }
+    }
+    
+    // 2. Upload Data Teks
+    progress.updateText('Mengirim data parameter utama...');
+    try {
+        await fetch(GAS_URL, {
+            method: 'POST', mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(finalData),
+            signal: currentUploadController.signal
+        });
+        
+        progress.complete();
+        showCustomAlert('✓ Data Logsheet berhasil dikirim ke server!', 'success');
+        
+        // Bersihkan data draf karena sudah selesai dikirim
+        univCurrentInput = {};
+        univParamPhotos = {};
+        localStorage.removeItem(config.draftKey);
+        localStorage.removeItem(config.photoKey);
+        
+        // Kembali ke Menu Utama
+        setTimeout(() => navigateTo('homeScreen'), 1500);
+        
+    } catch (error) {
+        progress.error();
+        // Simpan sebagai draf offline jika internet terputus
+        let offlineData = JSON.parse(localStorage.getItem(config.offlineKey) || '[]');
+        offlineData.push({...finalData, photos: allPhotos});
+        localStorage.setItem(config.offlineKey, JSON.stringify(offlineData));
+        setTimeout(() => showCustomAlert('Gagal mengirim. Data disimpan sementara ke memori lokal.', 'error'), 500);
+    }
+}
