@@ -2673,9 +2673,3 @@ async function send1300ToSheet() {
         }, 500);
     }
    }
-// State Universal
-let activeLogsheetType = null; // Akan berisi 'TURBINE', 'CT', '1300', atau '1100'
-let univCurrentInput = {};     // Menyimpan draf input sementara
-let univParamPhotos = {};      // Menyimpan foto sementara
-let univActiveArea = '';       // Area yang sedang dibuka (misal: "DRYING AIR")
-let univActiveIdx = 0;         // Urutan parameter ke-berapa
