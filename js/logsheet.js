@@ -2886,7 +2886,9 @@ function showUnivStep() {
     // Load Status Abnormal (Checkbox)
     loadUnivAbnormalStatus(fullLabel);
     renderUnivProgressDots();
-
+   // (Masukkan ke dalam fungsi showUnivStep() yang ada di JS Anda)
+    loadUnivParamPhotoForCurrentStep();
+   
     // Auto focus ke input
     setTimeout(() => {
         const inputEl = document.getElementById('univValInput');
