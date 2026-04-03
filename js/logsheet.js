@@ -2795,8 +2795,261 @@ function renderUniversalAreaList() {
     }
 }
 
-// Fungsi dummy sementara untuk menangkap klik area (akan kita buat di Langkah 4)
+// ==========================================
+// 6. UNIVERSAL INPUT ENGINE (CORE LOGIC)
+// ==========================================
+
+let activeUnivArea = null;
+let activeUnivIdx = 0;
+
+/**
+ * Memulai pengisian parameter untuk area yang dipilih
+ */
 function openUnivAreaInput(areaName) {
-    console.log("Membuka input untuk area:", areaName);
-    alert("Tombol berfungsi! Nanti akan membuka parameter untuk area: " + areaName);
+    activeUnivArea = areaName;
+    activeUnivIdx = 0;
+    
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
+    
+    // Sinkronisasi warna tema ke elemen UI
+    const stepBadge = document.getElementById('univStepBadge');
+    if (stepBadge) {
+        stepBadge.style.color = config.themeColor;
+        stepBadge.style.backgroundColor = `${config.themeColor}15`; // Transparansi 15%
+        stepBadge.style.borderColor = `${config.themeColor}40`;
+    }
+    
+    const submitBtnStep = document.getElementById('univBtnSubmitStep');
+    if (submitBtnStep) {
+        submitBtnStep.style.backgroundColor = config.themeColor;
+        submitBtnStep.style.boxShadow = `0 4px 16px ${config.themeColor}40`;
+    }
+
+    const currentAreaNameEl = document.getElementById('univCurrentAreaName');
+    if (currentAreaNameEl) {
+        currentAreaNameEl.textContent = areaName;
+        currentAreaNameEl.style.color = config.themeColor;
+    }
+
+    navigateTo('univParamScreen');
+    showUnivStep();
 }
+
+/**
+ * Menampilkan parameter aktif berdasarkan index
+ */
+function showUnivStep() {
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
+    const paramsList = config.areas[activeUnivArea];
+    const fullLabel = paramsList[activeUnivIdx];
+    const total = paramsList.length;
+    
+    // Update Header & Counter
+    document.getElementById('univStepInfo').textContent = `Step ${activeUnivIdx + 1}/${total}`;
+    document.getElementById('univAreaProgress').textContent = `${activeUnivIdx + 1}/${total}`;
+    
+    // Parsing Nama Parameter dan Satuan
+    const nameOnly = fullLabel.split(' (')[0];
+    const unitMatch = fullLabel.match(/\(([^)]+)\)/);
+    
+    document.getElementById('univLabelInput').textContent = nameOnly;
+    
+    const unitDisplay = document.getElementById('univUnitDisplay');
+    if (unitDisplay) {
+        unitDisplay.textContent = unitMatch ? unitMatch[1] : "--";
+        unitDisplay.style.color = config.themeColor;
+    }
+
+    // Ambil data dari draft (univCurrentInput)
+    let savedValue = (univCurrentInput[activeUnivArea] && univCurrentInput[activeUnivArea][fullLabel]) || '';
+    
+    // Jika data berupa status abnormal (ERROR/NOT_INSTALLED), jangan tampilkan di text input
+    let displayValue = savedValue;
+    if (['ERROR', 'NOT_INSTALLED'].includes(savedValue.split('\n')[0])) {
+        displayValue = ''; 
+    }
+
+    // Render Input Field (Otomatis deteksi Select atau Text)
+    const inputContainer = document.getElementById('univInputFieldContainer');
+    const inputType = detectInputType(fullLabel); 
+
+    if (inputType.type === 'select') {
+        let optionsHtml = `<option value="" disabled ${!displayValue ? 'selected' : ''}>Pilih Status...</option>`;
+        inputType.options.forEach(opt => {
+            optionsHtml += `<option value="${opt}" ${displayValue === opt ? 'selected' : ''}>${opt}</option>`;
+        });
+        inputContainer.innerHTML = `<select id="univValInput" class="status-select" style="width:100%; border:none; background:transparent; color:white; font-size:1.4rem; font-weight:700;">${optionsHtml}</select>`;
+    } else {
+        inputContainer.innerHTML = `<input type="text" id="univValInput" inputmode="decimal" placeholder="0.00" value="${displayValue}" autocomplete="off" style="width:100%; border:none; background:transparent; color:white; font-size:1.6rem; font-weight:700; outline:none;">`;
+    }
+
+    // Load Status Abnormal (Checkbox)
+    loadUnivAbnormalStatus(fullLabel);
+    renderUnivProgressDots();
+
+    // Auto focus ke input
+    setTimeout(() => {
+        const inputEl = document.getElementById('univValInput');
+        if (inputEl && !inputEl.disabled) {
+            inputEl.focus();
+            if (inputEl.select) inputEl.select();
+        }
+    }, 150);
+}
+
+/**
+ * Menyimpan step saat ini ke dalam memori draf
+ */
+function saveUnivStep() {
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
+    const paramsList = config.areas[activeUnivArea];
+    const fullLabel = paramsList[activeUnivIdx];
+    const input = document.getElementById('univValInput');
+    
+    if (!univCurrentInput[activeUnivArea]) univCurrentInput[activeUnivArea] = {};
+    
+    let valueToSave = '';
+    if (input && input.value.trim()) {
+        valueToSave = input.value.trim();
+    }
+    
+    // Cek apakah ada status abnormal yang dicentang
+    const checkedStatus = document.querySelector('input[name="univParamStatus"]:checked');
+    const note = document.getElementById('univStatusNote')?.value || '';
+    
+    if (checkedStatus) {
+        valueToSave = checkedStatus.value + (note ? `\n${note}` : '');
+    }
+    
+    if (valueToSave) {
+        univCurrentInput[activeUnivArea][fullLabel] = valueToSave;
+    } else {
+        delete univCurrentInput[activeUnivArea][fullLabel];
+    }
+    
+    // Simpan ke LocalStorage sesuai logsheet yang aktif
+    localStorage.setItem(config.draftKey, JSON.stringify(univCurrentInput));
+}
+
+/**
+ * Navigasi ke parameter selanjutnya
+ */
+function nextUnivStep() {
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
+    saveUnivStep();
+    
+    if (activeUnivIdx < config.areas[activeUnivArea].length - 1) {
+        activeUnivIdx++;
+        showUnivStep();
+    } else {
+        showCustomAlert(`Area ${activeUnivArea} selesai!`, 'success');
+        setTimeout(() => {
+            renderUniversalAreaList();
+            navigateTo('universalAreaListScreen');
+        }, 1200);
+    }
+}
+
+/**
+ * Navigasi kembali
+ */
+function prevUnivStep(forceBack = false) {
+    saveUnivStep();
+    if (!forceBack && activeUnivIdx > 0) {
+        activeUnivIdx--;
+        showUnivStep();
+    } else {
+        renderUniversalAreaList();
+        navigateTo('universalAreaListScreen');
+    }
+}
+
+/**
+ * Logika Checkbox Status Abnormal (Universal)
+ */
+function handleUnivStatusChange(checkbox) {
+    const noteContainer = document.getElementById('univStatusNoteContainer');
+    const valInput = document.getElementById('univValInput');
+    
+    // Matikan checkbox lain (radio-like behavior)
+    document.querySelectorAll('input[name="univParamStatus"]').forEach(cb => {
+        if (cb !== checkbox) cb.checked = false;
+        cb.closest('.status-chip').classList.toggle('active', cb.checked);
+    });
+
+    checkbox.closest('.status-chip').classList.toggle('active', checkbox.checked);
+
+    if (checkbox.checked) {
+        noteContainer.style.display = 'block';
+        if (valInput) {
+            valInput.disabled = true;
+            valInput.style.opacity = '0.3';
+        }
+    } else {
+        noteContainer.style.display = 'none';
+        if (valInput) {
+            valInput.disabled = false;
+            valInput.style.opacity = '1';
+        }
+    }
+}
+
+function loadUnivAbnormalStatus(fullLabel) {
+    const savedValue = (univCurrentInput[activeUnivArea] && univCurrentInput[activeUnivArea][fullLabel]) || '';
+    const lines = savedValue.split('\n');
+    const statusPart = lines[0];
+    const notePart = lines[1] || '';
+    
+    const checkboxes = document.querySelectorAll('input[name="univParamStatus"]');
+    const noteContainer = document.getElementById('univStatusNoteContainer');
+    const noteInput = document.getElementById('univStatusNote');
+    const valInput = document.getElementById('univValInput');
+
+    let foundStatus = false;
+    checkboxes.forEach(cb => {
+        cb.checked = (cb.value === statusPart);
+        cb.closest('.status-chip').classList.toggle('active', cb.checked);
+        if (cb.checked) foundStatus = true;
+    });
+
+    if (foundStatus) {
+        noteContainer.style.display = 'block';
+        noteInput.value = notePart;
+        if (valInput) {
+            valInput.disabled = true;
+            valInput.style.opacity = '0.3';
+        }
+    } else {
+        noteContainer.style.display = 'none';
+        noteInput.value = '';
+        if (valInput) {
+            valInput.disabled = false;
+            valInput.style.opacity = '1';
+        }
+    }
+}
+
+/**
+ * Render titik-titik progres di bagian bawah
+ */
+function renderUnivProgressDots() {
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
+    const container = document.getElementById('univProgressDots');
+    const params = config.areas[activeUnivArea];
+    let html = '';
+    
+    params.forEach((label, i) => {
+        const hasVal = univCurrentInput[activeUnivArea]?.[label];
+        const isActive = i === activeUnivIdx;
+        let style = isActive ? `background:${config.themeColor}; transform:scale(1.3);` : (hasVal ? `background:${config.themeColor}80;` : '');
+        html += `<div class="progress-dot" style="${style}" onclick="jumpToUnivStep(${i})"></div>`;
+    });
+    container.innerHTML = html;
+}
+
+function jumpToUnivStep(idx) {
+    saveUnivStep();
+    activeUnivIdx = idx;
+    showUnivStep();
+}
+
