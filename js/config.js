@@ -386,18 +386,18 @@ const AREAS_1100 = {
     "GAS OUTLET PI-1107-3 (mmH2O)"
   ],
   "BLOWER 30-C-1101": [
-    "SUCTION PI-1006-15 (Kg/cm2)",
-    "DISCHARGE PI-1006-13 (Kg/cm2)"
+    "30-C-1101 SUCTION PI-1006-15 (Kg/cm2)",
+    "30-C-1101 DISCHARGE PI-1006-13 (Kg/cm2)"
   ],
-  "WASTE HEAT BOILER (WHB) 30-B-1104": [
-    "HV-1111 S-3 (%)",
-    "JUG DAMPER HV-1110 (%)",
-    "GAS INLET PI-1107-4 (mmH2O)",
-    "GAS OUTLET PI-1007-4 (mmH2O)",
-    "STEAM DRUM PI-1102-4 (Kg/cm2)",
-    "SATURATED STEAM TI-1002-3 (°C)",
-    "LEVEL GLASS LG-1103-1/2 (%)",
-    "LCV-1102 (%)"
+  "WASTE HEAT BOILER (WHB)": [
+    "30-B-1104 HV-1111 S-3 (%)",
+    "30-B-1104 JUG DAMPER HV-1110 (%)",
+    "30-B-1104 GAS INLET PI-1107-4 (mmH2O)",
+    "30-B-1104 GAS OUTLET PI-1007-4 (mmH2O)",
+    "30-B-1104 STEAM DRUM PI-1102-4 (Kg/cm2)",
+    "30-B-1104 SATURATED STEAM TI-1002-3 (°C)",
+    "30-B-1104 LEVEL GLASS LG-1103-1/2 (%)",
+    "30-B-1104 LCV-1102 (%)"
   ],
   "DRUM & VESSEL": [
     "30-D-1101 PRESSURE PI-1002-5 (Kg/cm2)",
@@ -406,19 +406,17 @@ const AREAS_1100 = {
   ],
   "HEAT EXCHANGER (PREHEATER)": [
     "30-E-1103 PI-1006-22 (Kg/cm2)",
-    "30-E-1103 DP CW-1108 (Kg/cm2)"
+    "30-E-1103 DP CW-1108 (Kg/cm2)",
+    "30-P-1103 DISCHARGE PI-1006-12 (Kg/cm2)"
   ],
-  "PUMP 30-P-1103": [
-    "DISCHARGE PI-1006-12 (Kg/cm2)"
-  ],
-  "MPS HEATER 30-E-1102": [
-    "HCV-1102 (%)",
-    "TCV-1103 (%)",
-    "MPS OUTLET TI-1110 (°C)",
-    "MPS OUTLET PI-1002 (Kg/cm2)",
-    "PCV-1103 (%)",
-    "GAS IN PI-1006-5 (mmH2O)",
-    "GAS OUT PI-1007-5 (mmH2O)"
+    "MPS HEATER 30-E-1102": [
+    "30-E-1102 HCV-1102 (%)",
+    "30-E-1102 TCV-1103 (%)",
+    "30-E-1102 MPS OUTLET TI-1110 (°C)",
+    "30-E-1102 MPS OUTLET PI-1002 (Kg/cm2)",
+    "30-E-1102 PCV-1103 (%)",
+    "30-E-1102 GAS IN PI-1006-5 (mmH2O)",
+    "30-E-1102 GAS OUT PI-1007-5 (mmH2O)"
   ],
   "LP STEAM HEADER": [
     "PI-1002-3 (Kg/cm2)",
@@ -431,8 +429,8 @@ const AREAS_1100 = {
     "TI-1112 (°C)"
   ],
   "CONVERTER INLET (30-R-1201)": [
-    "DAMPER G-5 (%)",
-    "GAS IN PP-1008-9 (mmH2O)"
+    "30-R-1201 DAMPER G-5 (%)",
+    "30-R-1201 GAS IN PP-1008-9 (mmH2O)"
   ],
   "BED I": [
     "GAS IN PI-1007-6B (mmHg)",
