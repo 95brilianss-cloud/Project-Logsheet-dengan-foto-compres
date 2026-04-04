@@ -215,11 +215,11 @@ const AREAS = {
 // Struktur Area CT Logsheet
 const AREAS_CT = {
     "BASIN SA": [
-        "D-6511 LEVEL BASIN",
-        "D-6511 BLOWDOWN",
+        "D-6511 LEVEL BASIN (Meter)",
+        "D-6511 BLOWDOWN (%)",
         "D-6511 PH BASIN", 
         "D-6511 TRASSAR (A/M)", 
-        "TK-6511 LEVEL ACID", 
+        "TK-6511 LEVEL ACID (%)", 
         "FIL-6511 (A/B)", 
         "30-P-6511 A PRESS (kg/cm2)", 
         "30-P-6511 B PRESS (kg/cm2)", 
@@ -230,11 +230,11 @@ const AREAS_CT = {
         "MT-6511 D STATUS"
     ], 
     "BASIN SU": [
-        "D-6521 LEVEL BASIN",
-        "D-6521 BLOWDOWN",
+        "D-6521 LEVEL BASIN (Meter)",
+        "D-6521 BLOWDOWN (%)",
         "D-6521 PH BASIN", 
         "D-6521 TRASSAR (A/M)", 
-        "TK-6521 LEVEL ACID", 
+        "TK-6521 LEVEL ACID (%)", 
         "FIL-6521 (A/B)", 
         "30-P-6521 A PRESS (kg/cm2)", 
         "30-P-6521 B PRESS (kg/cm2)", 
@@ -246,21 +246,21 @@ const AREAS_CT = {
     ],
    "COMPRESSOR": [
                   "C-6701 A STATUS",
-                  "C-6701 A PRESSURE",
-                  "C-6701 A TEMP",
-                  "C-6701 A FLOW",
+                  "C-6701 A PRESSURE (kg/cm2)",
+                  "C-6701 A TEMP (°C)",
+                  "C-6701 A FLOW (m3/h)",
                   "C-6701 B STATUS",
-                  "C-6701 B PRESSURE",
-                  "C-6701 B TEMP",
-                  "C-6701 B FLOW",
+                  "C-6701 B PRESSURE (kg/cm2)",
+                  "C-6701 B TEMP (°C)",
+                  "C-6701 B FLOW (m3/h)",
                   "C-6702 A STATUS",
-                  "C-6702 A PRESSURE",
-                  "C-6702 A TEMP",
-                  "C-6702 A FLOW",
+                  "C-6702 A PRESSURE (kg/cm2)",
+                  "C-6702 A TEMP(°C)",
+                  "C-6702 A FLOW (m3/h)",
                   "C-6702 B STATUS", 
-                  "C-6702 B PRESSURE",
-                  "C-6702 B TEMP",
-                  "C-6702 B FLOW"
+                  "C-6702 B PRESSURE (kg/cm2)",
+                  "C-6702 B TEMP (°C)",
+                  "C-6702 B FLOW (m3/h)"
       ],
    "OLI GEARBOX SA": ["MT-6511 A",
                       "MT-6511 B", 
@@ -390,7 +390,7 @@ const AREAS_1100 = {
     "DISCHARGE PI-1006-13 (Kg/cm2)"
   ],
   "WASTE HEAT BOILER (WHB) 30-B-1104": [
-    "HV-1111 (S-3) (%)",
+    "HV-1111 S-3 (%)",
     "JUG DAMPER HV-1110 (%)",
     "GAS INLET PI-1107-4 (mmH2O)",
     "GAS OUTLET PI-1007-4 (mmH2O)",
