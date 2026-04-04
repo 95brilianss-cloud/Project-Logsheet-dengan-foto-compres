@@ -417,7 +417,7 @@
                         <span class="modern-menu-label">TPM</span>
                     </div>
 
-                    <div class="modern-menu-card success" onclick="goToBalancing(); closeBranchMenuPopup();">
+                    <div class="modern-menu-card success" id="menu-balancing" onclick="goToBalancing(); closeBranchMenuPopup();">
                         <div class="modern-menu-icon">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
@@ -426,7 +426,7 @@
                         <span class="modern-menu-label">Balancing</span>
                     </div>
 
-                    <div class="modern-menu-card danger" id="adminBranchItem" onclick="showUserManagement(); closeBranchMenuPopup();">
+                    <div class="modern-menu-card danger" id="menu-user" onclick="showUserManagement(); closeBranchMenuPopup();">
                         <div class="modern-menu-icon">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -494,7 +494,7 @@
         </div>
 
         <div class="logsheet-select-container">
-            <div class="logsheet-select-card" id="menu-turbin" onclick="fetchUniversalLastData('TURBINE')">
+            <div class="logsheet-select-card" id="menu-Turbin" onclick="fetchUniversalLastData('TURBINE')">
                 <div class="logsheet-icon-large turbin">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="stroke: white;">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
@@ -511,7 +511,7 @@
                 </div>
             </div>
 
-            <div class="logsheet-select-card ct-version" id="menu-ct" onclick="fetchUniversalLastData('CT')">
+            <div class="logsheet-select-card ct-version" id="menu-CT" onclick="fetchUniversalLastData('CT')">
                 <div class="logsheet-icon-large ct">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="stroke: white;">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
