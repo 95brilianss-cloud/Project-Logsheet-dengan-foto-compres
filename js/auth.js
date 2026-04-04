@@ -178,23 +178,24 @@ function filterMenuByUnit() {
         console.log('🛠️ FILTER MENU BERJALAN UNTUK DEPARTEMEN:', unit === '' ? 'KOSONG/ADMIN' : unit);
 
         // Cari elemen menu
-        const menuTurbin = document.getElementById('menu-turbin');
-        const menuCT = document.getElementById('menu-ct');
+        const menuTurbin = document.getElementById('menu-Turbin');
+        const menuCT = document.getElementById('menu-CT');
         const menu1300 = document.getElementById('menu-1300');
         const menu1100 = document.getElementById('menu-1100');
         const menu1000 = document.getElementById('menu-1000');
         const menuBalancing = document.getElementById('menu-balancing');
-       
+        
         // 1. SEMBUNYIKAN SEMUA MENU (Default State)
         if (menuTurbin) menuTurbin.style.display = 'none';
         if (menuCT) menuCT.style.display = 'none';
         if (menu1300) menu1300.style.display = 'none';
         if (menu1100) menu1100.style.display = 'none';
         if (menu1000) menu1000.style.display = 'none';
-       if (menuBalancing) menuBalancing.style.display = 'none';
+        if (menuBalancing) menuBalancing.style.display = 'none';
 
         // 2. TAMPILKAN BERDASARKAN UNIT
-        else if (unit.includes('UTILITAS') || unit.includes('UTIL')) {
+        // 👇 UBAH "else if" MENJADI "if" DI BARIS INI 👇
+        if (unit.includes('UTILITAS') || unit.includes('UTIL')) {
             console.log('✅ Menampilkan Menu SU (Turbin & CT)');
             if (menuTurbin) menuTurbin.style.display = 'flex';
             if (menuCT) menuCT.style.display = 'flex';
