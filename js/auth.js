@@ -194,7 +194,7 @@ function filterMenuByUnit() {
        if (menuBalancing) menuBalancing.style.display = 'none';
 
         // 2. TAMPILKAN BERDASARKAN UNIT
-        if (unit.includes('SU') || unit.includes('UTILITAS')) {
+        else if (unit.includes('UTILITAS') || unit.includes('UTIL')) {
             console.log('✅ Menampilkan Menu SU (Turbin & CT)');
             if (menuTurbin) menuTurbin.style.display = 'flex';
             if (menuCT) menuCT.style.display = 'flex';
