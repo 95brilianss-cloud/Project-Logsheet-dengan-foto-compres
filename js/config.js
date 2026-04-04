@@ -224,10 +224,10 @@ const AREAS_CT = {
         "30-P-6511 A PRESS (kg/cm2)", 
         "30-P-6511 B PRESS (kg/cm2)", 
         "30-P-6511 C PRESS (kg/cm2)", 
-        "MT-6511 A STATUS", 
-        "MT-6511 B STATUS", 
-        "MT-6511 C STATUS", 
-        "MT-6511 D STATUS"
+        "MT-6511 A (RUN/STOP)", 
+        "MT-6511 B (RUN/STOP)", 
+        "MT-6511 C (RUN/STOP)", 
+        "MT-6511 D (RUN/STOP)"
     ], 
     "BASIN SU": [
         "D-6521 LEVEL BASIN (Meter)",
@@ -239,37 +239,37 @@ const AREAS_CT = {
         "30-P-6521 A PRESS (kg/cm2)", 
         "30-P-6521 B PRESS (kg/cm2)", 
         "30-P-6521 C PRESS (kg/cm2)", 
-        "MT-6521 A STATUS", 
-        "MT-6521 B STATUS", 
-        "MT-6521 C STATUS", 
-        "MT-6521 D STATUS"
+        "MT-6521 A (RUN/STOP)", 
+        "MT-6521 B (RUN/STOP)", 
+        "MT-6521 C (RUN/STOP)", 
+        "MT-6521 D (RUN/STOP)"
     ],
    "COMPRESSOR": [
-                  "C-6701 A STATUS",
+                  "C-6701 A (RUN/STOP)",
                   "C-6701 A PRESSURE (kg/cm2)",
                   "C-6701 A TEMP (°C)",
                   "C-6701 A FLOW (m3/h)",
-                  "C-6701 B STATUS",
+                  "C-6701 B (RUN/STOP)",
                   "C-6701 B PRESSURE (kg/cm2)",
                   "C-6701 B TEMP (°C)",
                   "C-6701 B FLOW (m3/h)",
-                  "C-6702 A STATUS",
+                  "C-6702 A (RUN/STOP)",
                   "C-6702 A PRESSURE (kg/cm2)",
                   "C-6702 A TEMP(°C)",
                   "C-6702 A FLOW (m3/h)",
-                  "C-6702 B STATUS", 
+                  "C-6702 B (RUN/STOP)", 
                   "C-6702 B PRESSURE (kg/cm2)",
                   "C-6702 B TEMP (°C)",
                   "C-6702 B FLOW (m3/h)"
       ],
-   "OLI GEARBOX SA": ["MT-6511 A",
-                      "MT-6511 B", 
-                      "MT-6511 C", 
-                      "MT-6511 D"],
-   "OLI GEARBOX SU": ["MT-6521 A",
-                      "MT-6521 B",
-                      "MT-6521 C",
-                      "MT-6521 D"]
+   "OLI GEARBOX SA": ["MT-6511 A (Cm)",
+                      "MT-6511 B (Cm)", 
+                      "MT-6511 C (Cm)", 
+                      "MT-6511 D (Cm)"],
+   "OLI GEARBOX SU": ["MT-6521 A (Cm)",
+                      "MT-6521 B (Cm)",
+                      "MT-6521 C (Cm)",
+                      "MT-6521 D (Cm)"]
 };
 // Data Area 1300
 const AREAS_1300 = {
@@ -396,7 +396,7 @@ const AREAS_1100 = {
     "GAS OUTLET PI-1007-4 (mmH2O)",
     "STEAM DRUM PI-1102-4 (Kg/cm2)",
     "SATURATED STEAM TI-1002-3 (°C)",
-    "LEVEL GLASS LG-1103-1/2",
+    "LEVEL GLASS LG-1103-1/2 (%)",
     "LCV-1102 (%)"
   ],
   "DRUM & VESSEL": [
@@ -485,13 +485,13 @@ const AREAS_1100 = {
 const AREAS_1000 = {
 
   "AGITATOR (M-1001 / M-1002 / M-1005 / M-1004)": [
-    "30-M-1001 A/C RUN/STANDBY",
-    "30-M-1001 B/D RUN/STANDBY",
-    "30-M-1002 A/C RUN/STOP",
-    "30-M-1002 B/D RUN/STOP",
-    "30-M-1005 A/C RUN/STANDBY",
-    "30-M-1005 B/D RUN/STANDBY",
-    "30-M-1004 A/B RUN/STANDBY"
+    "30-M-1001 A/C (RUN/STOP)",
+    "30-M-1001 B/D (RUN/STOP)",
+    "30-M-1002 A/C (RUN/STOP)",
+    "30-M-1002 B/D (RUN/STOP)",
+    "30-M-1005 A/C (RUN/STOP)",
+    "30-M-1005 B/D (RUN/STOP)",
+    "30-M-1004 A/B (RUN/STOP)"
   ],
 
   "TANK & VESSEL TEMPERATURE": [
@@ -514,17 +514,17 @@ const AREAS_1000 = {
   ],
 
   "PUMP 30-P-1002": [
-    "A/C RUN/STANDBY",
+    "A/C (RUN/STOP)",
     "A/C PI-1001-7 (Kg/cm2)",
-    "B/D RUN/STANDBY",
+    "B/D (RUN/STOP)",
     "B/D PI-1001-8 (Kg/cm2)"
   ],
 
   "FILTER 30-FIL-1001": [
-    "A STATUS FILTRASI/STANDBY",
+    "A STATUS (FILTRASI/STANDBY)",
     "A INLET PI-1001-A (Kg/cm2)",
     "A OUTLET PI-1002-A (Kg/cm2)",
-    "B STATUS FILTRASI/STANDBY",
+    "B STATUS (FILTRASI/STANDBY)",
     "B INLET PI-1001-B (Kg/cm2)",
     "B OUTLET PI-1002-B (Kg/cm2)"
   ],
@@ -540,19 +540,19 @@ const AREAS_1000 = {
   ],
 
   "PUMP 30-P-1004": [
-    "A/C LOAD",
+    "A/C (Ampere)",
     "A/C PI-1001-1 (Kg/cm2)",
-    "B/D LOAD",
+    "B/D (Ampere)",
     "B/D PI-1001-2 (Kg/cm2)"
   ],
 
   "PUMP 30-P-1001": [
     "A/B PI-1001-6 (Kg/cm2)",
-    "A/B LOAD"
+    "A/B (Ampere)"
   ],
 
   "PUMP 30-P-1005": [
-    "A/B STATUS",
+    "A/B (RUN/STOP)",
     "A PI-1003-6 (Kg/cm2)",
     "B PI-1003-67 (Kg/cm2)"
   ]
