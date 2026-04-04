@@ -171,11 +171,11 @@ function filterMenuByUnit() {
     try {
         if (!currentUser) return;
         
-        // Ambil nama departemen, ubah ke uppercase
+        // Ambil nama departemen dan role user
         const unit = (currentUser.department || '').toUpperCase();
+        const role = (currentUser.role || '').toLowerCase(); // <-- BACA ROLE USER
         
-        // 💡 RADAR PENDETEKSI: Munculkan di Console untuk ngecek
-        console.log('🛠️ FILTER MENU BERJALAN UNTUK DEPARTEMEN:', unit === '' ? 'KOSONG/ADMIN' : unit);
+        console.log('🛠️ FILTER MENU BERJALAN UNTUK DEPARTEMEN:', unit, '| ROLE:', role);
 
         // Cari elemen menu
         const menuTurbin = document.getElementById('menu-Turbin');
@@ -193,10 +193,21 @@ function filterMenuByUnit() {
         if (menu1000) menu1000.style.display = 'none';
         if (menuBalancing) menuBalancing.style.display = 'none';
 
-        // 2. TAMPILKAN BERDASARKAN UNIT
-        // 👇 UBAH "else if" MENJADI "if" DI BARIS INI 👇
-        if (unit.includes('UTILITAS') || unit.includes('UTIL')) {
-            console.log('✅ Menampilkan Menu SU (Turbin & CT)');
+        // 2. TAMPILKAN BERDASARKAN ROLE & UNIT
+        
+        // 👇 CEK ROLE ADMIN TERLEBIH DAHULU (Prioritas Utama) 👇
+        if (role === 'admin' || unit.includes('MANAJEMEN')) {
+            console.log('✅ Mode Admin/Supervisor: Menampilkan Semua Menu');
+            if (menuTurbin) menuTurbin.style.display = 'flex';
+            if (menuCT) menuCT.style.display = 'flex';
+            if (menu1300) menu1300.style.display = 'flex';
+            if (menu1100) menu1100.style.display = 'flex';
+            if (menu1000) menu1000.style.display = 'flex';
+            if (menuBalancing) menuBalancing.style.display = 'flex';
+        }
+        // Jika bukan admin, baru cek unitnya
+        else if (unit.includes('UTILITAS') || unit.includes('UTIL')) {
+            console.log('✅ Menampilkan Menu SU (Turbin, CT, Balancing)');
             if (menuTurbin) menuTurbin.style.display = 'flex';
             if (menuCT) menuCT.style.display = 'flex';
             if (menuBalancing) menuBalancing.style.display = 'flex';
@@ -210,21 +221,11 @@ function filterMenuByUnit() {
             console.log('✅ Menampilkan Menu Melter (1000)');
             if (menu1000) menu1000.style.display = 'flex';
         } 
-        else {
-            console.log('✅ Mode Admin/Supervisor: Menampilkan Semua Menu');
-            if (menuTurbin) menuTurbin.style.display = 'flex';
-            if (menuCT) menuCT.style.display = 'flex';
-            if (menu1300) menu1300.style.display = 'flex';
-            if (menu1100) menu1100.style.display = 'flex';
-            if (menu1000) menu1000.style.display = 'flex';
-            if (menuBalancing) menuBalancing.style.display = 'flex';
-        }
         
     } catch (error) {
         console.error('❌ Error saat menyaring menu unit:', error);
     }
 }
-
 function togglePasswordVisibility() {
     const passwordInput = document.getElementById('operatorPassword');
     const eyeIcon = document.getElementById('eyeIcon');
