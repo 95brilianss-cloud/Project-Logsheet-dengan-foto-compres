@@ -274,48 +274,48 @@ const AREAS_CT = {
 // Data Area 1300
 const AREAS_1300 = {
   "DRYING AIR": [
-    "AIR INLET PI-1007-1 (mmAq)",
-    "AIR INLET FILTER PP-1008-1 (mmAq)",
-    "AIR OUT FILTER PP-1008-2 (mmAq)",
-    "CIRC PUMP LOAD (Amp)",
-    "PUMP DISCHARGE PI-1004-1 (Kg/cm2)",
-    "PUMP DISCHARGE TI-1302-1 (°C)",
-    "ACID OUT PI-1004-9 (Kg/cm2)",
-    "CW INLET PI-1005-2 (Kg/cm2)",
-    "CW OUTLET PI-1008-7 (Kg/cm2)",
-    "CW OUTLET TI-1301-2 (°C)"
+    "30-T-1301 AIR INLET PI-1007-1 (mmAq)",
+    "30-T-1301 AIR INLET FILTER PP-1008-1 (mmAq)",
+    "30-T-1301 AIR OUT FILTER PP-1008-2 (mmAq)",
+    "30-T-1301 CIRC PUMP LOAD (Ampere)",
+    "30-T-1301 PUMP DISCHARGE PI-1004-1 (Kg/cm2)",
+    "30-T-1301 PUMP DISCHARGE TI-1302-1 (°C)",
+    "30-T-1301 ACID OUT PI-1004-9 (Kg/cm2)",
+    "30-T-1301 CW INLET PI-1005-2 (Kg/cm2)",
+    "30-T-1301 CW OUTLET PI-1008-7 (Kg/cm2)",
+    "30-T-1301 CW OUTLET TI-1301-2 (°C)"
   ],
 
   "1st SO3 ABSORBER": [
-    "GAS IN FILTER PP-1008-19 (mmAq)",
-    "GAS OUT FILTER PP-1008-20 (mmAq)",
-    "CIRC PUMP LOAD 1st (Amp)",             // <-- DIPERBARUI
-    "DISCHARGE ACID PI-1004-2 (Kg/cm2)",
-    "DISCHARGE ACID TI-1302-2 (°C)",
-    "ACID OUT PI-1004-4 (Kg/cm2)",
-    "CW INLET PP-1008-11 (Kg/cm2)",
-    "CW OUTLET PI-1006-8 (Kg/cm2)",
-    "CW OUTLET TI-1301-3 (°C)"
+    "30-T-1302 GAS IN FILTER PP-1008-19 (mmAq)",
+    "30-T-1302 GAS OUT FILTER PP-1008-20 (mmAq)",
+    "30-T-1302 CIRC PUMP LOAD (Ampere)",             
+    "30-T-1302 DISCHARGE ACID PI-1004-2 (Kg/cm2)",
+    "30-T-1302 DISCHARGE ACID TI-1302-2 (°C)",
+    "30-T-1302 ACID OUT PI-1004-4 (Kg/cm2)",
+    "30-T-1302 CW INLET PP-1008-11 (Kg/cm2)",
+    "30-T-1302 CW OUTLET PI-1006-8 (Kg/cm2)",
+    "30-T-1302 CW OUTLET TI-1301-3 (°C)"
   ],
 
   "2nd SO3 ABSORBER": [
-    "GAS IN FILTER PP-1008-27 (mmAq)",
-    "GAS OUT FILTER PP-1008-28 (mmAq)",
-    "CIRC PUMP LOAD 2nd (Amp)",             // <-- DIPERBARUI
-    "DISCHARGE PI-1004-5 (Kg/cm2)",
-    "DISCHARGE TI-1302-3 (°C)",
-    "ACID OUT PI-1006-5 (Kg/cm2)",
-    "CW INLET PI-1006-9 (Kg/cm2)",
-    "CW OUTLET PI-1006-4 (Kg/cm2)",
-    "CW OUTLET TI-1304-4 (°C)"
+    "30-T-1303 GAS IN FILTER PP-1008-27 (mmAq)",
+    "30-T-1303 GAS OUT FILTER PP-1008-28 (mmAq)",
+    "30-T-1303 CIRC PUMP LOAD (Ampere)",           
+    "30-T-1303 DISCHARGE PI-1004-5 (Kg/cm2)",
+    "30-T-1303 DISCHARGE TI-1302-3 (°C)",
+    "30-T-1303 ACID OUT PI-1006-5 (Kg/cm2)",
+    "30-T-1303 CW INLET PI-1006-9 (Kg/cm2)",
+    "30-T-1303 CW OUTLET PI-1006-4 (Kg/cm2)",
+    "30-T-1303 CW OUTLET TI-1304-4 (°C)"
   ],
 
   "PRODUCT COOLER": [
-    "ACID OUT PI-1004-7 (Kg/cm2)",
-    "ACID OUTLET TI-1001-9 (°C)",
-    "CW INLET PI-1006-10 (Kg/cm2)",
-    "CW OUTLET PI-1006-11 (Kg/cm2)",
-    "CW OUTLET TI-1301-5 (°C)"
+    "30-E-1304 ACID OUT PI-1004-7 (Kg/cm2)",
+    "30-E-1304 ACID OUTLET TI-1001-9 (°C)",
+    "30-E-1304 CW INLET PI-1006-10 (Kg/cm2)",
+    "30-E-1304 CW OUTLET PI-1006-11 (Kg/cm2)",
+    "30-E-1304 CW OUTLET TI-1301-5 (°C)"
   ],
 
   "FLOW PRODUCT": [
@@ -330,23 +330,23 @@ const AREAS_1300 = {
   ],
 
   "BLOWER MC-C-1302": [
-    "LOAD MC-C-1302 (Amp)",                 // <-- DIPERBARUI
-    "SUCTION HV-1302-1 (%)",
-    "GUIDE VANE HV-1302-2 (%)",
-    "POINTER 1302 (%)",                     // <-- DIPERBARUI
-    "VENTING HCV-1304 (%)",
-    "PT-1304 (%)"
+    "MC-C-1302 LOAD (Ampere)",                 // <-- DIPERBARUI
+    "30-C-1302 SUCTION HV-1302-1 (%)",
+    "30-C-1302 GUIDE VANE HV-1302-2 (%)",
+    "30-C-1302 POINTER 1302 (%)",                     // <-- DIPERBARUI
+    "30-C-1302 VENTING HCV-1304 (%)",
+    "30-C-1302 PT-1304 (%)"
   ],
 
   "BLOWER MC-C-1301": [
-    "LOAD MC-C-1301 (Amp)",                 // <-- DIPERBARUI
-    "SUCTION HV-1301-1 (%)",
-    "GUIDE VANE HV-1301-2 (%)",
-    "POINTER 1301 (%)",                     // <-- DIPERBARUI
-    "VENTING HCV-1303 (%)",
-    "DISCHARGE HV-1301 (%)",
-    "PT-1301 (Kg/cm2)",
-    "PT-1303 (Kg/cm2)"
+    "MC-C-1301 LOAD (Ampere)",                 // <-- DIPERBARUI
+    "30-C-1301 SUCTION HV-1301-1 (%)",
+    "30-C-1301 GUIDE VANE HV-1301-2 (%)",
+    "30-C-1301 POINTER 1301 (%)",                     // <-- DIPERBARUI
+    "30-C-1301 VENTING HCV-1303 (%)",
+    "30-C-1301 DISCHARGE HV-1301 (%)",
+    "30-C-1301 PT-1301 (Kg/cm2)",
+    "30-C-1301 PT-1303 (Kg/cm2)"
   ],
 
   "LUBE OIL SYSTEM": [
