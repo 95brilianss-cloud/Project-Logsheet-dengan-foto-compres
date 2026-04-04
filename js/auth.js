@@ -183,19 +183,22 @@ function filterMenuByUnit() {
         const menu1300 = document.getElementById('menu-1300');
         const menu1100 = document.getElementById('menu-1100');
         const menu1000 = document.getElementById('menu-1000');
-
+        const menuBalancing = document.getElementById('menu-balancing');
+       
         // 1. SEMBUNYIKAN SEMUA MENU (Default State)
         if (menuTurbin) menuTurbin.style.display = 'none';
         if (menuCT) menuCT.style.display = 'none';
         if (menu1300) menu1300.style.display = 'none';
         if (menu1100) menu1100.style.display = 'none';
         if (menu1000) menu1000.style.display = 'none';
+       if (menuBalancing) menuBalancing.style.display = 'none';
 
         // 2. TAMPILKAN BERDASARKAN UNIT
         if (unit.includes('SU') || unit.includes('UTILITAS')) {
             console.log('✅ Menampilkan Menu SU (Turbin & CT)');
             if (menuTurbin) menuTurbin.style.display = 'flex';
             if (menuCT) menuCT.style.display = 'flex';
+            if (menuBalancing) menuBalancing.style.display = 'flex';
         } 
         else if (unit.includes('SA') || unit.includes('SULFAT')) {
             console.log('✅ Menampilkan Menu SA (1100 & 1300)');
@@ -213,6 +216,7 @@ function filterMenuByUnit() {
             if (menu1300) menu1300.style.display = 'flex';
             if (menu1100) menu1100.style.display = 'flex';
             if (menu1000) menu1000.style.display = 'flex';
+            if (menuBalancing) menuBalancing.style.display = 'flex';
         }
         
     } catch (error) {
