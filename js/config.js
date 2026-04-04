@@ -512,25 +512,25 @@ const AREAS_1000 = {
   ],
 
   "PUMP 30-P-1002": [
-    "A/C (RUN/STOP)",
-    "A/C PI-1001-7 (Kg/cm2)",
-    "B/D (RUN/STOP)",
-    "B/D PI-1001-8 (Kg/cm2)"
+    "30-P-1002 A/C (RUN/STOP)",
+    "30-P-1002 A/C PI-1001-7 (Kg/cm2)",
+    "30-P-1002 B/D (RUN/STOP)",
+    "30-P-1002 B/D PI-1001-8 (Kg/cm2)"
   ],
 
   "FILTER 30-FIL-1001": [
-    "A STATUS (FILTRASI/STANDBY)",
-    "A INLET PI-1001-A (Kg/cm2)",
-    "A OUTLET PI-1002-A (Kg/cm2)",
-    "B STATUS (FILTRASI/STANDBY)",
-    "B INLET PI-1001-B (Kg/cm2)",
-    "B OUTLET PI-1002-B (Kg/cm2)"
+    "30-FIL-1001 A STATUS (FILTRASI/STANDBY)",
+    "30-FIL-1001 A INLET PI-1001-A (Kg/cm2)",
+    "30-FIL-1001 A OUTLET PI-1002-A (Kg/cm2)",
+    "30-FIL-1001 B STATUS (FILTRASI/STANDBY)",
+    "30-FIL-1001 B INLET PI-1001-B (Kg/cm2)",
+    "30-FIL-1001 B OUTLET PI-1002-B (Kg/cm2)"
   ],
 
   "STORAGE TANK 30-TK-1001": [
-    "TI-1001-1 (°C)",
-    "TI-1001-2 (°C)",
-    "LI-1004 (mm)"
+    "30-TK-1001 TI-1001-1 (°C)",
+    "30-TK-1001 TI-1001-2 (°C)",
+    "30-TK-1001 LI-1004 (mm)"
   ],
 
   "CONTROL VALVE SYSTEM": [
@@ -538,21 +538,21 @@ const AREAS_1000 = {
   ],
 
   "PUMP 30-P-1004": [
-    "A/C (Ampere)",
-    "A/C PI-1001-1 (Kg/cm2)",
-    "B/D (Ampere)",
-    "B/D PI-1001-2 (Kg/cm2)"
+    "30-P-1004 A/C (Ampere)",
+    "30-P-1004 A/C PI-1001-1 (Kg/cm2)",
+    "30-P-1004 B/D (Ampere)",
+    "30-P-1004 B/D PI-1001-2 (Kg/cm2)"
   ],
 
   "PUMP 30-P-1001": [
-    "A/B PI-1001-6 (Kg/cm2)",
-    "A/B (Ampere)"
+    "30-P-1001 A/B PI-1001-6 (Kg/cm2)",
+    "30-P-1001 A/B (Ampere)"
   ],
 
   "PUMP 30-P-1005": [
-    "A/B (RUN/STOP)",
-    "A PI-1003-6 (Kg/cm2)",
-    "B PI-1003-67 (Kg/cm2)"
+    "30-P-1005 A/B (RUN/STOP)",
+    "30-P-1005 A PI-1003-6 (Kg/cm2)",
+    "30-P-1005 B PI-1003-67 (Kg/cm2)"
   ]
 
 };
