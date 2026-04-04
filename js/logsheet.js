@@ -311,10 +311,11 @@ function showUnivStep() {
     
     document.getElementById('univLabelInput').textContent = nameOnly;
     // --- TAMBAHAN UNTUK MENAMPILKAN LAST DATA ---
-    // Cari data shift sebelumnya untuk parameter ini
-    const lastValue = univLastData[fullLabel] || univLastData[nameOnly]; // Mencari berdasarkan nama lengkap atau nama potong
+    // Cari data sebelumnya untuk parameter ini
+    const lastValue = univLastData[fullLabel] || univLastData[nameOnly]; 
+    const lastTime = univLastData._lastTime || '--:--'; // Ambil jam update terakhir
     
-    // Kita buat/update elemen teks kecil di bawah nama parameter (jika belum ada, kita buat via JS)
+    // Kita buat/update elemen teks kecil di bawah nama parameter
     let lastDataEl = document.getElementById('univLastDataDisplay');
     if (!lastDataEl) {
         lastDataEl = document.createElement('div');
@@ -323,18 +324,17 @@ function showUnivStep() {
         lastDataEl.style.color = '#94a3b8';
         lastDataEl.style.marginBottom = '16px';
         lastDataEl.style.fontWeight = '500';
-        // Sisipkan di bawah judul parameter
         document.getElementById('univLabelInput').after(lastDataEl);
     }
     
-    // Tampilkan nilainya jika ada
+    // Tampilkan nilainya beserta jam ditarik
     if (lastValue && lastValue !== '') {
-        lastDataEl.innerHTML = `🕒 Shift sebelumnya: <span style="color: ${config.themeColor}; font-weight: bold;">${lastValue}</span>`;
+        lastDataEl.innerHTML = `🕒 Data sebelumnya (${lastTime}): <span style="color: ${config.themeColor}; font-weight: bold;">${lastValue}</span>`;
     } else {
-        lastDataEl.innerHTML = `🕒 Shift sebelumnya: -`;
+        lastDataEl.innerHTML = `🕒 Data sebelumnya: -`;
     }
-    // --------------------------------------------
-    
+   
+   // -----------------------------------------------------------//
     const unitDisplay = document.getElementById('univUnitDisplay');
     if (unitDisplay) {
         unitDisplay.textContent = unitMatch ? unitMatch[1] : "--";
