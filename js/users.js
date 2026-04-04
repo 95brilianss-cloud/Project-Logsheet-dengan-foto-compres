@@ -216,9 +216,14 @@ function showAddUserForm() {
                 </div>
                 
                 <div>
-                    <label style="display: block; font-size: 0.875rem; color: #94a3b8; margin-bottom: 6px;">Department</label>
-                    <input type="text" id="newDepartment" value="Unit Utilitas 3B" style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 8px; color: white; font-size: 1rem;">
-                </div>
+                    <label style="display: block; font-size: 0.875rem; color: #94a3b8; margin-bottom: 6px;">Department / Unit *</label>
+                    <select id="newDepartment" required style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 8px; color: white; font-size: 1rem;">
+                        <option value="Unit SU 3B">Unit SU (Turbin & CT)</option>
+                        <option value="Unit SA 3B">Unit SA (Area 1100 & 1300)</option>
+                        <option value="Unit Melter 3B">Unit Melter (Area 1000)</option>
+                        <option value="Manajemen">Manajemen / Super Admin</option>
+                    </select>
+                    </div>
                 
                 <button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 8px;">
                     Simpan User Baru
