@@ -5,7 +5,7 @@
 // ============================================
 // 1. APP CONFIGURATION
 // ============================================
-const APP_VERSION = '2.5.1';
+const APP_VERSION = '2.5.2';
 const APP_NAME = 'Turbine Logsheet Pro';
 
 const AUTH_CONFIG = {
@@ -481,6 +481,83 @@ const AREAS_1100 = {
     "BFW OUT 30-E-1204 TI-1117 (°C)"
   ]
 };
+
+const AREAS_1000 = {
+
+  "AGITATOR (M-1001 / M-1002 / M-1005 / M-1004)": [
+    "30-M-1001 A/C RUN/STANDBY",
+    "30-M-1001 B/D RUN/STANDBY",
+    "30-M-1002 A/C RUN/STOP",
+    "30-M-1002 B/D RUN/STOP",
+    "30-M-1005 A/C RUN/STANDBY",
+    "30-M-1005 B/D RUN/STANDBY",
+    "30-M-1004 A/B RUN/STANDBY"
+  ],
+
+  "TANK & VESSEL TEMPERATURE": [
+    "30-D-1002 A/C TI-1003-1 (°C)",
+    "30-D-1002 B/D TI-1003-2 (°C)",
+    "30-D-1005 A/C TI-1003-3 (°C)",
+    "30-D-1005 B/D TI-1003-4 (°C)",
+    "30-D-1006 A/B TI-1003-7 (°C)",
+    "30-D-1004 A/B TI-1003-5 (°C)",
+    "30-D-1007 TI-1003-8 (°C)"
+  ],
+
+  "TANK & VESSEL LEVEL": [
+    "30-D-1003 A/C LI-1005-1 (cm)",
+    "30-D-1003 B/D LI-1005-2 (cm)",
+    "30-D-1005 A/C LI-1005-4 (cm)",
+    "30-D-1005 B/D LI-1005-5 (cm)",
+    "30-D-1006 A/B LI-1005-6 (cm)",
+    "30-D-1004 A/B LI-1005-3 (cm)"
+  ],
+
+  "PUMP 30-P-1002": [
+    "A/C RUN/STANDBY",
+    "A/C PI-1001-7 (Kg/cm2)",
+    "B/D RUN/STANDBY",
+    "B/D PI-1001-8 (Kg/cm2)"
+  ],
+
+  "FILTER 30-FIL-1001": [
+    "A STATUS FILTRASI/STANDBY",
+    "A INLET PI-1001-A (Kg/cm2)",
+    "A OUTLET PI-1002-A (Kg/cm2)",
+    "B STATUS FILTRASI/STANDBY",
+    "B INLET PI-1001-B (Kg/cm2)",
+    "B OUTLET PI-1002-B (Kg/cm2)"
+  ],
+
+  "STORAGE TANK 30-TK-1001": [
+    "TI-1001-1 (°C)",
+    "TI-1001-2 (°C)",
+    "LI-1004 (mm)"
+  ],
+
+  "CONTROL VALVE SYSTEM": [
+    "30-D-1006 A/B LCV-1003 (%)"
+  ],
+
+  "PUMP 30-P-1004": [
+    "A/C LOAD",
+    "A/C PI-1001-1 (Kg/cm2)",
+    "B/D LOAD",
+    "B/D PI-1001-2 (Kg/cm2)"
+  ],
+
+  "PUMP 30-P-1001": [
+    "A/B PI-1001-6 (Kg/cm2)",
+    "A/B LOAD"
+  ],
+
+  "PUMP 30-P-1005": [
+    "A/B STATUS",
+    "A PI-1003-6 (Kg/cm2)",
+    "B PI-1003-67 (Kg/cm2)"
+  ]
+
+};
 // ============================================
 // MASTER CONFIGURATION UNTUK DYNAMIC TEMPLATE
 // ============================================
@@ -524,19 +601,35 @@ const LOGSHEET_CONFIG = {
         photoKey: PHOTO_DRAFT_KEYS.AREA1100,
         submitType: 'LOGSHEET_1100',
         themeColor: '#eab308' // Warna kuning
+    },
+    '1000': {
+        title: 'Logsheet Area 1000',
+        subtitle: 'Pencairan Belerang & Filtrasi',
+        areas: AREAS_1000,
+        draftKey: 'draft_1000',
+        offlineKey: 'offline_1000',
+        photoKey: 'draft_1000_photos',
+        submitType: 'LOGSHEET_1000', // Pastikan membuat sheet LOGSHEET_1000 di Google Sheets
+        themeColor: '#ef4444' // Warna merah api
     }
 };
 const INPUT_TYPES = {
     PUMP_STATUS: {
-        patterns: ['(A/B)', '(ON/OFF)', '(On/Off)', '(Running/Stop)', '(Remote/Running/Stop)', '(A/M)', 'STATUS'],
+        patterns: [
+            '(A/B)', '(ON/OFF)', '(On/Off)', '(Running/Stop)', '(Remote/Running/Stop)', 
+            '(A/M)', 'STATUS', 'RUN/STANDBY', 'RUN/STOP', 'FILTRASI/STANDBY'
+        ],
         options: {
             '(A/B)': ['A', 'B'],
             '(ON/OFF)': ['ON', 'OFF'],
             '(On/Off)': ['On', 'Off'],
             '(Running/Stop)': ['Running', 'Stop'],
-            '(Remote/Running/Stop)': ['Remote', 'Running', 'Stop'], // Pastikan koma ini ada
+            '(Remote/Running/Stop)': ['Remote', 'Running', 'Stop'],
             '(A/M)': ['Auto', 'Manual'],
-            'STATUS': ['Running', 'Stop', 'Standby']
+            'STATUS': ['Running', 'Stop', 'Standby'],
+            'RUN/STANDBY': ['RUN', 'STANDBY'],
+            'RUN/STOP': ['RUN', 'STOP'],
+            'FILTRASI/STANDBY': ['FILTRASI', 'STANDBY']
         }
     }
 };
