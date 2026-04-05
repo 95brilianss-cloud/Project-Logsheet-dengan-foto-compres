@@ -754,6 +754,17 @@ const LOGSHEET_CONFIG = {
         photoKey: 'draft_1000_photos',
         submitType: 'LOGSHEET_1000', // Pastikan membuat sheet LOGSHEET_1000 di Google Sheets
         themeColor: '#ef4444' // Warna merah api
+    },
+// 👇 TAMBAHKAN BLOK INI UNTUK PANEL STG 17,5 👇
+    'TURBINE_SYSTEM': {
+        title: 'Logsheet Panel STG 17,5',
+        subtitle: 'Data Parameter Turbine System',
+        areas: AREAS_TURBINE_SYSTEM, // Merujuk ke variabel AREAS_TURBINE_SYSTEM yang Anda berikan
+        draftKey: 'draft_turbine_system',
+        offlineKey: 'offline_turbine_system',
+        photoKey: 'draft_turbine_system_photos',
+        submitType: 'LOGSHEET_STG175', // Pastikan membuat sheet LOGSHEET_STG175 di Google Sheets
+        themeColor: '#10b981' // Warna hijau zamrud (emerald)
     }
 };
 const INPUT_TYPES = {
