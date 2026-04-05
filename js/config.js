@@ -561,7 +561,7 @@ const AREAS_1000 = {
    WIZARD LOGSHEET PANEL STG 17.5 LOGIC
    ========================================================== */
 
-const AREAS_PANEL_TURBINE = {
+const AREAS_TURBINE_SYSTEM = {
   "STEAM SYSTEM MAIN": ["PT-6107 (kg/cm2)", "FT-6102 (kg/h)", "PCV-6107 (A/M)", "TRIP VALVE INLET TI-6109 (°C)", "TRIP VALVE INLET PI-6113 (kg/cm2)", "GOVERNOR INLET TI-6154 (°C)", "GOVERNOR METAL TI-6110 (°C)", "NOZZLE OUTLET TI-6111 (°C)", "PI-6115 (kg/cm2)"],
   "GLAND STEAM SYSTEM": ["PV-6118 (%)", "PI-6117 (kg/cm2)", "TI-6149 (°C)"],
   "STEAM EXTRACTION": ["PI-6122 (kg/cm2)", "PI-6120 (kg/cm2)", "TT-6112 (°C)", "FT-6101 (kg/h)"],
