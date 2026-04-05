@@ -653,11 +653,12 @@ function renderWizardStep() {
     
     const btnNext = document.getElementById('btnNextStep');
     if (currentWizardStep === totalSteps - 1) {
-        btnNext.textContent = '💾 Simpan Data';
+        btnNext.textContent = '📤 Kirim ke Spreadsheet';
         btnNext.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        
+        // 👇 UBAH BAGIAN ONCLICK INI 👇
         btnNext.onclick = () => {
-            showCustomAlert('Data Logsheet STG 17.5 berhasil disimpan (Simulasi)!', 'success');
-            setTimeout(() => navigateTo('homeScreen'), 2000);
+            submitTurbineWizardData(); 
         };
     } else {
         btnNext.textContent = 'Lanjut';
@@ -787,3 +788,68 @@ const INPUT_TYPES = {
         }
     }
 };
+/* ==========================================================
+   FUNGSI KIRIM DATA WIZARD STG 17.5 KE SPREADSHEET
+   ========================================================== */
+function submitTurbineWizardData() {
+    // 1. Munculkan Animasi Loading (Overlay)
+    const overlay = document.getElementById('uploadProgressOverlay');
+    if (overlay) {
+        overlay.classList.remove('hidden');
+        document.getElementById('uploadProgressText').textContent = "Menyiapkan Data...";
+    }
+
+    // 2. Kumpulkan semua data dari inputan Wizard
+    let payloadData = {};
+    
+    Object.keys(AREAS_TURBINE_SYSTEM).forEach(groupName => {
+        AREAS_TURBINE_SYSTEM[groupName].forEach((param, i) => {
+            // Ambil ID yang sama persis saat kita render inputannya
+            const inputId = `wz-${groupName.replace(/\s/g, '')}-${i}`;
+            const inputElement = document.getElementById(inputId);
+            
+            // Jika ada isinya, ambil nilainya. Jika kosong, kirim tanda "-"
+            payloadData[param] = (inputElement && inputElement.value !== "") ? inputElement.value : "-";
+        });
+    });
+
+    console.log("Data STG 17.5 siap dikirim:", payloadData);
+
+    // 3. Susun format Payload sesuai standar aplikasi Anda
+    // Asumsi: Variabel currentUser dan SCRIPT_URL sudah dideklarasikan di auth.js / config.js
+    const userName = (typeof currentUser !== 'undefined' && currentUser) ? currentUser.username : "Operator";
+    
+    const finalPayload = {
+        action: 'submitLogsheet', // Disesuaikan dengan penamaan action di Code.gs Anda
+        type: 'LOGSHEET_STG175',  // Pastikan Sheet bernama LOGSHEET_STG175 sudah ada
+        user: userName,
+        timestamp: new Date().toISOString(),
+        data: payloadData
+    };
+
+    if (overlay) document.getElementById('uploadProgressText').textContent = "Mengirim ke Server...";
+
+    // 4. Kirim ke Google Apps Script
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(finalPayload)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (overlay) overlay.classList.add('hidden'); // Tutup loading
+        
+        if (result.status === 'success') {
+            showCustomAlert('Data STG 17.5 Berhasil Terkirim!', 'success');
+            // Reset Wizard ke langkah 1
+            currentWizardStep = 0; 
+            setTimeout(() => navigateTo('homeScreen'), 2000);
+        } else {
+            showCustomAlert('Gagal mengirim: ' + (result.message || 'Error Server'), 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error saat kirim:', error);
+        if (overlay) overlay.classList.add('hidden');
+        showCustomAlert('Gagal mengirim data. Periksa koneksi internet Anda.', 'error');
+    });
+}
