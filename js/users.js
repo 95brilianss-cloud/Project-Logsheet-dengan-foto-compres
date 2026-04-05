@@ -121,8 +121,21 @@ function renderUserList(users) {
         const isCurrentUser = userUsername === currentUsername;
         
         const isActive = user.status === 'ACTIVE';
-        const isAdminRole = user.role === 'admin';
         
+        // --- LOGIKA WARNA BADGE ROLE ---
+        const role = String(user.role || 'operator').toLowerCase();
+        let roleBg = 'rgba(100, 116, 139, 0.2)'; // Default Abu-abu (Operator)
+        let roleColor = '#94a3b8';
+
+        if (role === 'admin') {
+            roleBg = 'rgba(245, 158, 11, 0.2)'; roleColor = '#f59e0b'; // Jingga
+        } else if (role === 'avp') {
+            roleBg = 'rgba(139, 92, 246, 0.2)'; roleColor = '#a78bfa'; // Ungu
+        } else if (role === 'supervisor') {
+            roleBg = 'rgba(14, 165, 233, 0.2)'; roleColor = '#38bdf8'; // Biru Muda
+        }
+        
+        // 👇 PERHATIKAN: html += ` harus ada di sini 👇
         html += `
             <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid ${isActive ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}; border-radius: 12px; padding: 16px;">
                 <div style="display: flex; justify-content: space-between; align-items: start;">
@@ -136,9 +149,11 @@ function renderUserList(users) {
                         </div>
                     </div>
                     <div style="display: flex; gap: 4px;">
-                        <span style="padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; background: ${isAdminRole ? 'rgba(245, 158, 11, 0.2)' : 'rgba(100, 116, 139, 0.2)'}; color: ${isAdminRole ? '#f59e0b' : '#94a3b8'};">
-                            ${user.role || 'operator'}
+                        
+                        <span style="padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; background: ${roleBg}; color: ${roleColor};">
+                            ${role}
                         </span>
+                        
                         <span style="padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; background: ${isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}; color: ${isActive ? '#10b981' : '#ef4444'};">
                             ${user.status || 'ACTIVE'}
                         </span>
