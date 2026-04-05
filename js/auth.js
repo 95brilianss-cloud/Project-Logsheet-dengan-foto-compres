@@ -80,20 +80,9 @@ function isAdmin() {
 // ============================================
 
 function showLoginScreen() {
-    // 1. SEMBUNYIKAN SEMUA LAYAR SECARA TOTAL (Reset Inline Styles)
-    document.querySelectorAll('.screen').forEach(s => {
-        s.classList.remove('active');
-        s.style.display = 'none'; // 👈 TAMBAHKAN INI: Mematikan paksa semua layar yang menyala
-    });
-
-    // 2. TAMPILKAN LAYAR LOGIN
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const loginScreen = document.getElementById('loginScreen');
-    if (loginScreen) {
-        loginScreen.style.display = 'flex'; // 👈 Gunakan flex agar container login tetap di tengah
-        loginScreen.classList.add('active');
-    }
-    
-    // 3. LOGIKA SAVED USER (Tetap Sama)
+    if (loginScreen) loginScreen.classList.add('active');
     const savedUser = localStorage.getItem(AUTH_CONFIG.USER_KEY);
     if (savedUser) {
         try {
