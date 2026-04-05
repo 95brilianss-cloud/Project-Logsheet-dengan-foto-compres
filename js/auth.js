@@ -208,13 +208,19 @@ function filterMenuByUnit() {
         // 5. TAMPILKAN BERDASARKAN ROLE & UNIT
         // ==========================================
 
-        // 👇 LOGIKA KHUSUS SUPERVISOR (Pindah Layar) 👇
-        if (role === 'supervisor') {
-            console.log('👨‍💼 Mode Supervisor: Menampilkan Dashboard Monitoring');
+        // 👇 LOGIKA KHUSUS SUPERVISOR & AVP (Dashboard Dual-Zone) 👇
+        if (role === 'supervisor' || role === 'avp') {
+            console.log('👑 Mode Eksekutif: Menampilkan Dashboard Monitoring SA & SU');
             
             // Tukar Layar!
             if (homeScreen) homeScreen.style.display = 'none'; 
             if (dashSupervisor) dashSupervisor.style.display = 'block';
+
+            // Ubah Judul Dashboard secara cerdas sesuai siapa yang login
+            const headerTitle = dashSupervisor.querySelector('h2');
+            if (headerTitle) {
+                headerTitle.innerHTML = role === 'avp' ? '👔 AVP Dashboard' : '👨‍💼 Supervisor Dashboard';
+            }
 
             // Panggil mesin penarik data otomatis
             if (typeof loadSupervisorDashboard === 'function') {
