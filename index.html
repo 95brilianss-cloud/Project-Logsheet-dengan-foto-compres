@@ -570,6 +570,22 @@
                     </svg>
                 </div>
             </div>
+            <div class="logsheet-select-card" id="menu-STG175" onclick="initTurbineWizard()" style="border: 1px solid rgba(59, 130, 246, 0.4);">
+                <div class="logsheet-icon-large" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); display: flex; align-items: center; justify-content: center; border-radius: 16px;">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </div>
+                <div class="logsheet-info">
+                    <h3>Logsheet STG 17,5</h3>
+                    <p>Input data Panel STG (Sistem Step Wizard & Accordion)</p>
+                </div>
+                <div class="logsheet-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </div>
+            </div>
 
             <div class="logsheet-select-card ct-version" id="menu-CT" onclick="fetchUniversalLastData('CT')">
                 <div class="logsheet-icon-large ct">
@@ -1076,6 +1092,37 @@
                 <span>Kirim via WA & Simpan</span>
             </button>
         </div>
+        <div id="turbineWizardScreen" class="screen" style="padding-top: 70px; padding-bottom: 80px;">
+        <div class="screen-header glass-header" style="z-index: 10001;">
+            <button class="btn-icon" onclick="navigateTo('logsheetSelectScreen')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <div class="header-title-group">
+                <h2>Logsheet STG 17,5</h2>
+                <span class="header-subtitle" id="wizardOverallProgress">0% Complete (Langkah 1/6)</span>
+            </div>
+        </div>
+
+        <div style="position: fixed; top: 70px; left: 0; right: 0; max-width: 480px; margin: 0 auto; z-index: 10000; padding: 0 16px; background: rgba(10, 15, 28, 0.95); border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;">
+            <div class="progress-bar-bg" style="width: 100%; height: 6px; background: rgba(148, 163, 184, 0.1); border-radius: 9999px; overflow: hidden; margin-top: 8px;">
+                <div class="progress-bar-fill" id="wizardProgressBar" style="height: 100%; width: 0%; transition: width 0.3s ease; background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);"></div>
+            </div>
+        </div>
+
+        <div class="form-container" style="padding: 16px; margin-top: 24px;">
+            <div id="wizardAccordionContainer"></div>
+
+            <div class="action-bar" style="display: flex; gap: 12px; margin-top: 24px;">
+                <button class="btn btn-secondary" id="btnPrevStep" onclick="navigateWizard(-1)" style="flex: 1; padding: 16px; background: rgba(30, 41, 59, 0.8); color: #e2e8f0; border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 12px; font-weight: 600;">Kembali</button>
+                <button class="btn" id="btnNextStep" onclick="navigateWizard(1)" style="flex: 1; padding: 16px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; border-radius: 12px; font-weight: 600;">Lanjut</button>
+            </div>
+            <div style="text-align: center; margin-top: 12px;">
+                <small style="color: #64748b; font-size: 0.75rem;">💡 Tips: Gunakan Ctrl + ← / → untuk pindah halaman</small>
+            </div>
+        </div>
+    </div>
     </div>
 
     <div id="uploadProgressOverlay" class="upload-overlay hidden" style="position: fixed; inset: 0; background: rgba(10, 15, 28, 0.95); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 10005;">
