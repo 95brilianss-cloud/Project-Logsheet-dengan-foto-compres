@@ -184,7 +184,8 @@ function filterMenuByUnit() {
         const menu1100 = document.getElementById('menu-1100');
         const menu1000 = document.getElementById('menu-1000');
         const menuBalancing = document.getElementById('menu-balancing');
-        
+        const menuUser = document.getElementById('menu-user');
+
         // 1. SEMBUNYIKAN SEMUA MENU (Default State)
         if (menuTurbin) menuTurbin.style.display = 'none';
         if (menuCT) menuCT.style.display = 'none';
@@ -192,6 +193,7 @@ function filterMenuByUnit() {
         if (menu1100) menu1100.style.display = 'none';
         if (menu1000) menu1000.style.display = 'none';
         if (menuBalancing) menuBalancing.style.display = 'none';
+        if (menuUser) menuUser.style.display = 'none';
 
         // 2. TAMPILKAN BERDASARKAN ROLE & UNIT
         
@@ -204,6 +206,7 @@ function filterMenuByUnit() {
             if (menu1100) menu1100.style.display = 'flex';
             if (menu1000) menu1000.style.display = 'flex';
             if (menuBalancing) menuBalancing.style.display = 'flex';
+            if (menuUser) menuUser.style.display = 'flex';
         }
         // Jika bukan admin, baru cek unitnya
         else if (unit.includes('UTILITAS') || unit.includes('UTIL')) {
