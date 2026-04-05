@@ -16,7 +16,12 @@ function initAuth() {
         
         const loginScreen = document.getElementById('loginScreen');
         if (loginScreen && loginScreen.classList.contains('active')) {
-            navigateTo('homeScreen');
+            // PENGECEKAN ROLE SAAT AUTO-LOGIN
+            if (currentUser.role === 'supervisor' || currentUser.role === 'avp') {
+                navigateTo('dashboardSupervisor');
+            } else {
+                navigateTo('homeScreen');
+            }
         }
     } else {
         clearSession();
@@ -471,7 +476,13 @@ function handleLoginSuccess(user, username, password, isOffline = false) {
     
     saveSession(user, false);
     updateUIForAuthenticatedUser();
-    navigateTo('homeScreen');
+    
+    // PENGECEKAN ROLE UNTUK NAVIGASI LAYAR
+    if (user.role === 'supervisor' || user.role === 'avp') {
+        navigateTo('dashboardSupervisor');
+    } else {
+        navigateTo('homeScreen');
+    }
     
     if (isOffline) {
         showCustomAlert(`✓ Login offline berhasil! Selamat datang, ${user.name || user.username}`, 'warning');
