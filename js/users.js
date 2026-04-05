@@ -226,6 +226,8 @@ function showAddUserForm() {
                     <label style="display: block; font-size: 0.875rem; color: #94a3b8; margin-bottom: 6px;">Role *</label>
                     <select id="newRole" required style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 8px; color: white; font-size: 1rem;">
                         <option value="operator">Operator</option>
+                        <option value="supervisor">Supervisor</option>
+                        <option value="avp">AVP / Manajer</option>
                         <option value="admin">Administrator</option>
                     </select>
                 </div>
