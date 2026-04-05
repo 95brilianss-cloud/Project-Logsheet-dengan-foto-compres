@@ -177,7 +177,11 @@ function filterMenuByUnit() {
         
         console.log('🛠️ FILTER MENU BERJALAN UNTUK DEPARTEMEN:', unit, '| ROLE:', role);
 
-        // Cari elemen menu
+        // 1. Cari elemen Layar (Screens)
+        const homeScreen = document.getElementById('homeScreen');
+        const dashSupervisor = document.getElementById('dashboardSupervisor');
+
+        // 2. Cari elemen Menu
         const menuTurbin = document.getElementById('menu-Turbin');
         const menuCT = document.getElementById('menu-CT');
         const menu1300 = document.getElementById('menu-1300');
@@ -186,7 +190,11 @@ function filterMenuByUnit() {
         const menuBalancing = document.getElementById('menu-balancing');
         const menuUser = document.getElementById('menu-user');
 
-        // 1. SEMBUNYIKAN SEMUA MENU (Default State)
+        // 3. RESET TAMPILAN LAYAR (Default State)
+        if (homeScreen) homeScreen.style.display = 'block'; // Layar home biasa muncul
+        if (dashSupervisor) dashSupervisor.style.display = 'none'; // Layar SPV sembunyi
+
+        // 4. SEMBUNYIKAN SEMUA MENU (Default State)
         if (menuTurbin) menuTurbin.style.display = 'none';
         if (menuCT) menuCT.style.display = 'none';
         if (menu1300) menu1300.style.display = 'none';
@@ -195,10 +203,28 @@ function filterMenuByUnit() {
         if (menuBalancing) menuBalancing.style.display = 'none';
         if (menuUser) menuUser.style.display = 'none';
 
-        // 2. TAMPILKAN BERDASARKAN ROLE & UNIT
-        
-        // 👇 CEK ROLE ADMIN TERLEBIH DAHULU (Prioritas Utama) 👇
-        if (role === 'admin' || unit.includes('MANAJEMEN')) {
+
+        // ==========================================
+        // 5. TAMPILKAN BERDASARKAN ROLE & UNIT
+        // ==========================================
+
+        // 👇 LOGIKA KHUSUS SUPERVISOR (Pindah Layar) 👇
+        if (role === 'supervisor') {
+            console.log('👨‍💼 Mode Supervisor: Menampilkan Dashboard Monitoring');
+            
+            // Tukar Layar!
+            if (homeScreen) homeScreen.style.display = 'none'; 
+            if (dashSupervisor) dashSupervisor.style.display = 'block';
+
+            // Panggil mesin penarik data otomatis
+            if (typeof loadSupervisorDashboard === 'function') {
+                loadSupervisorDashboard();
+            }
+            return; // Berhenti di sini agar tidak memproses menu bawahnya
+        }
+
+        // 👇 CEK ROLE ADMIN (Prioritas Utama Menu) 👇
+        else if (role === 'admin' || unit.includes('MANAJEMEN')) {
             console.log('✅ Mode Admin/Supervisor: Menampilkan Semua Menu');
             if (menuTurbin) menuTurbin.style.display = 'flex';
             if (menuCT) menuCT.style.display = 'flex';
@@ -208,7 +234,7 @@ function filterMenuByUnit() {
             if (menuBalancing) menuBalancing.style.display = 'flex';
             if (menuUser) menuUser.style.display = 'flex';
         }
-        // Jika bukan admin, baru cek unitnya
+        // Jika bukan admin/supervisor, baru cek unitnya
         else if (unit.includes('UTILITAS') || unit.includes('UTIL')) {
             console.log('✅ Menampilkan Menu SU (Turbin, CT, Balancing)');
             if (menuTurbin) menuTurbin.style.display = 'flex';
