@@ -830,7 +830,7 @@ function submitTurbineWizardData() {
     if (overlay) document.getElementById('uploadProgressText').textContent = "Mengirim ke Server...";
 
     // 4. Kirim ke Google Apps Script
-    fetch(SCRIPT_URL, {
+    fetch(GAS_URL, {
         method: 'POST',
         body: JSON.stringify(finalPayload)
     })
