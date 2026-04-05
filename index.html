@@ -211,12 +211,10 @@
 <div id="customAlert" class="custom-alert hidden" style="z-index: 100000; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.7); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center;">
     <div class="alert-content glass" id="alertContent" style="max-width: 320px; width: 90%; background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95)); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px; padding: 32px 24px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);">
         
-        <div class="alert-icon-wrapper" id="alertIconWrapper" style="width: 80px; height: 80px; margin: 0 auto 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; background: rgba(15, 23, 42, 0.5); border: 2px solid rgba(255, 255, 255, 0.05); box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);">
-            <div style="position: absolute; inset: -6px; border-radius: 50%; border: 2px dashed rgba(148, 163, 184, 0.2); animation: spin-slow 8s linear infinite;"></div>
-            
-            </div>
-        
-        <h3 id="alertTitle" style="color: #f8fafc; margin-bottom: 12px; font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em;">Berhasil</h3>
+        <div class="alert-icon-wrapper" id="alertIconWrapper" ...>
+    <div style="... animation: spin-slow 8s linear infinite;"></div>
+    <div id="alertIcon"></div>
+    </div> <h3 id="alertTitle" ...>Berhasil</h3>
         
         <p id="alertMessage" style="color: #94a3b8; margin-bottom: 28px; font-size: 0.95rem; line-height: 1.5;">Data berhasil dikirim!</p>
         
@@ -478,7 +476,7 @@
     </div>
     <div id="dashboardSupervisor" class="screen" style="display: none; padding-top: 80px; padding-bottom: 80px;">
         
-        <div class="screen-header glass-header" style="display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; width: 100%; z-index: 100; padding: 12px 20px; box-sizing: border-box;">
+        <div class="screen-header glass-header" style="display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; width: 100%; z-index: 1000; padding: 12px 20px; box-sizing: border-box;">
             <div class="header-title-group" style="text-align: left;">
                 <h2 style="font-size: 1.1rem; font-weight: 800; color: #f8fafc; margin: 0;">👨‍💼 Supervisor Dashboard</h2>
                 <span class="header-subtitle" style="font-size: 0.75rem; color: #94a3b8;">Monitoring Shift 3B</span>
