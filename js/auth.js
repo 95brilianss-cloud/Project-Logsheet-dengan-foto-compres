@@ -80,10 +80,20 @@ function isAdmin() {
 // ============================================
 
 function showLoginScreen() {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    // 1. SEMBUNYIKAN SEMUA LAYAR SECARA TOTAL (Reset Inline Styles)
+    document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+        s.style.display = 'none'; // 👈 TAMBAHKAN INI: Mematikan paksa semua layar yang menyala
+    });
+
+    // 2. TAMPILKAN LAYAR LOGIN
     const loginScreen = document.getElementById('loginScreen');
-    if (loginScreen) loginScreen.classList.add('active');
+    if (loginScreen) {
+        loginScreen.style.display = 'flex'; // 👈 Gunakan flex agar container login tetap di tengah
+        loginScreen.classList.add('active');
+    }
     
+    // 3. LOGIKA SAVED USER (Tetap Sama)
     const savedUser = localStorage.getItem(AUTH_CONFIG.USER_KEY);
     if (savedUser) {
         try {
@@ -497,19 +507,29 @@ function handleLoginSuccess(user, username, password, isOffline = false) {
 
 function logoutOperator() {
     if (confirm('Apakah Anda yakin ingin keluar?')) {
+        // Simpan draf jika ada
         if (Object.keys(currentInput).length > 0) {
             localStorage.setItem(DRAFT_KEYS.LOGSHEET_BACKUP, JSON.stringify(currentInput));
         }
         
+        // Bersihkan sesi
         clearSession();
         currentUser = null;
         isAuthenticated = false;
         
+        // Reset input login
         const usernameInput = document.getElementById('operatorUsername');
         const passwordInput = document.getElementById('operatorPassword');
         if (usernameInput) usernameInput.value = '';
         if (passwordInput) passwordInput.value = '';
         
+        // SEMBUNYIKAN DASHBOARD SUPERVISOR SECARA EKSPLISIT
+        const dashSupervisor = document.getElementById('dashboardSupervisor');
+        if (dashSupervisor) {
+            dashSupervisor.style.display = 'none';
+        }
+        
+        // Kembali ke layar login
         showLoginScreen();
         showCustomAlert('Anda telah keluar dari sistem.', 'success');
     }
