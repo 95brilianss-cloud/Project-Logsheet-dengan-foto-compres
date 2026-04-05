@@ -248,14 +248,22 @@ function closeBranchMenuPopup() {
  * Digunakan untuk berpindah antar layar (screen)
  */
 function navigateTo(screenId) {
-    // Sembunyikan semua screen
+    // 1. SAPU BERSIH: Sembunyikan semua screen dan matikan inline style
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
+        screen.style.display = 'none'; // 👈 INI OBATNYA (Mencegah layar bertumpuk)
     });
 
-    // Tampilkan screen yang dituju
+    // 2. TAMPILKAN TARGET: Nyalakan hanya layar yang dituju
     const targetScreen = document.getElementById(screenId);
     if (targetScreen) {
+        // Gunakan flex untuk login, sisanya block
+        if (screenId === 'loginScreen') {
+            targetScreen.style.display = 'flex';
+        } else {
+            targetScreen.style.display = 'block';
+        }
+        
         targetScreen.classList.add('active');
         
         // Scroll ke atas secara otomatis
