@@ -16,15 +16,8 @@ function initBalancingScreen() {
     
     detectShift();
     
-    // DRAFT_KEYS berasal dari config.js
-    const draftData = JSON.parse(localStorage.getItem(DRAFT_KEYS.BALANCING));
-    const hasDraft = draftData !== null;
-    
-    if (hasDraft) {
-        loadBalancingDraft();
-    } else {
-        loadLastBalancingData();
-    }
+    // Tarik data terakhir (true untuk menampilkan animasi loading)
+    loadLastBalancingData(true);
     
     calculateLPBalance();
     setupBalancingAutoSave();
