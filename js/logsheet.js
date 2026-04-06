@@ -42,17 +42,18 @@ function fetchUniversalLastData(type) {
         }, 1000); // 1000ms = 1 detik
     };
     
-    // Tentukan Parameter 'action' ke Google Apps Script berdasarkan tipenya
+    // =======================================================================
+    // AUTO-PILOT ROUTING (PENGGANTI IF-ELSE MANUAL)
+    // =======================================================================
     let actionParam = '';
-    if (type === 'CT') {
-        actionParam = '&action=getLastCT';
-    } else if (type === '1300') {
-        actionParam = '&action=getLast1300';
-    } else if (type === '1100') {
-        actionParam = '&action=getLast1100'; 
-    } else if (type === 'TURBINE') {
-        actionParam = ''; 
+    if (type === 'TURBINE') {
+        // Pengecualian khusus Turbine lama karena format nama sheet di backend berbeda
+        actionParam = '&action=getLastTurbine'; 
+    } else {
+        // AUTO-PILOT untuk semua menu: CT, 1300, 1100_1200, PANEL_STG, GENSET, dll.
+        actionParam = '&action=getLast' + type; 
     }
+    // =======================================================================
     
     const script = document.createElement('script');
     script.src = `${GAS_URL}?callback=${callbackName}${actionParam}`;
