@@ -199,31 +199,23 @@ function updateDraftStatusIndicator() {
     }
 }
 
-// ============================================
-// 3. SERVER DATA & RESET HANDLERS
-// ============================================
-
 function loadLastBalancingData(isManualLoad = false) {
-    const loader = document.getElementById('loader');
     const timeLabel = document.getElementById('balancingLastTimeLabel');
     const dateLabel = document.getElementById('balancingLastDateLabel');
     
-    if (loader && isManualLoad) loader.style.display = 'flex';
+    // 1. TAMPILKAN POPUP SINKRONISASI
+    if (isManualLoad) {
+        showCustomAlert('🔄 Sinkronisasi data...', 'info');
+    }
 
     const callbackName = 'jsonp_balancing_' + Date.now();
     
     window[callbackName] = (result) => {
-        if (loader) loader.style.display = 'none';
-        
         if (result.success && result.data) {
             const lastDataFetch = result.data;
             
-            // 1. UPDATE LABEL INFORMASI TERAKHIR DI SERVER (Biru di bagian atas jika ada)
             if (timeLabel) timeLabel.textContent = lastDataFetch._lastTime || '--:--';
             if (dateLabel) dateLabel.textContent = lastDataFetch.Tanggal || '--/--/----';
-
-            // Dihapus: Jangan timpa input form tanggal dan jam agar tidak menggunakan data masa lalu
-            // (Input harus menggunakan waktu operator saat ini)
             
             // 2. Mapping field dari server ke input form
             const fieldMapping = {
@@ -271,7 +263,12 @@ function loadLastBalancingData(isManualLoad = false) {
             Object.entries(fieldMapping).forEach(([id, value]) => {
                 const el = document.getElementById(id);
                 if (el && value !== undefined && value !== null && value !== '') {
-                    el.value = value;
+                    // Mencegah munculnya tulisan [object Object] di inputan
+                    if (typeof value === 'object') {
+                        el.value = value.value || value.text || ''; 
+                    } else {
+                        el.value = value;
+                    }
                 }
             });
             
@@ -283,7 +280,11 @@ function loadLastBalancingData(isManualLoad = false) {
                 
             calculateLPBalance();
             saveBalancingDraft();
-            if (isManualLoad) showCustomAlert('✓ Data Server dimuat.', 'success');
+            
+            if (isManualLoad) {
+                showCustomAlert('✓ Data Server dimuat.', 'success');
+                setTimeout(() => { if (typeof closeAlert === 'function') closeAlert(); }, 1500);
+            }
         } 
         
         // 3. Pastikan Form Input Tanggal dan Jam terisi waktu saat ini
@@ -298,9 +299,13 @@ function loadLastBalancingData(isManualLoad = false) {
     const script = document.createElement('script');
     script.src = `${GAS_URL}?action=getLastBalancing&callback=${callbackName}&t=${Date.now()}`;
     script.onerror = () => {
-        if (loader) loader.style.display = 'none';
+        // Tampilkan error jika gagal ditarik
+        if (isManualLoad) {
+            showCustomAlert('⚠️ Gagal terhubung ke server.', 'error');
+            setTimeout(() => { if (typeof closeAlert === 'function') closeAlert(); }, 1500);
+        }
         
-        // Pastikan terisi meskipun gagal fetch
+        // Pastikan terisi waktu saat ini meskipun gagal fetch
         const dateInput = document.getElementById('balancingDate');
         if (!dateInput || !dateInput.value) updateBalancingDateTime();
     };
