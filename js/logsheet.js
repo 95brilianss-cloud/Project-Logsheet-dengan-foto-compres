@@ -117,7 +117,7 @@ function openUniversalLogsheet(type) {
 
     // 2. Ubah Judul & Info User di Header
     document.getElementById('univHeaderTitle').textContent = config.title;
-    document.getElementById('univAreaListUser').textContent = currentUser || 'Operator';
+    document.getElementById('univAreaListUser').textContent = (currentUser && currentUser.name) ? currentUser.name : 'Operator';
 
     // 3. Ambil Draf dari LocalStorage (Agar aman saat offline/refresh)
     const savedDraft = localStorage.getItem(config.draftKey);
