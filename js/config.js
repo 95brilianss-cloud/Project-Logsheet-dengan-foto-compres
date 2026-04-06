@@ -554,8 +554,216 @@ const AREAS_1000 = {
     "30-P-1005 A PI-1003-6 (Kg/cm2)",
     "30-P-1005 B PI-1003-67 (Kg/cm2)"
   ]
+  };
 
+// ==========================================
+// 6 AREA UTAMA (Fungsi Folder/Grup) & PARAMETER
+// ==========================================
+const AREAS_PANEL_STG175 = {
+  "STEAM SYSTEM MAIN": [
+    "PT-6107 (kg/cm2)",
+    "FT-6102 (kg/h)",
+    "PCV-6107 (A/M)",
+    "TRIP VALVE INLET TI-6109 (°C)",
+    "TRIP VALVE INLET PI-6113 (kg/cm2)",
+    "GOVERNOR INLET TI-6154 (°C)",
+    "GOVERNOR METAL TI-6110 (°C)",
+    "NOZZLE OUTLET TI-6111 (°C)",
+    "PI-6115 (kg/cm2)"
+  ],
+  "GLAND STEAM SYSTEM": [
+    "PV-6118 (%)",
+    "PI-6117 (kg/cm2)",
+    "TI-6149 (°C)"
+  ],
+  "STEAM EXTRACTION": [
+    "PI-6122 (kg/cm2)",
+    "PI-6120 (kg/cm2)",
+    "TT-6112 (°C)",
+    "FT-6101 (kg/h)"
+  ],
+  "MAIN CONDENSER": [
+    "LEVEL LI-6101 (%)",
+    "PI-6110 (kg/cm2)",
+    "PI-6112 (kg/cm2)",
+    "PUMP MP-6101 (A/B)",
+    "PI-6134 (kg/cm2)",
+    "TI-6115 (°C)",
+    "TI-6116 (°C)"
+  ],
+  "LUBE OIL SYSTEM": [
+    "30-TK-6102 LEVEL (%)",
+    "30-EH-6102 (ON/AUTO)",
+    "30-TK-6102 PDI-6144 (kg/cm2)",
+    "30-TK-6102 TEMP TIT-6124 (°C)",
+    "30-E-6104 COOLER (A/B)",
+    "30-P-6103 (ON/AUTO)",
+    "30-P-6104 (ON/AUTO)",
+    "TEMP TI-6126 (°C)",
+    "PDI-6146 (kg/cm2)",
+    "FILTER FIL-6101 (A/B)",
+    "PI-6141 (kg/cm2)"
+  ],
+  "HP OIL SYSTEM": [
+    "MP-6106 (A/B)",
+    "PI-6153 (kg/cm2)",
+    "ZC-6106 (%)",
+    "ZC-6107 (%)"
+  ],
+  "SHAFT LINE LUBE OIL": [
+    "UM-6103 (ON/AUTO)",
+    "P-6105 A (ON/AUTO)",
+    "P-6105 B (ON/AUTO)"
+  ],
+  "SYNCHRONIZATION & EXCITATION": [
+    "SPEED (RPM)",
+    "ACTIVE POWER (MW)",
+    "REACTIVE POWER (MVAR)",
+    "VOLTAGE (V)",
+    "FREQUENCY (Hz)",
+    "CURRENT (A)",
+    "POWER FACTOR (COSϕ)",
+    "EXCITATION VOLTAGE (V)",
+    "EXCITATION CURRENT (A)",
+    "AVR (A/B)"
+  ],
+  "TURBINE BEARING TEMPERATURE": [
+    "THRUST NDE TE-6131 A (°C)",
+    "THRUST NDE TE-6131 B (°C)",
+    "THRUST NDE TE-6132 A (°C)",
+    "THRUST NDE TE-6132 B (°C)",
+    "JOURNAL NDE TE-6133 A (°C)",
+    "JOURNAL NDE TE-6133 B (°C)",
+    "JOURNAL DE TE-6134 A (°C)",
+    "JOURNAL DE TE-6134 B (°C)"
+  ],
+  "GEARBOX TEMPERATURE": [
+    "HIGH SPEED DE TE-6135 A (°C)",
+    "HIGH SPEED DE TE-6135 B (°C)",
+    "HIGH SPEED NDE TE-6140 A (°C)",
+    "HIGH SPEED NDE TE-6140 B (°C)",
+    "WHEEL DE TE-6139 A (°C)",
+    "WHEEL DE TE-6139 B (°C)",
+    "WHEEL NDE TE-6138 A (°C)",
+    "WHEEL NDE TE-6138 B (°C)",
+    "LOW SPEED TE-6136 A (°C)",
+    "LOW SPEED TE-6136 B (°C)",
+    "LOW SPEED TE-6137 A (°C)",
+    "LOW SPEED TE-6137 B (°C)"
+  ],
+  "GENERATOR TEMPERATURE": [
+    "BEARING DE TE-6141 A (°C)",
+    "BEARING DE TE-6141 B (°C)",
+    "BEARING NDE TE-6145 A (°C)",
+    "BEARING NDE TE-6145 B (°C)",
+    "COOLING AIR INLET DE TE-6146 A (°C)",
+    "COOLING AIR INLET DE TE-6146 B (°C)",
+    "COOLING AIR INLET NDE TE-6147 A (°C)",
+    "COOLING AIR INLET NDE TE-6147 B (°C)",
+    "COOLING AIR OUTLET TE-6148 A (°C)",
+    "COOLING AIR OUTLET TE-6148 B (°C)",
+    "STATOR U TE-6142 A (°C)",
+    "STATOR U TE-6142 B (°C)",
+    "STATOR V TE-6143 A (°C)",
+    "STATOR V TE-6143 B (°C)",
+    "STATOR W TE-6144 A (°C)",
+    "STATOR W TE-6144 B (°C)"
+  ],
+  "VIBRATION SYSTEM": [
+    "THRUST ZE-6108 (mm)",
+    "TURBINE NDE VI-6101 X (µm)",
+    "TURBINE NDE VI-6101 Y (µm)",
+    "TURBINE DE VI-6102 X (µm)",
+    "TURBINE DE VI-6102 Y (µm)",
+    "GB HIGH SPEED DE VI-6103 X (µm)",
+    "GB HIGH SPEED DE VI-6103 Y (µm)",
+    "GB HIGH SPEED NDE VI-6106 X (µm)",
+    "GB HIGH SPEED NDE VI-6106 Y (µm)",
+    "GB LOW SPEED NDE VI-6104 X (µm)",
+    "GB LOW SPEED NDE VI-6104 Y (µm)",
+    "GB LOW SPEED DE VI-6105 X (µm)",
+    "GB LOW SPEED DE VI-6105 Y (µm)",
+    "GENERATOR DE VI-6107 X (µm)",
+    "GENERATOR DE VI-6107 Y (µm)",
+    "GENERATOR NDE VI-6108 X (µm)",
+    "GENERATOR NDE VI-6108 Y (µm)"
+  ],
+  "TEMP & PRESS REDUCING": [
+    "30-U-6101 MPS PIC-6102 (kg/cm2)",
+    "30-U-6101 ZI-6102 (%)",
+    "30-U-6101 LPS LETDOWN PI-6103",
+    "30-U-6101 TICA-6101 (°C)",
+    "30-U-6101 ZI-6101 (%)",
+    "30-U-6102 TICA-6103 (°C)",
+    "30-U-6102 ZI-6103 (%)",
+    "PCV-6105 (%)",
+    "PICA-6105 (kg/cm2)",
+    "TIA-6108 (°C)",
+    "INSTRUMENT AIR (kg/cm2)",
+    "PI-6172 (kg/cm2)"
+  ],
+  "STEAM CONDENSATE RECOVERY SYSTEM": [
+    "30-TK-6201 LCV-6211 (%)",
+    "30-TK-6201 LICA-6211 (A/M)",
+    "30-TK-6201 LICA-6211 (%)",
+    "30-P-6202 A (Amp/Standby)",
+    "30-P-6202 B (Amp/Standby)",
+    "30-D-6201 LICA-6209 (A/M)",
+    "30-D-6201 LICA-6209 (%)",
+    "30-D-6201 TIC-6213 (A/M)",
+    "30-D-6201 TIC-6213 (°C)",
+    "30-E-6202 PICA-6216 (A/M)",
+    "30-E-6202 PICA-6216 (kg/cm2)",
+    "30-E-6202 PCV-6216 (%)",
+    "SC-C-6202 A/B (A/M)",
+    "SC-C-6202 A/B (%)",
+    "SC-C-6202 A/B (ON/OFF)"
+  ],
+  "DEAERATION & WATER FEEDING SYSTEM": [
+    "30-U-6201 STEAM PI-6202 (kg/cm2)",
+    "30-U-6201 STEAM FI-6201 (kg/h)",
+    "30-U-6201 STEAM PCV-6201 (%)",
+    "30-U-6201 STEAM PICA-6201 (A/M)",
+    "30-U-6201 STEAM PICA-6201 (kg/cm2)",
+    "30-U-6201 BFW PI-6203 (kg/cm2)",
+    "30-U-6201 BFW FI-6202 (m3/h)",
+    "30-U-6201 BFW LCV-6201 (%)",
+    "30-U-6201 BFW TIA-6205 (°C)",
+    "30-U-6201 BFW LICA-6201 A (A/M)",
+    "30-U-6201 BFW LICA-6201 A (%)",
+    "30-U-6201 BFW LISA-6201 B (%)",
+    "P-6201 A (Amp/Standby)",
+    "P-6201 B (Amp/Standby)"
+  ],
+  "BFW PUMP COOLING & SEALING": [
+    "TISA-6206 (°C)",
+    "TISA-6207 (°C)",
+    "TISA-6208 (°C)",
+    "TISA-6209 (°C)",
+    "TISA-6210 (°C)",
+    "PIA-6207 A/B (kg/cm2)",
+    "PISA-6210 (kg/cm2)"
+  ],
+  "ELECTRICAL FEEDER LOAD": [
+    "SCADA/UBB Power (kW)",
+    "TR-MAIN01 Winding Temp (°C)",
+    "TR-MAIN01 Oil Temp (°C)",
+    "TR-EMERGENCY01 Power (kW)",
+    "TR-EMERGENCY02 / P-6201B Power (kW)",
+    "SS-2000 Power (kW)",
+    "SS-4100 Power (kW)",
+    "SS-7000 Power (kW)",
+    "30-C1301 Power (kW)",
+    "30-C1302 Power (kW)",
+    "30-P1302 Power (kW)",
+    "30-P1301 Power (kW)",
+    "30-P1303 Power (kW)",
+    "30-P6201A Power (kW)",
+    "30-TR-10 Power (kW)",
+    "SS-6500 via TR-MAIN02 Power (kW)"
+  ]
 };
+
 // ============================================
 // MASTER CONFIGURATION UNTUK DYNAMIC TEMPLATE
 // ============================================
@@ -563,12 +771,12 @@ const LOGSHEET_CONFIG = {
     'TURBINE': {
         title: 'Logsheet Turbin',
         subtitle: 'Input data operasional turbine',
-        areas: AREAS, // Mengambil dari variabel AREAS yang sudah ada
+        areas: AREAS,
         draftKey: DRAFT_KEYS.LOGSHEET,
         offlineKey: DRAFT_KEYS.LOGSHEET_OFFLINE,
         photoKey: PHOTO_DRAFT_KEYS.TURBINE,
         submitType: 'LOGSHEET',
-        themeColor: '#3b82f6' // Warna biru
+        themeColor: '#3b82f6'
     },
     'CT': {
         title: 'Logsheet Cooling Tower',
@@ -578,7 +786,7 @@ const LOGSHEET_CONFIG = {
         offlineKey: DRAFT_KEYS_CT.OFFLINE,
         photoKey: PHOTO_DRAFT_KEYS.CT,
         submitType: 'LOGSHEET_CT',
-        themeColor: '#06b6d4' // Warna cyan
+        themeColor: '#06b6d4'
     },
     '1300': {
         title: 'Logsheet Area 1300',
@@ -588,7 +796,7 @@ const LOGSHEET_CONFIG = {
         offlineKey: DRAFT_KEYS_1300.OFFLINE,
         photoKey: PHOTO_DRAFT_KEYS.AREA1300,
         submitType: 'LOGSHEET_1300',
-        themeColor: '#8b5cf6' // Warna ungu
+        themeColor: '#8b5cf6'
     },
     '1100': {
         title: 'Logsheet Area 1100/1200',
@@ -597,8 +805,8 @@ const LOGSHEET_CONFIG = {
         draftKey: DRAFT_KEYS_1100.LOGSHEET,
         offlineKey: DRAFT_KEYS_1100.OFFLINE,
         photoKey: PHOTO_DRAFT_KEYS.AREA1100,
-        submitType: 'LOGSHEET_1100',
-        themeColor: '#eab308' // Warna kuning
+        submitType: 'LOGSHEET_1100_1200',
+        themeColor: '#eab308'
     },
     '1000': {
         title: 'Logsheet Area 1000',
@@ -607,10 +815,53 @@ const LOGSHEET_CONFIG = {
         draftKey: 'draft_1000',
         offlineKey: 'offline_1000',
         photoKey: 'draft_1000_photos',
-        submitType: 'LOGSHEET_1000', // Pastikan membuat sheet LOGSHEET_1000 di Google Sheets
-        themeColor: '#ef4444' // Warna merah api
+        submitType: 'LOGSHEET_1000',
+        themeColor: '#ef4444'
+    },
+    'PANEL_STG': {
+        title: 'Logsheet Panel STG 17.5 MW',
+        submitType: 'LOGSHEET_PANEL_STG',
+        draftKey: 'draft_panel_stg',
+        photoKey: 'photos_panel_stg',
+        offlineKey: 'offline_panel_stg',
+        themeColor: '#1d6be8', // Warna biru tema panel
+        
+        // MENGGABUNGKAN GROUPS DAN AREAS KE SINI AGAR TIDAK ERROR
+        groups: {
+            "1. Steam & Condenser System": [
+                "STEAM SYSTEM MAIN", 
+                "GLAND STEAM SYSTEM", 
+                "STEAM EXTRACTION", 
+                "MAIN CONDENSER"
+            ],
+            "2. Turbine Oil Systems": [
+                "LUBE OIL SYSTEM", 
+                "HP OIL SYSTEM", 
+                "SHAFT LINE LUBE OIL"
+            ],
+            "3. Temperature Monitoring": [
+                "TURBINE BEARING TEMPERATURE", 
+                "GEARBOX TEMPERATURE", 
+                "GENERATOR TEMPERATURE"
+            ],
+            "4. Vibration & Excitation": [
+                "VIBRATION SYSTEM", 
+                "SYNCHRONIZATION & EXCITATION"
+            ],
+            "5. PRDS & Condensate Recovery": [
+                "TEMP & PRESS REDUCING", 
+                "STEAM CONDENSATE RECOVERY SYSTEM"
+            ],
+            "6. Deaerator & Electrical Load": [
+                "DEAERATION & WATER FEEDING SYSTEM", 
+                "BFW PUMP COOLING & SEALING", 
+                "ELECTRICAL FEEDER LOAD"
+            ]
+        },
+        areas: AREAS_PANEL_STG175 // Memanggil variabel data di atas
     }
 };
+
 const INPUT_TYPES = {
     PUMP_STATUS: {
         patterns: [
