@@ -798,7 +798,7 @@ const LOGSHEET_CONFIG = {
         submitType: 'LOGSHEET_1300',
         themeColor: '#8b5cf6'
     },
-    '1100': {
+    '1100_1200': {
         title: 'Logsheet Area 1100/1200',
         subtitle: 'Sulphur, Furnace, WHB',
         areas: AREAS_1100,
