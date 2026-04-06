@@ -833,7 +833,7 @@ function openPanelSTGSubAreas(groupName) {
         const paramsList = config.areas[subAreaName] || [];
         
         html += `
-        <details open class="form-card glass" style="margin-bottom: 16px; padding: 16px; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(59, 130, 246, 0.2);">
+        <details class="form-card glass" style="margin-bottom: 16px; padding: 16px; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(59, 130, 246, 0.2);">
             <summary style="font-size: 1rem; font-weight: 700; color: ${config.themeColor}; cursor: pointer; outline: none; list-style-position: inside;">
                 ${subAreaName}
             </summary>
