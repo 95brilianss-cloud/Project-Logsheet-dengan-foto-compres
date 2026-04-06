@@ -115,7 +115,17 @@ function openUniversalLogsheet(type) {
 
     // 1. Set tipe logsheet yang sedang aktif
     activeLogsheetType = type;
-
+   
+    // === TAMBAHKAN BLOK INTERCEPT INI ===
+    // Jika yang dibuka adalah Panel STG, belokkan ke tampilan Grouping (Folder)
+    if (type === 'PANEL_STG') {
+        if (typeof openPanelSTGGroups === 'function') {
+            openPanelSTGGroups();
+        } else {
+            console.error("Fungsi openPanelSTGGroups belum ditambahkan!");
+        }
+        return; // WAJIB ADA return agar tidak lanjut ke tampilan standar yang ada fotonya
+    }
     // 2. Ubah Judul & Info User di Header
     document.getElementById('univHeaderTitle').textContent = config.title;
     document.getElementById('univAreaListUser').textContent = (currentUser && currentUser.name) ? currentUser.name : 'Operator';
@@ -736,4 +746,168 @@ async function submitUniversalLogsheet() {
         localStorage.setItem(config.offlineKey, JSON.stringify(offlineData));
         setTimeout(() => showCustomAlert('Gagal mengirim. Data disimpan sementara ke memori lokal.', 'error'), 500);
     }
+}
+
+// =====================================================================
+// KHUSUS RENDER LOGSHEET PANEL STG (6 AREA FOLDER & DROPDOWN)
+// Letakkan di paling bawah file js/logsheet.js
+// =====================================================================
+
+function openPanelSTGGroups() {
+    const config = LOGSHEET_CONFIG['PANEL_STG'];
+    
+    document.getElementById('panelGroupTitle').textContent = config.title;
+    document.getElementById('panelGroupUser').textContent = (currentUser && currentUser.name) ? currentUser.name : 'Operator';
+
+    const savedDraft = localStorage.getItem(config.draftKey);
+    univCurrentInput = savedDraft ? JSON.parse(savedDraft) : {};
+
+    const listContainer = document.getElementById('panelGroupList');
+    let html = '';
+    let globalTotalParams = 0;
+    let globalFilledParams = 0;
+
+    Object.entries(config.groups).forEach(([groupName, subAreas]) => {
+        let groupTotalParams = 0;
+        let groupFilledParams = 0;
+
+        subAreas.forEach(subArea => {
+            const params = config.areas[subArea] || [];
+            groupTotalParams += params.length;
+            
+            params.forEach(param => {
+                if (univCurrentInput[subArea] && univCurrentInput[subArea][param] && univCurrentInput[subArea][param].toString().trim() !== '') {
+                    groupFilledParams++;
+                }
+            });
+        });
+
+        globalTotalParams += groupTotalParams;
+        globalFilledParams += groupFilledParams;
+
+        const isComplete = groupFilledParams === groupTotalParams && groupTotalParams > 0;
+        const percent = groupTotalParams === 0 ? 0 : Math.round((groupFilledParams / groupTotalParams) * 100);
+
+        html += `
+            <div class="premium-area-card" onclick="openPanelSTGSubAreas('${groupName}')" style="--theme-color: ${config.themeColor};">
+                <div class="premium-area-header">
+                    <div style="display: flex; align-items: center; flex: 1;">
+                        <div class="premium-icon-box" style="background: rgba(29, 107, 232, 0.15); color: #1d6be8; border: 1px solid rgba(29, 107, 232, 0.3);">
+                            ${isComplete ? '✅' : '⚡'}
+                        </div>
+                        <div class="premium-area-info">
+                            <h3 class="premium-area-title" style="font-size: 0.95rem;">${groupName}</h3>
+                            <p class="premium-area-subtitle">${groupFilledParams} / ${groupTotalParams} Diisi</p>
+                        </div>
+                    </div>
+                    <div style="padding: 4px 12px; background: ${isComplete ? '#10b981' : 'rgba(15, 23, 42, 0.6)'}; color: ${isComplete ? 'white' : '#e2e8f0'}; border-radius: 20px; font-size: 0.8rem; font-weight: 800;">
+                        ${percent}%
+                    </div>
+                </div>
+                <div class="premium-progress-bar-bg">
+                    <div class="premium-progress-fill" style="width: ${percent}%; background: ${isComplete ? '#10b981' : config.themeColor};"></div>
+                </div>
+            </div>
+        `;
+    });
+
+    listContainer.innerHTML = html;
+
+    const submitBtn = document.getElementById('panelSubmitBtn');
+    if (submitBtn) {
+        submitBtn.style.display = globalFilledParams > 0 ? 'block' : 'none';
+    }
+
+    navigateTo('panelSTGGroupScreen');
+}
+
+function openPanelSTGSubAreas(groupName) {
+    const config = LOGSHEET_CONFIG['PANEL_STG'];
+    document.getElementById('panelSTGHeaderTitle').textContent = groupName;
+
+    const subAreas = config.groups[groupName];
+    const container = document.getElementById('panelSTGContent');
+    let html = '';
+
+    subAreas.forEach(subAreaName => {
+        const paramsList = config.areas[subAreaName] || [];
+        
+        html += `
+        <details open class="form-card glass" style="margin-bottom: 16px; padding: 16px; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(59, 130, 246, 0.2);">
+            <summary style="font-size: 1rem; font-weight: 700; color: ${config.themeColor}; cursor: pointer; outline: none; list-style-position: inside;">
+                ${subAreaName}
+            </summary>
+            <div style="margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px;">
+        `;
+        
+        paramsList.forEach(fullLabel => {
+            const nameOnly = fullLabel.split(' (')[0];
+            const unitMatch = fullLabel.match(/\(([^)]+)\)/);
+            const unit = unitMatch ? unitMatch[1] : '';
+            
+            const savedValue = (univCurrentInput[subAreaName] && univCurrentInput[subAreaName][fullLabel]) || '';
+            
+            // Ambil data shift sebelumnya dengan aman
+            let lastDataVal = univLastData[fullLabel] || univLastData[nameOnly] || '';
+            if (typeof lastDataVal === 'object' && lastDataVal !== null) {
+                lastDataVal = lastDataVal.value || '-'; 
+            }
+            const lastTime = univLastData._lastTime || '--:--';
+            
+            let lastDataHtml = lastDataVal ? `<small style="color: #94a3b8; display: block; margin-bottom: 6px;">🕒 Sblm (${lastTime}): <strong style="color: ${config.themeColor};">${lastDataVal}</strong></small>` : '';
+
+            // Cek apakah parameter ini bertipe Dropdown (A/B, ON/OFF) berdasarkan config.js
+            let isDropdown = false;
+            let dropdownOptions = [];
+            for (const [key, rules] of Object.entries(INPUT_TYPES)) {
+                rules.patterns.forEach(pattern => {
+                    if (fullLabel.includes(pattern)) {
+                        isDropdown = true;
+                        dropdownOptions = rules.options[pattern];
+                    }
+                });
+            }
+
+            html += `
+                <div class="form-field" style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 0.85rem; color: #f8fafc; margin-bottom: 4px; font-weight: 600;">
+                        ${nameOnly} <span style="color: ${config.themeColor};">${unit ? `(${unit})` : ''}</span>
+                    </label>
+                    ${lastDataHtml}
+            `;
+
+            if (isDropdown) {
+                html += `<select onchange="savePanelSTGInput('${subAreaName}', '${fullLabel}', this.value)" style="width: 100%; padding: 14px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 10px; color: white; font-size: 1rem; outline: none;">
+                            <option value="">Pilih status...</option>`;
+                dropdownOptions.forEach(opt => {
+                    const selected = savedValue === opt ? 'selected' : '';
+                    html += `<option value="${opt}" ${selected}>${opt}</option>`;
+                });
+                html += `</select></div>`;
+            } else {
+                html += `<input type="number" step="any" placeholder="0.00" value="${savedValue}" oninput="savePanelSTGInput('${subAreaName}', '${fullLabel}', this.value)" style="width: 100%; padding: 14px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 10px; color: white; font-size: 1rem; outline: none;"></div>`;
+            }
+        });
+        
+        html += `</div></details>`;
+    });
+
+    container.innerHTML = html;
+    navigateTo('panelSTGScreen');
+}
+
+function savePanelSTGInput(subAreaName, fullLabel, value) {
+    const config = LOGSHEET_CONFIG['PANEL_STG'];
+    
+    if (!univCurrentInput[subAreaName]) {
+        univCurrentInput[subAreaName] = {};
+    }
+    
+    if (value.trim() !== '') {
+        univCurrentInput[subAreaName][fullLabel] = value;
+    } else {
+        delete univCurrentInput[subAreaName][fullLabel];
+    }
+    
+    localStorage.setItem(config.draftKey, JSON.stringify(univCurrentInput));
 }
