@@ -508,12 +508,12 @@ function handleLoginSuccess(user, username, password, isOffline = false) {
 function logoutOperator() {
     if (confirm('Apakah Anda yakin ingin keluar?')) {
         // Simpan draf jika ada
-        if (Object.keys(currentInput).length > 0) {
+        if (typeof currentInput !== 'undefined' && Object.keys(currentInput).length > 0) {
             localStorage.setItem(DRAFT_KEYS.LOGSHEET_BACKUP, JSON.stringify(currentInput));
         }
         
         // Bersihkan sesi
-        clearSession();
+        if (typeof clearSession === 'function') clearSession();
         currentUser = null;
         isAuthenticated = false;
         
@@ -523,15 +523,35 @@ function logoutOperator() {
         if (usernameInput) usernameInput.value = '';
         if (passwordInput) passwordInput.value = '';
         
-        // SEMBUNYIKAN DASHBOARD SUPERVISOR SECARA EKSPLISIT
-        const dashSupervisor = document.getElementById('dashboardSupervisor');
-        if (dashSupervisor) {
-            dashSupervisor.style.display = 'none';
-        }
+        // BERSIHKAN SEMUA LAYAR SECARA PAKSA (Perbaikan untuk masalah tampilan nembus)
+        const allScreens = document.querySelectorAll('.screen');
+        allScreens.forEach(screen => {
+            // Hapus class active
+            screen.classList.remove('active');
+            
+            // Sembunyikan paksa via inline style (mengatasi nyangkut di homeScreen & supervisor)
+            screen.style.display = 'none'; 
+        });
         
-        // Kembali ke layar login
-        showLoginScreen();
+        // Tampilkan layar login kembali
+        const loginScreen = document.getElementById('loginScreen');
+        if (loginScreen) {
+            // Hilangkan display none khusus layar login agar bisa dikontrol class .active
+            loginScreen.style.display = ''; 
+            loginScreen.classList.add('active');
+        }
+
+        // Panggil navigasi bawaan Anda jika ada
+        if (typeof showLoginScreen === 'function') showLoginScreen();
+        
+        // Tutup menu bulat popup jika nyangkut terbuka
+        const menuOverlay = document.getElementById('branchMenuPopupOverlay');
+        if (menuOverlay) menuOverlay.classList.add('hidden');
+
         showCustomAlert('Anda telah keluar dari sistem.', 'success');
+        
+        // Gulir ke atas layar agar rapi
+        window.scrollTo(0, 0);
     }
 }
 
