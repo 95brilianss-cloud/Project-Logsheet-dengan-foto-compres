@@ -841,6 +841,12 @@ const AREAS_PANEL_ASAM_SULFAT = {
     "30-T-1303 CCV-1302 (%)", "CEMS AIA-1303 (ppm)", "30-C-1301 HIC-1301-1 (%)",
     "30-C-1301 HIC-1301-2 (%)", "30-C-1301 HIC-1303 (%)", "30-C-1301 HV-1301 (%)"
   ],
+
+ "FLOW METER": [
+    "FICQ-1101 FLOW (Ton/Jam)","FICQ-1101 TOTAL (Ton)","30-B-1104 FLOW  FI-1102 (Ton/Jam)","30-B-1104 FIQ-1102 TOTAL (Ton)",	
+    "30-B-1101 FIQ-1103 FLOW (M3/h)","30-B-1101 FIQ-1103 TOTAL (Ton)","30-E-1102 FI-1105 FLOW (m3/h)","30-E-1102 FIQ-1105 TOTAL (Ton)",	
+    "FI-1302 FLOW (Ton/Jam)","FIQ-1302 TOTAL (Ton)","FI-1303 FLOW (Ton/Jam)","FIQ-1303 TOTAL (Ton)","FIQ-1304 FLOW (m3/h)","FIQ-1304 TOTAL (m3)"
+],
   "AIR BLOWER 30-C-1301": [
     "30-C-1301 TIA-1336 (°C)", "30-C-1301 ∆T-1336 (°C)", "30-C-1301 PI-1333 A",	
     "30-C-1301 PI-1333 B", "30-C-1301 PI-1333 C", "30-C-1301 PT-1340",	
@@ -866,8 +872,16 @@ const AREAS_PANEL_ASAM_SULFAT = {
 const GROUPS_PANEL_ASAM_SULFAT = {
     "SULPHUR & GENERATION": ["SULPHUR HANDLING 30-TK-1001", "SO2 GENERATION"],
     "STEAM & UTILITY": ["STEAM SYSTEM", "LPS & BFW SYSTEM", "UTILITY DISTRIBUTION"],
-    "CONVERSION & ABSORPTION": ["SO2 CONVERSION", "SO3 ABSORPTION"],
-    "BLOWER": ["AIR BLOWER 30-C-1301", "STARTUP BLOWER C-1302"] // <--- Nama disinkronkan kembali
+    "CONVERSION & ABSORPTION": ["SO2 CONVERSION", "SO3 ABSORPTION","FLOW METER"],
+    "BLOWER": ["AIR BLOWER 30-C-1301", "STARTUP BLOWER C-1302"]
+};
+const GROUPS_PANEL_STG175 = {
+            "1. Steam & Condenser System": ["STEAM SYSTEM MAIN","GLAND STEAM SYSTEM","STEAM EXTRACTION","MAIN CONDENSER"],
+            "2. Turbine Oil Systems": ["LUBE OIL SYSTEM","HP OIL SYSTEM","SHAFT LINE LUBE OIL"],
+            "3. Temperature Monitoring": ["TURBINE BEARING TEMPERATURE","GEARBOX TEMPERATURE","GENERATOR TEMPERATURE","VIBRATION SYSTEM"],
+            "4. Synchonizarion & Power": ["SYNCHRONIZATION & EXCITATION","ELECTRICAL FEEDER LOAD"],
+            "5. PRDS & Condensate Recovery": ["TEMP & PRESS REDUCING","STEAM CONDENSATE RECOVERY SYSTEM"],
+            "6. Deaerator & Electrical Load": ["DEAERATION & WATER FEEDING SYSTEM","BFW PUMP COOLING & SEALING"]
 };
 
 // ============================================
@@ -932,38 +946,8 @@ const LOGSHEET_CONFIG = {
         offlineKey: 'offline_panel_stg',
         themeColor: '#1d6be8',
         areas: AREAS_PANEL_STG175,
-        groups: {
-            "1. Steam & Condenser System": [
-                "STEAM SYSTEM MAIN", 
-                "GLAND STEAM SYSTEM", 
-                "STEAM EXTRACTION", 
-                "MAIN CONDENSER"
-            ],
-            "2. Turbine Oil Systems": [
-                "LUBE OIL SYSTEM", 
-                "HP OIL SYSTEM", 
-                "SHAFT LINE LUBE OIL"
-            ],
-            "3. Temperature Monitoring": [
-                "TURBINE BEARING TEMPERATURE", 
-                "GEARBOX TEMPERATURE", 
-                "GENERATOR TEMPERATURE"
-            ],
-            "4. Vibration & Excitation": [
-                "VIBRATION SYSTEM", 
-                "SYNCHRONIZATION & EXCITATION"
-            ],
-            "5. PRDS & Condensate Recovery": [
-                "TEMP & PRESS REDUCING", 
-                "STEAM CONDENSATE RECOVERY SYSTEM"
-            ],
-            "6. Deaerator & Electrical Load": [
-                "DEAERATION & WATER FEEDING SYSTEM", 
-                "BFW PUMP COOLING & SEALING", 
-                "ELECTRICAL FEEDER LOAD"
-            ]
-        }
-    }, // <--- Penutup PANEL_STG sudah benar
+        groups: GROUPS_PANEL_STG175
+      },
     'PANEL_ASAM_SULFAT': {
         title: 'Panel Asam Sulfat',
         submitType: 'LOGSHEET_PANEL_ASAM_SULFAT',
