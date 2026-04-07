@@ -116,15 +116,10 @@ function openUniversalLogsheet(type) {
     // 1. Set tipe logsheet yang sedang aktif
     activeLogsheetType = type;
    
-    // === TAMBAHKAN BLOK INTERCEPT INI ===
-    // Jika yang dibuka adalah Panel STG, belokkan ke tampilan Grouping (Folder)
-    if (type === 'PANEL_STG') {
-        if (typeof openPanelSTGGroups === 'function') {
-            openPanelSTGGroups();
-        } else {
-            console.error("Fungsi openPanelSTGGroups belum ditambahkan!");
-        }
-        return; // WAJIB ADA return agar tidak lanjut ke tampilan standar yang ada fotonya
+    // === INTERCEPT UNTUK SEMUA LOGSHEET BERBASIS GRUP/FOLDER ===
+    if (config.groups) {
+        openGroupedLogsheet();
+        return; 
     }
     // 2. Ubah Judul & Info User di Header
     document.getElementById('univHeaderTitle').textContent = config.title;
@@ -749,12 +744,11 @@ async function submitUniversalLogsheet() {
 }
 
 // =====================================================================
-// KHUSUS RENDER LOGSHEET PANEL STG (6 AREA FOLDER & DROPDOWN)
-// Letakkan di paling bawah file js/logsheet.js
+// DYNAMIC GROUPED LOGSHEET ENGINE (Untuk STG, Asam Sulfat, dll)
 // =====================================================================
 
-function openPanelSTGGroups() {
-    const config = LOGSHEET_CONFIG['PANEL_STG'];
+function openGroupedLogsheet() {
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
     
     document.getElementById('panelGroupTitle').textContent = config.title;
     document.getElementById('panelGroupUser').textContent = (currentUser && currentUser.name) ? currentUser.name : 'Operator';
@@ -789,10 +783,10 @@ function openPanelSTGGroups() {
         const percent = groupTotalParams === 0 ? 0 : Math.round((groupFilledParams / groupTotalParams) * 100);
 
         html += `
-            <div class="premium-area-card" onclick="openPanelSTGSubAreas('${groupName}')" style="--theme-color: ${config.themeColor};">
+            <div class="premium-area-card" onclick="openGroupedSubAreas('${groupName}')" style="--theme-color: ${config.themeColor};">
                 <div class="premium-area-header">
                     <div style="display: flex; align-items: center; flex: 1;">
-                        <div class="premium-icon-box" style="background: rgba(29, 107, 232, 0.15); color: #1d6be8; border: 1px solid rgba(29, 107, 232, 0.3);">
+                        <div class="premium-icon-box" style="background: ${config.themeColor}25; color: ${config.themeColor}; border: 1px solid ${config.themeColor}40;">
                             ${isComplete ? '✅' : '⚡'}
                         </div>
                         <div class="premium-area-info">
@@ -816,13 +810,15 @@ function openPanelSTGGroups() {
     const submitBtn = document.getElementById('panelSubmitBtn');
     if (submitBtn) {
         submitBtn.style.display = globalFilledParams > 0 ? 'block' : 'none';
+        // Warna tombol menyesuaikan config theme
+        submitBtn.style.background = `linear-gradient(135deg, ${config.themeColor}, color-mix(in srgb, ${config.themeColor} 70%, black))`;
     }
 
     navigateTo('panelSTGGroupScreen');
 }
 
-function openPanelSTGSubAreas(groupName) {
-    const config = LOGSHEET_CONFIG['PANEL_STG'];
+function openGroupedSubAreas(groupName) {
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
     document.getElementById('panelSTGHeaderTitle').textContent = groupName;
 
     const subAreas = config.groups[groupName];
@@ -833,7 +829,7 @@ function openPanelSTGSubAreas(groupName) {
         const paramsList = config.areas[subAreaName] || [];
         
         html += `
-        <details class="form-card glass" style="margin-bottom: 16px; padding: 16px; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(59, 130, 246, 0.2);">
+        <details class="form-card glass" style="margin-bottom: 16px; padding: 16px; background: rgba(30, 41, 59, 0.7); border: 1px solid ${config.themeColor}40;">
             <summary style="font-size: 1rem; font-weight: 700; color: ${config.themeColor}; cursor: pointer; outline: none; list-style-position: inside;">
                 ${subAreaName}
             </summary>
@@ -847,7 +843,6 @@ function openPanelSTGSubAreas(groupName) {
             
             const savedValue = (univCurrentInput[subAreaName] && univCurrentInput[subAreaName][fullLabel]) || '';
             
-            // Ambil data shift sebelumnya dengan aman
             let lastDataVal = univLastData[fullLabel] || univLastData[nameOnly] || '';
             if (typeof lastDataVal === 'object' && lastDataVal !== null) {
                 lastDataVal = lastDataVal.value || '-'; 
@@ -856,7 +851,6 @@ function openPanelSTGSubAreas(groupName) {
             
             let lastDataHtml = lastDataVal ? `<small style="color: #94a3b8; display: block; margin-bottom: 6px;">🕒 Sblm (${lastTime}): <strong style="color: ${config.themeColor};">${lastDataVal}</strong></small>` : '';
 
-            // Cek apakah parameter ini bertipe Dropdown (A/B, ON/OFF) berdasarkan config.js
             let isDropdown = false;
             let dropdownOptions = [];
             for (const [key, rules] of Object.entries(INPUT_TYPES)) {
@@ -877,7 +871,7 @@ function openPanelSTGSubAreas(groupName) {
             `;
 
             if (isDropdown) {
-                html += `<select onchange="savePanelSTGInput('${subAreaName}', '${fullLabel}', this.value)" style="width: 100%; padding: 14px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 10px; color: white; font-size: 1rem; outline: none;">
+                html += `<select onchange="saveGroupedInput('${subAreaName}', '${fullLabel}', this.value)" style="width: 100%; padding: 14px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 10px; color: white; font-size: 1rem; outline: none;">
                             <option value="">Pilih status...</option>`;
                 dropdownOptions.forEach(opt => {
                     const selected = savedValue === opt ? 'selected' : '';
@@ -885,7 +879,7 @@ function openPanelSTGSubAreas(groupName) {
                 });
                 html += `</select></div>`;
             } else {
-                html += `<input type="number" step="any" placeholder="0.00" value="${savedValue}" oninput="savePanelSTGInput('${subAreaName}', '${fullLabel}', this.value)" style="width: 100%; padding: 14px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 10px; color: white; font-size: 1rem; outline: none;"></div>`;
+                html += `<input type="number" step="any" placeholder="0.00" value="${savedValue}" oninput="saveGroupedInput('${subAreaName}', '${fullLabel}', this.value)" style="width: 100%; padding: 14px; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 10px; color: white; font-size: 1rem; outline: none;"></div>`;
             }
         });
         
@@ -896,8 +890,8 @@ function openPanelSTGSubAreas(groupName) {
     navigateTo('panelSTGScreen');
 }
 
-function savePanelSTGInput(subAreaName, fullLabel, value) {
-    const config = LOGSHEET_CONFIG['PANEL_STG'];
+function saveGroupedInput(subAreaName, fullLabel, value) {
+    const config = LOGSHEET_CONFIG[activeLogsheetType];
     
     if (!univCurrentInput[subAreaName]) {
         univCurrentInput[subAreaName] = {};
@@ -911,3 +905,5 @@ function savePanelSTGInput(subAreaName, fullLabel, value) {
     
     localStorage.setItem(config.draftKey, JSON.stringify(univCurrentInput));
 }
+
+
