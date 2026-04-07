@@ -557,7 +557,7 @@ const AREAS_1000 = {
   };
 
 // ==========================================
-// 6 AREA UTAMA (Fungsi Folder/Grup) & PARAMETER
+// 6 AREA PANEL STG 17,5
 // ==========================================
 const AREAS_PANEL_STG175 = {
   "STEAM SYSTEM MAIN": [
@@ -764,6 +764,112 @@ const AREAS_PANEL_STG175 = {
   ]
 };
 
+// ==========================================
+// AREA PANEL ASAM SULFAT
+// ==========================================
+const AREAS_PANEL_ASAM_SULFAT = {
+  "SULPHUR HANDLING 30-TK-1001": [
+    "30-P-1004 A/B LOAD (Amp)",
+    "30-TK-1001 TI-1001-1 (°C)",
+    "30-TK-1001 TI-1001-2 (°C)",
+    "30-TK-1001 LI-1002 (%)",
+    "30-D-1006 LICA-1003 (%)"
+  ],
+  "SO2 GENERATION": [
+    "30-D-1006 HCV-1101 (%)",
+    "30-B-1101 PI-1001-5 (kg/cm2)",
+    "30-B-1102 TI-1001-3 (°C)",
+    "30-B-1101 TIA-1101 A (°C)",
+    "30-B-1101 TIA-1101 B (°C)",
+    "30-B-1101 TIA-1101 C (°C)",
+    "30-B-1101 TI-1002-10 (°C)",
+    "30-B-1101 TI-1202-5 (°C)",	
+    "30-B-1101 JUG DAMPER HV-1110 (%)",
+    "30-B-1101 STEAM DRUM HV-1111 (%)"
+  ],
+  "UTILITY DISTRIBUTION": [
+    "CW HEADER PIA-1008 (kg/cm2)",	
+    "INSTRUMENT AIR PIA-1009 (kg/cm2)",	
+    "RCW PIA-1010 (kg/cm2)",	
+    "CW OUTLET AIA-1103 (pH)"
+  ],
+  "STEAM SYSTEM": [
+    "30-B-1104 PIA-1102 A/B (kg/cm2)",	
+    "30-B-1104 LICA-1102 (%)",	
+    "30-B-1104 LCV-1102 (%)",
+    "30-E-1102 HCV-1102 (%)",	
+    "30-E-1102 TI-1106 (°C)",
+    "30-E-1102 TIA-1107 (°C)",	
+    "30-E-1102 TCV-1103 (%)",
+    "30-E-1102 TICA-1103 (°C)",
+    "30-E-1102 PICSA-1103 (kg/cm2)",	
+    "30-E-1102 PCV-1103 (%)"
+  ],
+  "LPS & BFW SYSTEM": [
+    "30-E-1211 TIC-1104 (°C)",	
+    "30-E-1212 TIC-1105 (°C)",	
+    "PI-1003-5 (kg/cm2)",
+    "TI-1001-4 (°C)",
+    "TI-1108 (°C)",	
+    "TI-1002-1 (°C)",
+    "TI-1109 (°C)"
+  ],
+  "SO2 CONVERSION": [
+    "30-R-1201 TI-1201-1 (°C)", "30-R-1201 TI-1201-2 (°C)", "30-R-1201 TI-1201-3 (°C)",
+    "30-R-1201 TI-1201-4 (°C)", "30-R-1201 TI-1201-5 (°C)", "30-R-1201 TI-1201-6 (°C)",
+    "30-R-1201 TI-1201-25 (°C)", "30-R-1201 TI-1201-7 (°C)", "30-R-1201 TI-1201-8 (°C)",
+    "30-R-1201 TI-1201-9 (°C)", "30-R-1201 TI-1201-10 (°C)", "30-R-1201 TI-1201-11 (°C)",
+    "30-R-1201 TI-1201-12 (°C)", "30-R-1201 TI-1201-26 (°C)", "30-R-1201 TI-1201-13 (°C)",
+    "30-R-1201 TI-1201-14 (°C)", "30-R-1201 TI-1201-15 (°C)", "30-R-1201 TI-1201-16 (°C)",
+    "30-R-1201 TI-1201-17 (°C)", "30-R-1201 TI-1201-18 (°C)", "30-R-1201 TI-1201-27 (°C)",
+    "30-R-1201 TI-1201-19 (°C)", "30-R-1201 TI-1201-20 (°C)", "30-R-1201 TI-1201-21 (°C)",
+    "30-R-1201 TI-1201-22 (°C)", "30-R-1201 TI-1201-23 (°C)", "30-R-1201 TI-1201-24 (°C)",
+    "30-R-1201 TI-1201-28 (°C)", "30-E-1201 HCV-1201 (%)", "30-E-1202 HCV-1202 (%)",	
+    "30-E-1203 TI-1002-6 (°C)", "30-E-1204 TI-1002-8 (°C)", "30-T-1302 TI-1002.7 (°C)",
+    "30-T-1303 TI-1002.9 (°C)", "AIA-1301 (%)"
+  ],
+  "SO3 ABSORPTION": [
+    "30-C-1301 PI-1301 (mmH2O)", "30-C-1301/2 HV-1301/2-1 (%)", "30-C-1301/2 HV-1301/2-2 (%)",
+    "30-C-1301/2 HC-1303/4 (%)", "30-C-1301/2 (Amp)", "30-C-1301/2 PI-1304/03 (mmH2O)",
+    "30-C-1301/2 PI-1304 (Kg/cm2)", "30-C-1301/2 TI-1001.8 (°C)", "30-T-1301 TI-1001.7 (°C)",
+    "30-T-1301 TI-1001.6 (°C)", "30-T-1301 TI-1001.5 (°C)", "30-T-1302 TI-1001.12 (°C)",
+    "30-T-1302 TI-1001.11 (°C)", "30-T-1302 TI-1001.10 (°C)", "30-T-1303-TI-1001.15 (°C)",
+    "30-T-1303-TI-1001.14 (°C)", "30-T-1303-TI-1001.13 (°C)", "30-D-1301 LICA-1301 (%)",	
+    "30-D-1301 LCV-1301 (%)", "30-T-1302 CICA-1301 (%)", "30-T-1302 CCV-1301 (%)",	
+    "30-T-1301 P-1301 (Amp)", "30-T-1302 P-1302 (Amp)", "30-T-1303 P-1303 (Amp)",	
+    "30-D-1302 LICA-1302 (%)", "30-D-1302 LCV-1302 (%)", "30-T-1303 CICA-1302 (%)",	
+    "30-T-1303 CCV-1302 (%)", "CEMS AIA-1303 (ppm)", "30-C-1301 HIC-1301-1 (%)",
+    "30-C-1301 HIC-1301-2 (%)", "30-C-1301 HIC-1303 (%)", "30-C-1301 HV-1301 (%)"
+  ],
+  "AIR BLOWER 30-C-1301": [
+    "30-C-1301 TIA-1336 (°C)", "30-C-1301 ∆T-1336 (°C)", "30-C-1301 PI-1333 A",	
+    "30-C-1301 PI-1333 B", "30-C-1301 PI-1333 C", "30-C-1301 PT-1340",	
+    "30-C-1301 TIA-1337 (°C)", "30-C-1301 TIA-1331 (°C)", "30-C-1301 TIA-1333 (°C)",	
+    "30-C-1301 TIA-1334 (°C)", "30-C-1301 ZI-1334", "30-C-1301 VIA-1331 X (µm)",	
+    "30-C-1301 VIA-1332 Y (µm)", "30-C-1301 VIA-1333 X (µm)", "30-C-1301 VIA-1334 Y (µm)",	
+    "30-C-1301 TIA-1341 (°C)", "30-C-1301 TIA-1343 (°C)", "30-C-1301 TIA-1345 (°C)",	
+    "30-C-1301 TIA-1346 (°C)", "30-C-1301 TI-1347 (°C)", "30-C-1301 TI-1348 (°C)",	
+    "30-C-1301 VIA-1341 X (µm)", "30-C-1301 VIA-1342 Y (µm)", "30-C-1301 VIA-1343 Y (µm)",	
+    "30-C-1301 VIA-1344 X (µm)", "30-C-1301 LOAD (Ampere)", "30-C-1301 TIA-1352 (°C)",	
+    "30-C-1301 TIA-1355 (°C)", "30-C-1301 TIA -1357 U (°C)", "30-C-1301 TIA -1358 V (°C)",	
+    "30-C-1301 TIA -1359 W (°C)"
+  ],
+  "STARTUP BLOWER C-1302": [
+    "30-C-1302 TISA-1367 (°C)", "30-C-1302 TISA-1368 (°C)", "30-C-1302 TISA-1371 (°C)",	
+    "30-C-1302 TISA-1372 (°C)", "30-C-1302 TISA-1373 (°C)", "30-C-1302 TISA-1364 (°C)",	
+    "30-C-1302 TISA-1365 (°C)", "30-C-1302 TISA-1366 (°C)"
+  ]
+};
+// ============================================
+// PENGELOMPOKAN GRUP PANEL ASAM SULFAT (WAJIB DI ATAS LOGSHEET_CONFIG)
+// ============================================
+const GROUPS_PANEL_ASAM_SULFAT = {
+    "SULPHUR & GENERATION": ["SULPHUR HANDLING 30-TK-1001", "SO2 GENERATION"],
+    "STEAM & UTILITY": ["STEAM SYSTEM", "LPS & BFW SYSTEM", "UTILITY DISTRIBUTION"],
+    "CONVERSION & ABSORPTION": ["SO2 CONVERSION", "SO3 ABSORPTION"],
+    "BLOWER": ["AIR BLOWER 30-C-1301", "STARTUP BLOWER C-1302"] // <--- Nama disinkronkan kembali
+};
+
 // ============================================
 // MASTER CONFIGURATION UNTUK DYNAMIC TEMPLATE
 // ============================================
@@ -824,9 +930,8 @@ const LOGSHEET_CONFIG = {
         draftKey: 'draft_panel_stg',
         photoKey: 'photos_panel_stg',
         offlineKey: 'offline_panel_stg',
-        themeColor: '#1d6be8', // Warna biru tema panel
-        
-        // MENGGABUNGKAN GROUPS DAN AREAS KE SINI AGAR TIDAK ERROR
+        themeColor: '#1d6be8',
+        areas: AREAS_PANEL_STG175,
         groups: {
             "1. Steam & Condenser System": [
                 "STEAM SYSTEM MAIN", 
@@ -857,20 +962,33 @@ const LOGSHEET_CONFIG = {
                 "BFW PUMP COOLING & SEALING", 
                 "ELECTRICAL FEEDER LOAD"
             ]
-        },
-        areas: AREAS_PANEL_STG175 // Memanggil variabel data di atas
+        }
+    }, // <--- Penutup PANEL_STG sudah benar
+    'PANEL_ASAM_SULFAT': {
+        title: 'Panel Asam Sulfat',
+        submitType: 'LOGSHEET_PANEL_ASAM_SULFAT',
+        draftKey: 'draft_panel_asam_sulfat',
+        photoKey: 'photos_panel_asam_sulfat',
+        offlineKey: 'offline_panel_asam_sulfat',
+        themeColor: '#eab308',
+        areas: AREAS_PANEL_ASAM_SULFAT,
+        groups: GROUPS_PANEL_ASAM_SULFAT
     }
-};
+}; // <--- Penutup LOGSHEET_CONFIG
 
+// ============================================
+// KONFIGURASI INPUT KHUSUS (DROPDOWN DLL)
+// ============================================
 const INPUT_TYPES = {
     PUMP_STATUS: {
         patterns: [
             '(A/B)', '(ON/OFF)', '(On/Off)', '(Running/Stop)', '(Remote/Running/Stop)', 
-            '(A/M)', 'STATUS', 'RUN/STANDBY', 'RUN/STOP', 'FILTRASI/STANDBY'
+            '(A/M)', 'STATUS', 'RUN/STANDBY', 'RUN/STOP', 'FILTRASI/STANDBY','(ON/AUTO)'
         ],
         options: {
             '(A/B)': ['A', 'B'],
             '(ON/OFF)': ['ON', 'OFF'],
+            '(ON/AUTO)': ['ON','AUTO'],
             '(On/Off)': ['On', 'Off'],
             '(Running/Stop)': ['Running', 'Stop'],
             '(Remote/Running/Stop)': ['Remote', 'Running', 'Stop'],
