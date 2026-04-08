@@ -167,16 +167,34 @@ function updateUIForAuthenticatedUser() {
     }
 
     // ========================================================
-    // TAMPILKAN INFO GRUP SHIFT OTOMATIS (FITUR BARU)
+    // TAMPILKAN INFO GRUP SHIFT & STATUS ON DUTY
     // ========================================================
     try {
         const shiftInfo = getCurrentDutyGroup();
-        // Coba cari elemen dengan ID 'displayGroupName' jika Anda sudah membuatnya di HTML
-        // Atau kita bisa tempelkan secara dinamis di sebelah nama user
         const userNameEl = document.getElementById('displayUserName');
+        
         if (userNameEl) {
-            // Kita ubah teksnya menjadi: "Brilian Eriko (Grup A - PAGI)"
-            userNameEl.innerHTML = `${currentUser.name || currentUser.username} <span style="font-size: 0.75rem; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 6px; margin-left: 8px;">Grup ${shiftInfo.group} | ${shiftInfo.shift}</span>`;
+            // Ambil data grup dari user yang sedang login
+            const userGroup = currentUser.group || '-';
+            let statusBadge = '';
+            
+            // Logika Cerdas: Cek apakah jadwal pabrik = jadwal user yang login
+            if (userGroup !== '-' && userGroup !== 'Unknown') {
+                if (userGroup.toUpperCase() === shiftInfo.group) {
+                    // Jika Cocok = ON DUTY (Hijau Menyala)
+                    statusBadge = `<span style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-left: 8px; box-shadow: 0 0 10px rgba(16,185,129,0.4); border: 1px solid #34d399;">ON DUTY ✓</span>`;
+                } else {
+                    // Jika Tidak Cocok = OFF DUTY (Merah)
+                    statusBadge = `<span style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-left: 8px; border: 1px solid #f87171;">OFF DUTY ❌</span>`;
+                }
+            }
+
+            // Tampilkan semuanya di Header Home Screen
+            userNameEl.innerHTML = `${currentUser.name || currentUser.username} 
+                <span style="font-size: 0.75rem; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 6px; margin-left: 8px; border: 1px solid rgba(255,255,255,0.2);">
+                    Jadwal: Grup ${shiftInfo.group} | ${shiftInfo.shift}
+                </span>
+                ${statusBadge}`;
         }
     } catch (e) {
         console.warn('Gagal memuat info grup shift:', e);
