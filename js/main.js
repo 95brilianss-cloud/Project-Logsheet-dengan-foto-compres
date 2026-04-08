@@ -614,7 +614,3 @@ window.addEventListener('DOMContentLoaded', () => {
     
     console.log(`${APP_NAME} v${APP_VERSION} initialized successfully`);
 });
-    
-    console.log(`${APP_NAME} v${APP_VERSION} initialized successfully`);
-});
-
