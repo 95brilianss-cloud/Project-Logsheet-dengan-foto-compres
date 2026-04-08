@@ -278,3 +278,75 @@ function navigateTo(screenId) {
         console.error(`Layar dengan ID "${screenId}" tidak ditemukan!`);
     }
 }
+
+// ============================================
+// 6. SMART SHIFT DETECTOR (ROSTER 28 HARI)
+// ============================================
+
+// Tanggal Patokan: 1 April 2026 (Dari Gambar Jadwal)
+const SHIFT_ANCHOR_DATE = new Date('2026-04-01T00:00:00');
+
+// Pola presisi 28 Hari berdasarkan pergerakan Grup A
+const CYCLE_28_DAYS = [
+    'PAGI', 'SORE', 'SORE', 'OFF', 'OFF', 'MALAM', 'MALAM', // Hari 1-7
+    'OFF', 'PAGI', 'PAGI', 'SORE', 'SORE', 'SORE', 'OFF',   // Hari 8-14 (Ada 3 Sore Beruntun)
+    'MALAM', 'MALAM', 'OFF', 'PAGI', 'PAGI', 'PAGI', 'SORE',// Hari 15-21 (Ada 3 Pagi Beruntun)
+    'SORE', 'OFF', 'MALAM', 'MALAM', 'MALAM', 'OFF', 'PAGI' // Hari 22-28 (Ada 3 Malam Beruntun)
+];
+
+// Jarak putaran antar grup (dalam hitungan hari)
+const GROUP_OFFSETS = {
+    'A': 0,   // Patokan utama
+    'C': 7,   // Terlambat 1 minggu dari A
+    'D': 14,  // Terlambat 2 minggu dari A
+    'B': 21   // Terlambat 3 minggu dari A
+};
+
+function getCurrentDutyGroup() {
+    const now = new Date();
+    const hour = now.getHours();
+    
+    // 1. Tentukan Jam Shift
+    let currentShift = '';
+    if (hour >= 7 && hour < 15) {
+        currentShift = 'PAGI';
+    } else if (hour >= 15 && hour < 23) {
+        currentShift = 'SORE';
+    } else {
+        currentShift = 'MALAM';
+    }
+
+    // 2. Kalkulasi Selisih Hari 
+    // (Jika Shift Malam jam 00:00 - 06:59, terhitung masih hari kemarin)
+    const anchor = new Date(SHIFT_ANCHOR_DATE.getFullYear(), SHIFT_ANCHOR_DATE.getMonth(), SHIFT_ANCHOR_DATE.getDate());
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    if (hour >= 0 && hour < 7) {
+        today.setDate(today.getDate() - 1);
+    }
+    
+    const diffTime = today.getTime() - anchor.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    // 3. Pencarian Grup yang Bertugas
+    let dutyGroup = 'Unknown';
+    let scheduleToday = {};
+
+    ['A', 'B', 'C', 'D'].forEach(group => {
+        let index = (GROUP_OFFSETS[group] + diffDays) % 28;
+        if (index < 0) index = (index + 28) % 28; // Jaga-jaga jika nge-cek tanggal mundur
+        
+        const groupShiftToday = CYCLE_28_DAYS[index];
+        scheduleToday[group] = groupShiftToday;
+        
+        if (groupShiftToday === currentShift) {
+            dutyGroup = group;
+        }
+    });
+
+    return {
+        group: dutyGroup,
+        shift: currentShift,
+        schedule: scheduleToday
+    };
+}
