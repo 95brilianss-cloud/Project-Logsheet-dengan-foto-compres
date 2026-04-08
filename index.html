@@ -149,6 +149,21 @@
             70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
+      /* ========================================= */
+        /* PWA STANDALONE HIDER (MENYEMBUNYIKAN TOMBOL INSTALL) */
+        /* ========================================= */
+        @media all and (display-mode: standalone) {
+            #installPwaBtn {
+                display: none !important;
+            }
+        }
+        
+        /* Deteksi khusus untuk pengguna iPhone/iOS Safari */
+        @media all and (display-mode: fullscreen) {
+            #installPwaBtn {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
