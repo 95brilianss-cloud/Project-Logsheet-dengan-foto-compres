@@ -368,16 +368,33 @@ function setupParamPhotoListeners() {
     }
 }
 
-// Fungsi untuk memindahkan kursor pakai Enter
+// Fungsi Cerdas untuk Navigasi Enter (Mendukung Form Panjang & Layar Wizard)
 function setupEnterKeyNavigation() {
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
-            event.preventDefault(); 
-            const focusableElements = Array.from(document.querySelectorAll('input, select, button'));
+            event.preventDefault(); // Cegah form tersubmit otomatis
+            
+            // 1. CEK MODE WIZARD (Layar 1 Parameter)
+            // Mencari tombol yang mengandung kata "Lanjut" atau "Next"
+            const allButtons = Array.from(document.querySelectorAll('button'));
+            const btnLanjut = allButtons.find(btn => 
+                btn.textContent.toLowerCase().includes('lanjut') || 
+                btn.textContent.toLowerCase().includes('next')
+            );
+
+            // Jika kursor sedang di dalam kotak input DAN ada tombol Lanjut di layar
+            if (btnLanjut && event.target.tagName === 'INPUT') {
+                btnLanjut.click(); // Langsung otomatis klik "Simpan & Lanjut"
+                return; // Hentikan fungsi di sini
+            }
+
+            // 2. CEK MODE FORM PANJANG (Seperti layar Login)
+            // Hanya cari elemen input dan select (Abaikan tombol agar kursor tidak nyasar ke tombol kamera/status)
+            const focusableElements = Array.from(document.querySelectorAll('input:not([type="hidden"]), select, textarea'));
             const currentIndex = focusableElements.indexOf(event.target);
             
             if (currentIndex > -1 && currentIndex < focusableElements.length - 1) {
-                focusableElements[currentIndex + 1].focus();
+                focusableElements[currentIndex + 1].focus(); // Pindah ke input berikutnya
             }
         }
     });
