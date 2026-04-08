@@ -437,7 +437,20 @@
                 </div>
             </div>
         </div>
-
+        <div id="offlineSyncContainer" style="display: none; padding: 0 20px; margin-bottom: 20px;">
+    <button onclick="syncOfflineData()" class="btn-primary" style="background: linear-gradient(135deg, #ef4444, #b91c1c); display: flex; align-items: center; justify-content: space-between; width: 100%; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 1.5rem;">🔄</span>
+            <div style="text-align: left;">
+                <div style="font-weight: 800; font-size: 1rem;">Kirim Data Tertunda</div>
+                <div id="offlineSyncText" style="font-size: 0.75rem; font-weight: 500; opacity: 0.9;">Ada 0 data belum terkirim</div>
+            </div>
+        </div>
+        <div id="offlineSyncBadge" style="background: white; color: #ef4444; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;">
+            0
+        </div>
+    </button>
+</div>
         <div class="home-content-area">
             <div class="round-menu-section">
                 <button class="round-menu-btn" onclick="toggleBranchMenuPopup()" title="Menu Utama">
