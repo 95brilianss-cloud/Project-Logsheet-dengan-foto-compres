@@ -38,12 +38,6 @@ function silentFetchLastData(type) {
         cleanupJSONP(callbackName);
     };
 
-    // Buat jembatan ke Google Apps Script tanpa mengganggu layar utama
-    const script = document.createElement('script');
-    script.src = `${GAS_URL}?action=getLastData&type=${type}&callback=${callbackName}`;
-    document.body.appendChild(script);
-}
-    
     // =======================================================================
     // AUTO-PILOT ROUTING (PENGGANTI IF-ELSE MANUAL)
     // =======================================================================
@@ -59,19 +53,23 @@ function silentFetchLastData(type) {
     
     const script = document.createElement('script');
     script.src = `${GAS_URL}?callback=${callbackName}${actionParam}`;
+    
+    // === TAMBAHAN VARIABEL TIMEOUT AGAR TIDAK ERROR (Lihat Bug 2) ===
+    const timeout = setTimeout(() => {
+        cleanupJSONP(callbackName);
+        console.warn(`[Background Sync] Timeout saat menarik data ${type}.`);
+    }, 15000);
+    // ================================================================
+
     script.onerror = () => {
         clearTimeout(timeout);
         cleanupJSONP(callbackName);
-        showCustomAlert('Gagal menarik data. Membuka mode offline.', 'error');
-        
-        // Tutup otomatis setelah 1.5 detik
-        setTimeout(() => {
-            if(typeof closeAlert === 'function') closeAlert();
-            openUniversalLogsheet(type);
-        }, 1500);
+        // Hapus alert error di sini, karena background sync harus diam-diam!
+        console.warn(`[Background Sync] Gagal menarik data ${type}.`);
     };
+    
     document.body.appendChild(script);
-}
+} // <--- ✅ PINDAHKAN KURUNG KURAWAL PENUTUP KE SINI!
 
 function updateStatusIndicator(isOnline) {
     console.log('System Status:', isOnline ? 'Online' : 'Offline');
