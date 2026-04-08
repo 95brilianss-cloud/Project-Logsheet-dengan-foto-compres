@@ -546,7 +546,16 @@ window.addEventListener('DOMContentLoaded', () => {
     initState();
     loadTodayJobs();
    checkOfflineData();
-   
+
+    // Deteksi jika aplikasi dibuka dari Homescreen HP (Standalone Mode)
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+        const installBtn = document.getElementById('installPwaBtn');
+        if (installBtn) {
+            installBtn.style.display = 'none'; // Hilangkan paksa
+            installBtn.classList.add('hidden');
+        }
+    }
+  
     const versionDisplay = document.getElementById('versionDisplay');
     if (versionDisplay) versionDisplay.textContent = APP_VERSION;
     
