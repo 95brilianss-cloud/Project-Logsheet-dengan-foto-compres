@@ -50,7 +50,7 @@ const PHOTO_DRAFT_KEYS = {
 };
 
 // URL Google Apps Script Backend
-const GAS_URL = "https://script.google.com/macros/s/AKfycbx2H2TRUd57teyB7Z5Cxv0lkGWY3x4j5gntu2fIxy1ASfTb6sM13Zpy4-7ehH1s2ifG/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzGdg6Pkpi9OEeotp7cQ4Ip3ZRBeWnfvHONO-49iE6UyKKFI2pInAoLdkScYW20nPQg/exec";
 
 // Fallback users untuk mode offline (legacy support)
 const OFFLINE_USERS = {
