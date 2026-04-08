@@ -407,12 +407,145 @@ window.addEventListener('appinstalled', (evt) => {
 });
 
 // ============================================
+// 8. OFFLINE SYNC ENGINE (MESIN PENGIRIMAN BACKUP)
+// ============================================
+
+/**
+ * Mencari dan menghitung semua data tertunda di memori HP
+ */
+function checkOfflineData() {
+    let totalOffline = 0;
+    
+    // Cari semua data di localStorage yang kuncinya mengandung kata 'offline'
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.toLowerCase().includes('offline')) {
+            try {
+                const data = JSON.parse(localStorage.getItem(key) || '[]');
+                if (Array.isArray(data)) {
+                    totalOffline += data.length;
+                }
+            } catch (e) {
+                console.warn('Gagal membaca draf offline untuk key:', key);
+            }
+        }
+    }
+
+    // Update UI Tombol
+    const syncContainer = document.getElementById('offlineSyncContainer');
+    const syncBadge = document.getElementById('offlineSyncBadge');
+    const syncText = document.getElementById('offlineSyncText');
+
+    if (syncContainer) {
+        if (totalOffline > 0) {
+            syncContainer.style.display = 'block'; // Munculkan tombol
+            if (syncBadge) syncBadge.textContent = totalOffline;
+            if (syncText) syncText.textContent = `Ada ${totalOffline} data belum terkirim`;
+        } else {
+            syncContainer.style.display = 'none'; // Sembunyikan tombol jika bersih
+        }
+    }
+}
+
+/**
+ * Menjalankan proses pengiriman data yang tertunda
+ */
+async function syncOfflineData() {
+    if (!navigator.onLine) {
+        showCustomAlert('Anda masih offline! Cari sinyal internet/Wi-Fi terlebih dahulu.', 'error');
+        return;
+    }
+
+    const progress = showUploadProgress('Menyiapkan Sinkronisasi...');
+    let totalSuccess = 0;
+    currentUploadController = new AbortController();
+
+    // Loop semua kunci di memori HP
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key || !key.toLowerCase().includes('offline')) continue;
+
+        let offlineArray = [];
+        try {
+            offlineArray = JSON.parse(localStorage.getItem(key) || '[]');
+        } catch (e) { continue; }
+
+        if (!Array.isArray(offlineArray) || offlineArray.length === 0) continue;
+
+        let failedArray = []; // Untuk menyimpan data yang masih gagal
+
+        // Loop setiap data tertunda di dalam kategori ini
+        for (let j = 0; j < offlineArray.length; j++) {
+            const item = offlineArray[j];
+            progress.updateText(`Mengirim data ${j + 1}/${offlineArray.length}...`);
+
+            // Pisahkan foto dari payload teks (sesuai format asli Anda)
+            const photos = item.photos || {};
+            delete item.photos; 
+
+            try {
+                // 1. Kirim Foto Dulu (Jika ada)
+                for (const [photoKey, photoData] of Object.entries(photos)) {
+                    const photoPayload = {
+                        type: 'LOGSHEET_PHOTO',
+                        parentType: item.type || 'LOGSHEET',
+                        Operator: item.Operator || 'Unknown',
+                        photoKey: photoKey,
+                        photo: photoData,
+                        timestamp: new Date().toISOString()
+                    };
+                    await fetch(GAS_URL, {
+                        method: 'POST', mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(photoPayload),
+                        signal: currentUploadController.signal
+                    });
+                    await new Promise(r => setTimeout(r, 300)); // Jeda agar server tidak kaget
+                }
+
+                // 2. Kirim Data Teks Utama
+                await fetch(GAS_URL, {
+                    method: 'POST', mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(item),
+                    signal: currentUploadController.signal
+                });
+
+                totalSuccess++;
+
+            } catch (error) {
+                console.error('Gagal mengirim item tertunda:', error);
+                // Jika gagal, kembalikan foto ke item, dan masukkan ke daftar gagal
+                item.photos = photos;
+                failedArray.push(item);
+            }
+        }
+
+        // Update memori lokal: Simpan yang gagal, hapus jika sukses semua
+        if (failedArray.length > 0) {
+            localStorage.setItem(key, JSON.stringify(failedArray));
+        } else {
+            localStorage.removeItem(key);
+        }
+    }
+
+    progress.complete();
+    checkOfflineData(); // Cek ulang dan update UI
+
+    if (totalSuccess > 0) {
+        showCustomAlert(`✓ Luar biasa! ${totalSuccess} data tertunda berhasil masuk ke server.`, 'success');
+    } else {
+        showCustomAlert('Sinkronisasi selesai. Pastikan koneksi internet stabil.', 'info');
+    }
+}
+// ============================================
 // 7. DOM READY INITIALIZATION
 // ============================================
 
 window.addEventListener('DOMContentLoaded', () => {
     initState();
     loadTodayJobs();
+   checkOfflineData();
    
     const versionDisplay = document.getElementById('versionDisplay');
     if (versionDisplay) versionDisplay.textContent = APP_VERSION;
@@ -428,3 +561,4 @@ window.addEventListener('DOMContentLoaded', () => {
     
     console.log(`${APP_NAME} v${APP_VERSION} initialized successfully`);
 });
+
