@@ -165,6 +165,24 @@ function updateUIForAuthenticatedUser() {
             if(typeof updateAdminBranchVisibility === 'function') updateAdminBranchVisibility();
         }, 100);
     }
+
+    // ========================================================
+    // TAMPILKAN INFO GRUP SHIFT OTOMATIS (FITUR BARU)
+    // ========================================================
+    try {
+        const shiftInfo = getCurrentDutyGroup();
+        // Coba cari elemen dengan ID 'displayGroupName' jika Anda sudah membuatnya di HTML
+        // Atau kita bisa tempelkan secara dinamis di sebelah nama user
+        const userNameEl = document.getElementById('displayUserName');
+        if (userNameEl) {
+            // Kita ubah teksnya menjadi: "Brilian Eriko (Grup A - PAGI)"
+            userNameEl.innerHTML = `${currentUser.name || currentUser.username} <span style="font-size: 0.75rem; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 6px; margin-left: 8px;">Grup ${shiftInfo.group} | ${shiftInfo.shift}</span>`;
+        }
+    } catch (e) {
+        console.warn('Gagal memuat info grup shift:', e);
+    }
+    // ========================================================
+
    // 👇 TAMBAHKAN BARIS INI 👇
     filterMenuByUnit();
 }
