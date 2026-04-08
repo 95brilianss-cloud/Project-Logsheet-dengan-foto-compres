@@ -368,6 +368,20 @@ function setupParamPhotoListeners() {
     }
 }
 
+// Fungsi untuk memindahkan kursor pakai Enter
+function setupEnterKeyNavigation() {
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+            event.preventDefault(); 
+            const focusableElements = Array.from(document.querySelectorAll('input, select, button'));
+            const currentIndex = focusableElements.indexOf(event.target);
+            
+            if (currentIndex > -1 && currentIndex < focusableElements.length - 1) {
+                focusableElements[currentIndex + 1].focus();
+            }
+        }
+    });
+}
 // ============================================
 // 6. PWA INSTALLATION LOGIC
 // ============================================
@@ -564,7 +578,7 @@ window.addEventListener('DOMContentLoaded', () => {
     setupLoginListeners();
     setupTPMListeners();
     setupParamPhotoListeners();
-    
+    setupEnterKeyNavigation();    
     // Start premium loading animation
     simulateLoading();
     
