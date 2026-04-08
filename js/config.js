@@ -6,7 +6,7 @@
 // 1. APP CONFIGURATION
 // ============================================
 const APP_VERSION = '2.7.4';
-const APP_NAME = 'Turbine Logsheet Pro';
+const APP_NAME = 'PROJECT LOGSHEET';
 
 const AUTH_CONFIG = {
     SESSION_KEY: 'turbine_session',
