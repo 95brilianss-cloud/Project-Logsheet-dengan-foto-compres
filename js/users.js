@@ -134,8 +134,10 @@ function renderUserList(users) {
         } else if (role === 'supervisor') {
             roleBg = 'rgba(14, 165, 233, 0.2)'; roleColor = '#38bdf8'; // Biru Muda
         }
+
+        // --- BACA DATA GRUP ---
+        const userGroup = user.group || '-';
         
-        // 👇 PERHATIKAN: html += ` harus ada di sini 👇
         html += `
             <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid ${isActive ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}; border-radius: 12px; padding: 16px;">
                 <div style="display: flex; justify-content: space-between; align-items: start;">
@@ -144,18 +146,23 @@ function renderUserList(users) {
                             ${user.name || user.username}
                             ${isCurrentUser ? '<span style="font-size: 0.7rem; background: rgba(14, 165, 233, 0.2); color: #38bdf8; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">Anda</span>' : ''}
                         </div>
-                        <div style="font-size: 0.875rem; color: #94a3b8;">
+                        <div style="font-size: 0.875rem; color: #94a3b8; margin-top: 4px;">
                             @${user.username} • ${user.department || 'Unit Utilitas 3B'}
                         </div>
                     </div>
-                    <div style="display: flex; gap: 4px;">
+                    <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-end;">
                         
-                        <span style="padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; background: ${roleBg}; color: ${roleColor};">
-                            ${role}
-                        </span>
+                        <div style="display: flex; gap: 4px;">
+                            <span style="padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2);">
+                                GRUP ${userGroup}
+                            </span>
+                            <span style="padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; background: ${roleBg}; color: ${roleColor};">
+                                ${role}
+                            </span>
+                        </div>
                         
-                        <span style="padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; background: ${isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}; color: ${isActive ? '#10b981' : '#ef4444'};">
-                            ${user.status || 'ACTIVE'}
+                        <span style="padding: 2px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; background: ${isActive ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'}; color: ${isActive ? '#10b981' : '#ef4444'};">
+                            STATUS: ${user.status || 'ACTIVE'}
                         </span>
                     </div>
                 </div>
@@ -167,14 +174,14 @@ function renderUserList(users) {
                 
                 ${!isCurrentUser ? `
                     <div style="display: flex; gap: 8px;">
-                        <button onclick="toggleUserStatus('${user.username}')" style="flex: 1; padding: 10px; background: ${isActive ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)'}; color: ${isActive ? '#ef4444' : '#10b981'}; border: 1px solid ${isActive ? 'rgba(239, 68, 68, 0.3)' : 'rgba(16, 185, 129, 0.3)'}; border-radius: 8px; cursor: pointer;">
+                        <button onclick="toggleUserStatus('${user.username}')" style="flex: 1; padding: 10px; background: ${isActive ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)'}; color: ${isActive ? '#ef4444' : '#10b981'}; border: 1px solid ${isActive ? 'rgba(239, 68, 68, 0.3)' : 'rgba(16, 185, 129, 0.3)'}; border-radius: 8px; cursor: pointer; font-weight: 600;">
                             ${isActive ? '🔒 Nonaktifkan' : '🔓 Aktifkan'}
                         </button>
                         <button onclick="deleteUser('${user.username}')" style="padding: 10px 16px; background: rgba(100, 116, 139, 0.1); color: #64748b; border: 1px solid rgba(100, 116, 139, 0.3); border-radius: 8px; cursor: pointer;">
                             🗑️
                         </button>
                     </div>
-                ` : '<div style="text-align: center; color: #64748b; font-size: 0.875rem; padding: 10px;">Tidak dapat mengedit diri sendiri</div>'}
+                ` : '<div style="text-align: center; color: #64748b; font-size: 0.8rem; padding: 10px; border: 1px dashed #334155; border-radius: 8px;">(Akun Anda sendiri)</div>'}
             </div>
         `;
     });
@@ -194,7 +201,7 @@ function showAddUserForm() {
     modal.setAttribute('data-old-content', modal.innerHTML);
     
     modal.innerHTML = `
-        <div style="max-width: 480px; margin: 0 auto;">
+        <div style="max-width: 480px; margin: 0 auto; padding-bottom: 40px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 16px; background: rgba(30, 41, 59, 0.8); border-radius: 12px; border: 1px solid rgba(148, 163, 184, 0.2);">
                 <h2 style="margin: 0; font-size: 1.25rem;">➕ Tambah User Baru</h2>
                 <button onclick="restoreUserManagement()" style="background: none; border: none; color: #94a3b8; cursor: pointer; padding: 8px;">
@@ -240,8 +247,18 @@ function showAddUserForm() {
                         <option value="Unit Melter 3B">Unit Melter (Area 1000)</option>
                         <option value="Manajemen">Manajemen / Super Admin</option>
                     </select>
-                    </div>
-                
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.875rem; color: #94a3b8; margin-bottom: 6px;">Grup Shift *</label>
+                    <select id="newGroup" required style="width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.6); border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 8px; color: white; font-size: 1rem;">
+                        <option value="-">Non-Shift (Off / Admin)</option>
+                        <option value="A">Grup A</option>
+                        <option value="B">Grup B</option>
+                        <option value="C">Grup C</option>
+                        <option value="D">Grup D</option>
+                    </select>
+                </div>
                 <button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 8px;">
                     Simpan User Baru
                 </button>
@@ -271,7 +288,8 @@ async function handleAddUser(e) {
         password: document.getElementById('newPassword').value,
         name: document.getElementById('newName').value.trim(),
         role: document.getElementById('newRole').value,
-        department: document.getElementById('newDepartment').value.trim()
+        department: document.getElementById('newDepartment').value.trim(),
+        group: document.getElementById('newGroup').value // <--- TANGKAP DATA GRUP
     };
     
     if (!formData.username || !formData.password || !formData.name) {
@@ -295,6 +313,7 @@ async function handleAddUser(e) {
                 name: formData.name,
                 role: formData.role,
                 department: formData.department,
+                group: formData.group, // <--- SIMPAN GRUP KE CACHE
                 status: 'ACTIVE'
             });
             
@@ -497,6 +516,7 @@ function updateUsersCache(usersArray) {
                         role: String(user.role || 'operator'),
                         name: String(user.name || user.username),
                         department: String(user.department || 'Unit Utilitas 3B'),
+                        group: String(user.group || '-'), // <--- CACHE DATA GRUP
                         status: String(user.status || 'ACTIVE'),
                         lastSync: new Date().toISOString()
                     };
