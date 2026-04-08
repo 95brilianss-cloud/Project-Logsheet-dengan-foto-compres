@@ -3,44 +3,46 @@
    ============================================ */
 
 // ============================================
-// UNIVERSAL FETCH LAST DATA MODULE
+// UNIVERSAL FETCH LAST DATA MODULE (INSTANT LOAD)
 // ============================================
 
-// Variabel global untuk menyimpan data shift sebelumnya secara universal
+// Variabel global untuk menyimpan data shift sebelumnya
 let univLastData = {};
 
 function fetchUniversalLastData(type) {
-    // Tampilkan loading screen/indikator
-    updateStatusIndicator(false);
-    showCustomAlert('🔄 Menarik data shift sebelumnya...', 'info');
+    // 1. JALUR KILAT: Langsung ambil dari memori HP (Cache) dalam 0.1 detik
+    const cachedLastData = localStorage.getItem('last_data_' + type);
+    if (cachedLastData) {
+        univLastData = JSON.parse(cachedLastData);
+    } else {
+        univLastData = {}; // Kosongkan jika baru pertama kali buka
+    }
     
-    // Set batas waktu 8 detik. Jika koneksi lambat, tutup alert dan buka logsheet
-    const timeout = setTimeout(() => {
-        showCustomAlert('⚠️ Waktu habis. Membuka logsheet tanpa riwayat.', 'warning');
-        setTimeout(() => {
-            if(typeof closeAlert === 'function') closeAlert(); // Tutup alert otomatis
-            openUniversalLogsheet(type);
-        }, 1500); // Jeda 1,5 detik agar pesan terbaca
-    }, 8000);
+    // 2. Langsung buka layar Logsheet TANPA LOADING!
+    openUniversalLogsheet(type);
     
-    const callbackName = 'jsonp_univ_' + Date.now();
+    // 3. CURI START: Diam-diam minta data terbaru ke server untuk shift berikutnya
+    silentFetchLastData(type);
+}
+
+// Mesin pekerja di latar belakang (Background Worker)
+function silentFetchLastData(type) {
+    const callbackName = 'jsonp_silent_' + type + '_' + Date.now();
     
     window[callbackName] = (data) => {
-        clearTimeout(timeout);
-        // Simpan data aslinya ke dalam variabel universal
-        univLastData = data.success ? data.data : {}; 
-        updateStatusIndicator(true);
+        if (data.success) {
+            // Simpan hasil tarikan terbaru ke memori HP
+            localStorage.setItem('last_data_' + type, JSON.stringify(data.data));
+            console.log(`[Background Sync] Data riwayat ${type} berhasil diperbarui.`);
+        }
         cleanupJSONP(callbackName);
-        
-        // Tampilkan pesan sukses
-        showCustomAlert('Data shift sebelumnya berhasil ditarik!', 'success');
-        
-        // Tutup alert otomatis setelah 1 detik, lalu pindah ke halaman logsheet
-        setTimeout(() => {
-            if(typeof closeAlert === 'function') closeAlert(); // Menutup popup
-            openUniversalLogsheet(type);
-        }, 1000); // 1000ms = 1 detik
     };
+
+    // Buat jembatan ke Google Apps Script tanpa mengganggu layar utama
+    const script = document.createElement('script');
+    script.src = `${GAS_URL}?action=getLastData&type=${type}&callback=${callbackName}`;
+    document.body.appendChild(script);
+}
     
     // =======================================================================
     // AUTO-PILOT ROUTING (PENGGANTI IF-ELSE MANUAL)
