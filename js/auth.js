@@ -174,25 +174,36 @@ function updateUIForAuthenticatedUser() {
         const userNameEl = document.getElementById('displayUserName');
         
         if (userNameEl) {
-            // Ambil data grup dari user yang sedang login
-            const userGroup = currentUser.group || '-';
+            // Ambil data grup dari user yang sedang login, ubah ke huruf besar
+            const userGroup = currentUser.group ? currentUser.group.toUpperCase() : '-';
             let statusBadge = '';
             
-            // Logika Cerdas: Cek apakah jadwal pabrik = jadwal user yang login
-            if (userGroup !== '-' && userGroup !== 'Unknown') {
-                if (userGroup.toUpperCase() === shiftInfo.group) {
-                    // Jika Cocok = ON DUTY (Hijau Menyala)
+            // Logika Cerdas: Cek jadwal pabrik vs jadwal user
+            if (userGroup !== '-' && userGroup !== 'UNKNOWN') {
+                // Tarik jadwal shift untuk grup user tersebut HARI INI
+                const userShiftToday = shiftInfo.schedule[userGroup];
+
+                if (userGroup === shiftInfo.group) {
+                    // Jika jadwal cocok dengan jam saat ini = ON DUTY
                     statusBadge = `<span style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-left: 8px; box-shadow: 0 0 10px rgba(16,185,129,0.4); border: 1px solid #34d399;">ON DUTY ✓</span>`;
                 } else {
-                    // Jika Tidak Cocok = OFF DUTY (Merah)
-                    statusBadge = `<span style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-left: 8px; border: 1px solid #f87171;">OFF DUTY ❌</span>`;
+                    // Jika jam tidak cocok, tampilkan JADWAL ASLI user tersebut
+                    let textPeringatan = '';
+                    if (userShiftToday === 'OFF') {
+                        textPeringatan = 'JADWAL ANDA: OFF (LIBUR) ❌';
+                    } else {
+                        textPeringatan = `JADWAL ANDA: ${userShiftToday} ❌`;
+                    }
+
+                    statusBadge = `<span style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; margin-left: 8px; border: 1px solid #f87171; box-shadow: 0 0 10px rgba(239,68,68,0.3);">${textPeringatan}</span>`;
                 }
             }
 
-            // Tampilkan semuanya di Header Home Screen
+            // Tampilkan di Header Home Screen
+            // Teks putih disebelah nama diubah dari "Jadwal:" menjadi "Sekarang:" agar tidak ambigu
             userNameEl.innerHTML = `${currentUser.name || currentUser.username} 
                 <span style="font-size: 0.75rem; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 6px; margin-left: 8px; border: 1px solid rgba(255,255,255,0.2);">
-                    Jadwal: Grup ${shiftInfo.group} | ${shiftInfo.shift}
+                    Sekarang: Grup ${shiftInfo.group} | ${shiftInfo.shift}
                 </span>
                 ${statusBadge}`;
         }
